@@ -2,15 +2,17 @@
   <div class="page-container">
     <div class="upload-section">
       <el-upload
+        drag
         action="#"
         :auto-upload="false"
         :on-change="handleFileChange"
         :show-file-list="false"
+        class="upload-dragger"
       >
-        <el-button>
-          <el-icon><Upload /></el-icon>
-          <span style="margin-left: 5px">上传文件</span>
-        </el-button>
+        <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
+        <div class="el-upload__text">
+          将文件拖到此处，或<em>点击上传</em>
+        </div>
         <template #tip>
           <div class="el-upload__tip">
             请上传文件（文件名以 "v0" 结尾为高风险，以 "v1" 结尾为低风险）
@@ -18,7 +20,8 @@
         </template>
       </el-upload>
       <div v-if="fileName" class="file-info">
-        当前文件: {{ fileName }} &rArr;
+        当前文件: <strong>{{ fileName }}</strong> &rArr;
+        风险等级:
         <span :class="riskLevel === 'high' ? 'high' : riskLevel === 'low' ? 'low' : 'none'">
           {{ riskLevel === 'high' ? '高风险' : (riskLevel === 'low' ? '低风险' : '未识别') }}
         </span>
@@ -50,7 +53,7 @@
 
 <script setup lang="ts">
 import { ref, shallowRef, computed, markRaw } from 'vue'
-import { Upload } from '@element-plus/icons-vue'
+import { UploadFilled } from '@element-plus/icons-vue'
 import type { UploadFile } from 'element-plus'
 import OneKeyScan from '~/components/OneKeyScan.vue'
 import RiskPool from '~/components/RiskPool.vue'
@@ -167,5 +170,10 @@ const removeTab = (targetName: string) => {
 
 .tab-content {
     background-color: #f0f2f5;
+}
+
+.upload-dragger {
+  flex: 1;
+  min-width: 300px;
 }
 </style> 

@@ -1,140 +1,339 @@
 <template>
-  <div class="test-report-container">
-    <div class="toolbar">
-        <el-button type="primary" :icon="Document">生成报告</el-button>
-        <el-button :icon="Download">导出</el-button>
-        <el-button :icon="Filter">选项</el-button>
-    </div>
-    <el-container class="content-container">
-      <el-aside width="240px" class="content-aside">
-        <div class="side-menu">
-          <div class="menu-title">测评</div>
-          <div class="menu-title">年度</div>
-          <div class="menu-title">月度</div>
-        </div>
-        <div class="task-info-container">
-          <div class="task-info-title">
-            <span>任务信息</span>
+  <div class="test-report">
+    <el-card>
+      <el-row :gutter="20" align="middle">
+        <el-col :span="6">
+          <div class="score-section">
+            <el-progress type="dashboard" :percentage="percentage" :color="colors">
+              <template #default="{ percentage }">
+                <span class="percentage-value">{{ percentage }}</span>
+                <span class="percentage-label">综合得分</span>
+              </template>
+            </el-progress>
           </div>
-          <el-menu default-active="1" class="task-menu">
-            <el-menu-item index="1">企业涉税风险一键测评</el-menu-item>
-          </el-menu>
+        </el-col>
+        <el-col :span="18">
+          <h2 class="report-title">企业年度税务风险测评报告</h2>
+          <p class="report-subtitle">
+            根据您提交的数据，系统完成了 {{ totalChecks }} 项指标的全面检测，综合评定企业的税务健康状况。
+          </p>
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <el-row :gutter="20" style="margin-top: 20px;">
+      <el-col :span="8">
+        <el-card shadow="never" class="summary-card">
+          <template #header>
+            <div class="card-header">
+              <span>涉税风险指标</span>
+            </div>
+          </template>
+          <client-only>
+            <v-chart class="chart" :option="barOption" autoresize />
+          </client-only>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="never" class="summary-card">
+          <template #header>
+            <div class="card-header">
+              <span>风险等级分布</span>
+            </div>
+          </template>
+          <client-only>
+            <v-chart class="chart" :option="pieOption" autoresize />
+          </client-only>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="never" class="summary-card">
+           <template #header>
+            <div class="card-header">
+              <span>核心风险摘要</span>
+            </div>
+          </template>
+          <div class="risk-summary">
+            <ul>
+              <li v-for="item in coreRisks" :key="item.text">
+                <el-tag :type="item.type" effect="dark" size="small">{{ item.tag }}</el-tag>
+                <span>{{ item.text }}</span>
+              </li>
+            </ul>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-card style="margin-top: 20px;">
+      <template #header>
+        <div class="card-header">
+          <span>风险明细</span>
         </div>
-      </el-aside>
-      <el-main class="content-main">
-        <div class="result-panel" :class="{ 'high-risk': riskLevel === 'high', 'low-risk': riskLevel === 'low', 'initial-state': riskLevel === 'none' }">
-          <template v-if="riskLevel === 'high'">
-            <div style="font-size: 32px; font-weight: bold;">检测完成, 高风险！！</div>
+      </template>
+      <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
+        <el-table-column prop="dimension" label="风险维度" width="180"></el-table-column>
+        <el-table-column prop="indicator" label="风险指标"></el-table-column>
+        <el-table-column prop="description" label="风险描述"></el-table-column>
+        <el-table-column prop="level" label="风险等级" width="100">
+          <template #default="scope">
+            <el-tag :type="scope.row.level === '高' ? 'danger' : 'warning'">{{ scope.row.level }}</el-tag>
           </template>
-          <template v-else-if="riskLevel === 'low'">
-            <div style="font-size: 32px; font-weight: bold; margin-bottom: 20px;">检测完成, 无风险或风险较低。</div>
-            <div>请注意高新技术企业认定标准</div>
-          </template>
-          <template v-else>
-            <div style="font-size: 28px; font-weight: bold;">请上传文件开始测评</div>
-          </template>
-        </div>
-      </el-main>
-    </el-container>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { Document, Download, Filter } from '@element-plus/icons-vue'
+import { ref, computed, watch } from 'vue';
+import type { PropType } from 'vue';
 
-defineProps({
+type RiskLevel = 'low' | 'high' | 'none';
+
+const props = defineProps({
   riskLevel: {
-    type: String as () => 'low' | 'high' | 'none',
-    default: 'none'
+    type: String as PropType<RiskLevel>,
+    default: 'none',
+  },
+});
+
+const percentage = ref(85);
+const totalChecks = ref(125);
+
+const colors = [
+  { color: '#f56c6c', percentage: 20 },
+  { color: '#e6a23c', percentage: 40 },
+  { color: '#5cb87a', percentage: 60 },
+  { color: '#1989fa', percentage: 80 },
+  { color: '#6f7ad3', percentage: 100 },
+];
+
+const tableData = ref([]);
+const coreRisks = ref([]);
+
+const highRiskData = {
+  percentage: 45,
+  totalChecks: 150,
+  bar: {
+    categories: ['发票合规', '税务申报', '成本票据', '合同涉税', '关联交易'],
+    values: [8, 12, 5, 9, 11]
+  },
+  pie: [
+    { value: 18, name: '高风险' },
+    { value: 20, name: '中风险' },
+    { value: 7, name: '低风险' },
+  ],
+  table: [
+    { dimension: '发票管理', indicator: '发票开具异常', description: '存在大量连号、作废发票', level: '高' },
+    { dimension: '税务申报', indicator: '增值税申报不一致', description: '申报表与财务报表数据差异大', level: '高' },
+  ],
+  core: [
+      { text: '增值税申报数据与财务报表存在重大差异。', tag: '申报', type: 'danger' },
+      { text: '存在大量作废及连号发票，可能面临虚开风险。', tag: '发票', type: 'danger' },
+      { text: '部分大额采购缺少合规成本票据支撑。', tag: '成本', type: 'warning' },
+  ]
+};
+
+const lowRiskData = {
+  percentage: 88,
+  totalChecks: 110,
+  bar: {
+    categories: ['发票合规', '税务申报', '成本票据', '合同涉税', '关联交易'],
+    values: [2, 1, 3, 1, 0]
+  },
+  pie: [
+    { value: 1, name: '高风险' },
+    { value: 3, name: '中风险' },
+    { value: 15, name: '低风险' },
+  ],
+  table: [
+     { dimension: '成本管理', indicator: '部分差旅费用票据不合规', description: '少量差旅报销缺少有效凭证', level: '中' },
+  ],
+  core: [
+      { text: '整体税务风险可控，未发现重大风险点。', tag: '综合', type: 'success' },
+      { text: '部分差旅费用报销凭证不完整，建议规范化。', tag: '凭证', type: 'warning' },
+  ]
+};
+
+const defaultData = {
+  percentage: 0,
+  totalChecks: 0,
+  bar: { categories: ['发票合规', '税务申报', '成本票据', '合同涉税', '关联交易'], values: [0, 0, 0, 0, 0]},
+  pie: [ { value: 0, name: '无数据' } ],
+  table: [],
+  core: [ { text: '请先上传文件进行风险测评。', tag: '提示', type: 'info' } ]
+};
+
+
+const barOption = ref({});
+const pieOption = ref({});
+
+const updateReportData = (level: RiskLevel) => {
+  let data;
+  if (level === 'high') {
+    data = highRiskData;
+  } else if (level === 'low') {
+    data = lowRiskData;
+  } else {
+    data = defaultData;
   }
-})
+
+  percentage.value = data.percentage;
+  totalChecks.value = data.totalChecks;
+  tableData.value = data.table;
+  coreRisks.value = data.core;
+  
+  barOption.value = {
+    tooltip: {},
+    xAxis: {
+      data: data.bar.categories,
+      axisLabel: {
+        interval: 0,
+        rotate: 30
+      }
+    },
+    yAxis: {},
+    series: [{
+      name: '风险点数量',
+      type: 'bar',
+      data: data.bar.values
+    }],
+    grid: {
+      top: '10%',
+      left: '3%',
+      right: '4%',
+      bottom: '15%',
+      containLabel: true
+    }
+  };
+  
+  pieOption.value = {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      top: '5%',
+      left: 'center'
+    },
+    series: [{
+      name: '风险等级分布',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: '20',
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: data.pie
+    }]
+  };
+};
+
+watch(() => props.riskLevel, (newLevel) => {
+  updateReportData(newLevel);
+}, { immediate: true });
+
+
+const tableRowClassName = ({ row }) => {
+  if (row.level === '高') {
+    return 'danger-row';
+  } else if (row.level === '中') {
+    return 'warning-row';
+  }
+  return '';
+};
 </script>
 
 <style scoped>
-.test-report-container {
+.test-report {
   padding: 20px;
-}
-.toolbar {
-  margin-bottom: 20px;
-  background-color: white;
-  padding: 10px 20px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-}
-.content-container {
-  background-color: white;
-  display: flex;
-  min-height: 600px;
-}
-.content-aside {
-  border-right: 1px solid #e0e0e0;
-  display: flex;
-}
-
-.side-menu {
-  width: 80px;
-  background-color: #f4f6f8;
-  padding: 20px 0;
-  border-right: 1px solid #e0e0e0;
-}
-
-.menu-title {
-  padding: 15px 0;
-  text-align: center;
-  cursor: pointer;
-}
-
-.menu-title:first-child {
-  background-color: #fff;
-  border-left: 3px solid #1890ff;
-}
-
-.task-info-container {
-  flex: 1;
-  padding: 20px;
-}
-
-.task-info-title {
-  font-weight: bold;
-  padding-left: 10px;
-  border-left: 3px solid #1890ff;
-  margin-bottom: 15px;
-}
-.task-menu {
-    border-right: none;
-}
-.content-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: #f0f2f5;
-  padding: 20px;
 }
-.result-panel {
-  color: white;
-  padding: 80px;
-  font-size: 24px;
-  text-align: center;
-  border-radius: 8px;
-  width: 100%;
-  height: 100%;
+
+.score-section {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.low-risk {
-  background-color: #00c484;
+.percentage-value {
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
 }
 
-.high-risk {
-  background-color: red;
-}
-
-.initial-state {
-  background-color: #e9eef3;
+.percentage-label {
+  display: block;
+  font-size: 14px;
   color: #606266;
+}
+
+.report-title {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.report-subtitle {
+  font-size: 14px;
+  color: #909399;
+}
+
+.summary-card {
+  height: 100%;
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.chart {
+  height: 250px;
+}
+
+.risk-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 250px;
+  overflow-y: auto;
+}
+
+.risk-summary li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.risk-summary li .el-tag {
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+</style>
+
+<style>
+.el-table .warning-row {
+  --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+.el-table .danger-row {
+  --el-table-tr-bg-color: var(--el-color-danger-light-9);
 }
 </style> 

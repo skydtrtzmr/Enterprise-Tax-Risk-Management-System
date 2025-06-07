@@ -10,7 +10,7 @@
           <el-icon :size="24"><DataAnalysis /></el-icon>
           <div>数据管理</div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item active">
           <el-icon :size="24"><Platform /></el-icon>
           <div>风险测评</div>
         </div>
@@ -92,10 +92,22 @@ body {
   cursor: pointer;
   padding: 0 15px;
   transition: background-color 0.3s;
+  position: relative;
 }
 
 .nav-item:hover {
     background-color: #144281;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  height: 3px;
+  background-color: #409eff;
+  border-radius: 2px;
 }
 
 .header-right {
