@@ -6,26 +6,26 @@
         <div class="subtitle">由无锡博盾授权试用90天-剩余89天</div>
       </div>
       <div class="header-center">
-        <div class="nav-item">
+        <NuxtLink to="/data-management" class="nav-item">
           <el-icon :size="24"><DataAnalysis /></el-icon>
           <div>数据管理</div>
-        </div>
-        <div class="nav-item active">
+        </NuxtLink>
+        <NuxtLink to="/risk-assessment" class="nav-item">
           <el-icon :size="24"><Platform /></el-icon>
           <div>风险测评</div>
-        </div>
-        <div class="nav-item">
+        </NuxtLink>
+        <NuxtLink to="/risk-response" class="nav-item">
           <el-icon :size="24"><TakeawayBox /></el-icon>
           <div>风险应对</div>
-        </div>
-        <div class="nav-item">
+        </NuxtLink>
+        <NuxtLink to="/self-inspection" class="nav-item">
           <el-icon :size="24"><Finished /></el-icon>
           <div>风险自查</div>
-        </div>
-        <div class="nav-item">
+        </NuxtLink>
+        <NuxtLink to="/statistical-analysis" class="nav-item">
           <el-icon :size="24"><TrendCharts /></el-icon>
           <div>统计分析</div>
-        </div>
+        </NuxtLink>
       </div>
       <div class="header-right">
         <el-icon><User /></el-icon>
@@ -66,6 +66,7 @@ body {
   align-items: center;
   justify-content: space-between;
   height: 60px;
+  border-bottom: 1px solid #1a4a8a;
 }
 
 .header-left .title {
@@ -80,7 +81,7 @@ body {
 
 .header-center {
   display: flex;
-  gap: 20px;
+  gap: 4px;
   height: 100%;
 }
 
@@ -90,24 +91,33 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 0 15px;
-  transition: background-color 0.3s;
+  padding: 0 20px;
+  transition: all 0.3s ease;
   position: relative;
+  text-decoration: none;
+  color: white;
 }
 
 .nav-item:hover {
-    background-color: #144281;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nav-item.active::after {
+.nav-item.router-link-exact-active {
+  background-color: #409eff;
+  color: white;
+}
+
+.nav-item.router-link-exact-active::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 15px;
-  right: 15px;
-  height: 3px;
-  background-color: #409eff;
-  border-radius: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent #f0f2f5 transparent;
 }
 
 .header-right {
