@@ -24,14 +24,15 @@
                     class="risk-box-description"
                     v-if="riskLevel === 'high'"
                 >
-                    <p>检测完成，高风险！！</p>
+                    <p>检测完成</p>
+                    <p>高风险！！</p>
                 </div>
                 <div
                     class="risk-box-description"
                     v-if="riskLevel === 'low'"
                 >
                     <p>检测完成，无风险或风险较低。</p>
-                    <p>请注意高新技术企业认定标准。</p>
+                    <p class="risk-box-subtitle">请注意高新技术企业认定标准。</p>
                 </div>
             </div>
         </el-col>
@@ -376,30 +377,38 @@ const tableRowClassName = ({ row }: { row: TableRow }) => {
 
 .risk-box {
     border-radius: 8px;
-    padding: 25px 15px;
+    padding: 20px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
 }
 
 .risk-box.high {
-    background-color: #fde2e2;
-    border: 1px solid #f56c6c;
-    color: #f56c6c;
+    background-color: #f56c6c;
+    color: white;
 }
 
 .risk-box.low {
-    background-color: #e9f9f4;
-    border: 1px solid #67c23a;
-    color: #67c23a;
+    background-color: #67c23a;
+    color: white;
 }
 
 .risk-box-description {
-    font-size: 22px;
+    font-size: 28px;
     font-weight: bold;
 }
 
 .risk-box-description p {
     margin: 0;
     line-height: 1.4;
+}
+
+.risk-box-subtitle {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 8px;
 }
 </style>
 
