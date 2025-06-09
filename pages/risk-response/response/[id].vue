@@ -74,7 +74,7 @@ const {
 watch(
   riskId,
   (newId) => {
-    if (newId) {
+    if (newId && newId !== 'SUB-TAX-01') {
       execute();
     }
   },
