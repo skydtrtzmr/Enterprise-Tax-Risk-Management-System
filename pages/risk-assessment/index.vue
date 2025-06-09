@@ -18,44 +18,12 @@
 
         <div class="tab-content">
             <template v-if="activeTab === 'one-key-scan'">
-                <div class="upload-section">
-                    <el-upload
-                        drag
-                        action="#"
-                        :auto-upload="false"
-                        :on-change="handleFileChange"
-                        :show-file-list="false"
-                        class="upload-dragger"
-                        :disabled="isAnalyzing"
-                    >
-                        <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
-                        <div class="el-upload__text">
-                            将文件拖到此处，或<em>点击上传</em>
-                        </div>
-                        <template #tip>
-                            <div class="el-upload__tip">请上传文件</div>
-                        </template>
-                    </el-upload>
-                    <div class="info-panel">
-                        <div
-                            v-if="!isAnalyzing && fileName && riskLevel !== 'none'"
-                            class="result-display"
-                        >
-                            <p class="file-name-display">
-                                当前文件: <strong>{{ fileName }}</strong>
-                            </p>
-                        </div>
-                        <div v-else class="instructions">
-                            <h4>风险测评使用说明</h4>
-                            <ul>
-                                <li>点击或拖拽您的税务报表文件到左侧上传区域。</li>
-                                <li>
-                                    系统将对文件进行智能分析，请确保文件名符合规范。
-                                </li>
-                                <li>分析过程将持续数秒，请耐心等待。</li>
-                                <li>完成后，系统将展示详细的风险等级和测评报告。</li>
-                            </ul>
-                        </div>
+                <div v-if="!isAnalyzing" class="question-container">
+                    <h3>60万元政府补助是否需要缴纳企业所得税？</h3>
+                    <p class="subtitle">请根选择对应的处理方式：</p>
+                    <div class="button-group">
+                        <el-button type="danger" size="large" @click="startAnalysis('high')">缴纳企业所得税</el-button>
+                        <el-button type="success" size="large" @click="startAnalysis('low')">不缴纳企业所得税</el-button>
                     </div>
                 </div>
 
@@ -81,8 +49,7 @@
 
 <script setup lang="ts">
 import { ref, shallowRef, computed, markRaw } from "vue";
-import { UploadFilled } from "@element-plus/icons-vue";
-import type { UploadFile, TabPaneName } from "element-plus";
+import type { TabPaneName } from "element-plus";
 import OneKeyScan from "~/components/OneKeyScan.vue";
 import TestReport from "~/components/TestReport.vue";
 
@@ -95,40 +62,22 @@ const isAnalyzing = ref(false);
 const progress = ref(0);
 const analysisStage = ref("");
 
-const handleFileChange = (file: UploadFile) => {
-    const name = file.name || "";
-
-    const dotIndex = name.lastIndexOf(".");
-    const baseName = dotIndex === -1 ? name : name.slice(0, dotIndex);
-
-    let newRiskLevel: "low" | "high" | "none" = "none";
-
-    if (baseName.endsWith("v0")) {
-        newRiskLevel = "high";
-    } else if (baseName.endsWith("v1")) {
-        newRiskLevel = "low";
-    } else {
-        riskLevel.value = "none";
-        fileName.value = "";
-        ElMessage.error("无法识别的文件名格式。");
-        return;
-    }
-
-    fileName.value = name;
+const startAnalysis = (selectedRisk: "high" | "low") => {
+    fileName.value = "政府补助税务处理判断";
     riskLevel.value = "none";
     isAnalyzing.value = true;
     progress.value = 0;
 
     const analysisStages = [
         "正在初始化分析引擎...",
-        "正在进行税务风险扫描...",
-        "正在分析发票数据...",
-        "正在比对合同信息...",
-        "正在进行历史数据比对...",
+        "正在评估选择的税务处理方式...",
+        "正在匹配相关税法条款...",
+        "正在分析潜在税务风险...",
+        "正在进行合规性检查...",
         "正在生成税务风险报告...",
     ];
     let stageIndex = 0;
-    const intervalTime = 1000; // 2 seconds per stage
+    const intervalTime = 800;
 
     const runAnalysis = () => {
         if (stageIndex < analysisStages.length) {
@@ -143,7 +92,7 @@ const handleFileChange = (file: UploadFile) => {
             progress.value = 100;
             setTimeout(() => {
                 isAnalyzing.value = false;
-                riskLevel.value = newRiskLevel;
+                riskLevel.value = selectedRisk;
                 activeTab.value = "test-report";
             }, 500);
         }
@@ -154,7 +103,7 @@ const handleFileChange = (file: UploadFile) => {
 
 const tabsMap = {
     "one-key-scan": {
-        title: "一键扫描",
+        title: "智能问答",
         name: "one-key-scan",
         component: OneKeyScanComponent,
     },
@@ -179,7 +128,7 @@ const activeComponent = computed(() => {
 
 const activeComponentProps = computed(() => {
     if (activeTab.value === "test-report") {
-        return { riskLevel: riskLevel.value };
+        return { riskLevel: riskLevel.value, fileName: fileName.value };
     }
     return {};
 });
@@ -209,76 +158,39 @@ const removeTab = (targetName: TabPaneName) => {
     padding: 20px;
 }
 
-.upload-section {
+.question-container {
     background: white;
-    padding: 15px 20px;
-    margin-top: 20px;
+    padding: 40px 20px;
     border-radius: 4px;
+    text-align: center;
+}
+.question-container h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+.question-container p {
+    color: #606266;
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    text-align: left;
+}
+.question-container .subtitle {
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+    color: #303133;
+}
+.button-group {
+    margin-top: 30px;
     display: flex;
-    align-items: stretch;
+    justify-content: center;
     gap: 20px;
 }
 
-.info-panel {
-    flex: 1;
-    padding: 10px 10px 10px 30px;
-    border-left: 1px solid #e4e7ed;
-}
-
-.instructions h4 {
-    margin-top: 0;
-    font-size: 16px;
-    color: #303133;
-    margin-bottom: 15px;
-}
-
-.instructions ul {
-    padding-left: 20px;
-    margin: 0;
-    font-size: 13px;
-    color: #606266;
-    line-height: 1.8;
-}
-
-.result-display .file-name-display {
-    font-size: 14px;
-    margin-bottom: 10px;
-    color: #606266;
-}
-
-.risk-box {
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    color: white;
-}
-
-.risk-box.high {
-    background-color: #fde2e2;
-    border: 1px solid #f56c6c;
-    color: #f56c6c;
-}
-
-.risk-box.low {
-    background-color: #e9f9f4;
-    border: 1px solid #67c23a;
-    color: #67c23a;
-}
-
-.risk-box-title {
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.risk-box-level {
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.risk-box-description {
-    font-size: 18px;
-    margin-top: 10px;
-    font-weight: bold;
+.main-tabs {
+  margin-top: 20px;
 }
 
 :deep(.el-tabs__header) {
@@ -287,11 +199,7 @@ const removeTab = (targetName: TabPaneName) => {
 
 .tab-content {
     background-color: #f0f2f5;
-}
-
-.upload-dragger {
-    flex: 1;
-    min-width: 300px;
+    padding-top: 20px;
 }
 
 .analysis-progress {
