@@ -11,9 +11,10 @@
       <el-button :icon="Download">导出</el-button>
     </div>
     <el-table :data="filteredData" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
-      <el-table-column type="index" label="序号" width="80" />
+      <el-table-column type="index" label="序号" width="60" />
+      <el-table-column prop="id" label="ID" width="150" />
       <el-table-column prop="name" label="风险名称" min-width="300" />
-      <el-table-column prop="year" label="风险年度" width="180" />
+      <el-table-column prop="year" label="风险年度" width="120" />
       <el-table-column prop="month" label="风险月份" width="120" />
       <el-table-column prop="status" label="状态" width="120">
         <template #default="scope">
@@ -22,7 +23,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="220">
+      <el-table-column label="操作" width="180">
         <template #default="scope">
           <el-button type="primary" link @click="viewDetails(scope.row)">详情</el-button>
           <el-button type="primary" link @click="createResponse(scope.row)">对策制定</el-button>
@@ -47,18 +48,18 @@ const statusFilter = ref('all');
 
 const STORAGE_KEY = 'risk_statuses';
 
-// Mock data based on the screenshot
+// Mock data based on the screenshot with new alphanumeric IDs
 const allRisks = ref([
-    { id: 1, type: 'jieshou', name: '期间费用变动率与营业收入变动率比对异常风险', year: '2022', month: '-', status: '未应对' },
-    { id: 2, type: 'jieshou', name: '增值税不动产租赁税目申报金额与房产税比对异常风险', year: '2021,2022', month: '-', status: '未应对' },
-    { id: 3, type: 'ceping', name: '买卖合同印花税比对存在差异', year: '2021', month: '-', status: '未应对' },
-    { id: 4, type: 'ceping', name: '纳税人【银行存款】是否有期末余额委托付款进项转出风险', year: '2021,2022', month: '-', status: '未应对' },
-    { id: 5, type: 'butie-SUB-2024-001', name: '纳税人【库存现金】是否有期末余额', year: '2020,2021,2022', month: '-', status: '未应对' },
-    { id: 6, type: 'butie-SUB-2024-001', name: '非房地产企业房产未清算或未按公允价值清算，车辆、设备等资产损失未按规定进行资产损失申报的风险', year: '2020,2021,2022', month: '-', status: '未应对' },
-    { id: 7, type: 'butie-SUB-2024-002', name: '土地未清算或未按公允价值清算少缴税款风险', year: '2020,2021,2022', month: '-', status: '未应对' },
-    { id: 8, type: 'butie-SUB-2024-003', name: '存货未清算或未做视同销售处理少缴税款风险', year: '2020,2021,2022', month: '-', status: '已应对' },
-    { id: 9, type: 'butie-SUB-2024-004', name: '应收类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
-    { id: 10, type: 'butie-SUB-2024-005', name: '应付类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
+    { id: 'FEE-VAR-01', type: 'jieshou', name: '期间费用变动率与营业收入变动率比对异常风险', year: '2022', month: '-', status: '未应对' },
+    { id: 'VAT-RENT-01', type: 'jieshou', name: '增值税不动产租赁税目申报金额与房产税比对异常风险', year: '2021,2022', month: '-', status: '未应对' },
+    { id: 'STAMP-DUTY-01', type: 'ceping', name: '买卖合同印花税比对存在差异', year: '2021', month: '-', status: '未应对' },
+    { id: 'BANK-PAY-01', type: 'ceping', name: '纳税人【银行存款】是否有期末余额委托付款进项转出风险', year: '2021,2022', month: '-', status: '未应对' },
+    { id: 'CASH-BAL-01', type: 'butie-SUB-2024-001', name: '纳税人【库存现金】是否有期末余额', year: '2020,2021,2022', month: '-', status: '未应对' },
+    { id: 'ASSET-LOSS-01', type: 'butie-SUB-2024-001', name: '非房地产企业房产未清算或未按公允价值清算，车辆、设备等资产损失未按规定进行资产损失申报的风险', year: '2020,2021,2022', month: '-', status: '未应对' },
+    { id: 'LAND-TAX-01', type: 'butie-SUB-2024-002', name: '土地未清算或未按公允价值清算少缴税款风险', year: '2020,2021,2022', month: '-', status: '未应对' },
+    { id: 'INV-SALE-01', type: 'butie-SUB-2024-003', name: '存货未清算或未做视同销售处理少缴税款风险', year: '2020,2021,2022', month: '-', status: '已应对' },
+    { id: 'AR-RISK-01', type: 'butie-SUB-2024-004', name: '应收类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
+    { id: 'AP-RISK-01', type: 'butie-SUB-2024-005', name: '应付类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
 ]);
 
 onMounted(() => {
@@ -97,11 +98,11 @@ const filteredData = computed(() => {
   return tableData.value.filter(item => item.status === status);
 });
 
-const viewDetails = (row: { id: number }) => {
+const viewDetails = (row: { id: string }) => {
   router.push(`/risk-response/details/${row.id}`);
 };
 
-const createResponse = (row: { id: number }) => {
+const createResponse = (row: { id: string }) => {
   const risk = allRisks.value.find(r => r.id === row.id);
   if (risk) {
     risk.status = '已应对';
@@ -122,4 +123,4 @@ const createResponse = (row: { id: number }) => {
   gap: 10px;
   align-items: center;
 }
-</style> 
+</style>

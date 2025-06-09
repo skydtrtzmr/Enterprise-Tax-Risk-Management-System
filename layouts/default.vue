@@ -3,7 +3,7 @@
     <el-header class="main-header">
       <div class="header-left">
         <div class="title">企业税收风险管理系统 F8</div>
-        <div class="subtitle">（已授权）</div>
+        <div class="subtitle">【已授权】</div>
       </div>
       <div class="header-center">
         <NuxtLink to="/data-management" class="nav-item">
@@ -29,7 +29,7 @@
       </div>
       <div class="header-right">
         <el-icon><User /></el-icon>
-        <span>您好, XXX有限公司</span>
+        <span>您好, 中比新能源公司</span>
       </div>
     </el-header>
     <el-main class="main-content">
