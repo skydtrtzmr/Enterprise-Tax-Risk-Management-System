@@ -12,13 +12,13 @@
             </el-progress>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <h2 class="report-title">企业年度税务风险测评报告</h2>
           <p class="report-subtitle">
             根据您提交的数据，系统完成了 {{ totalChecks }} 项指标的全面检测，综合评定企业的税务健康状况。
           </p>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
             <div v-if="riskLevel !== 'none'" :class="['risk-box', riskLevel]">
                  <div
                     class="risk-box-description"
@@ -376,7 +376,7 @@ const tableRowClassName = ({ row }: { row: TableRow }) => {
 
 .risk-box {
     border-radius: 8px;
-    padding: 15px;
+    padding: 25px 15px;
     text-align: center;
 }
 
@@ -393,7 +393,7 @@ const tableRowClassName = ({ row }: { row: TableRow }) => {
 }
 
 .risk-box-description {
-    font-size: 14px;
+    font-size: 22px;
     font-weight: bold;
 }
 
