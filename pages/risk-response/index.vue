@@ -7,6 +7,7 @@
       </div>
       <el-menu
         :default-active="activeMenu"
+        :default-openeds="defaultOpeneds"
         class="el-menu-vertical-demo"
         @select="handleMenuSelect"
       >
@@ -39,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
 import RiskList from '~/components/risk/RiskList.vue';
 import {
   Document,
@@ -48,11 +49,21 @@ import {
   TakeawayBox
 } from '@element-plus/icons-vue'
 
-const activeMenu = ref('jieshou'); // 默认显示第一个
+// Use useState to create a shared state that persists across page navigations.
+// 'jieshou' is the initial value if the state doesn't exist yet.
+const activeMenu = useState('activeRiskResponseMenu', () => 'jieshou');
 
 const handleMenuSelect = (index: string) => {
   activeMenu.value = index;
 };
+
+// Compute which sub-menu should be open based on the active menu item.
+const defaultOpeneds = computed(() => {
+  if (activeMenu.value.startsWith('butie')) {
+    return ['butie'];
+  }
+  return [];
+});
 </script>
 
 <style scoped>
