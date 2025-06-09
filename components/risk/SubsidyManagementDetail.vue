@@ -168,7 +168,7 @@
     </el-row>
 
     <!-- Floating Anchor -->
-    <div class="fab-anchor">
+    <div class="fab-container">
       <transition name="el-fade-in-linear">
         <el-card v-show="isAnchorVisible" class="anchor-panel">
           <el-anchor :offset="80" @click="isAnchorVisible = false">
@@ -354,17 +354,21 @@ const tableData7 = ref([
 }
 
 /* New styles for FAB Anchor */
-.fab-anchor {
+.fab-container {
+  /* A logical container, no position needed */
+}
+.anchor-panel {
+  position: fixed;
+  right: 40px;
+  bottom: 112px; /* Button height 56px + margin 16px */
+  width: 200px;
+  z-index: 100;
+}
+.fab-button {
   position: fixed;
   right: 40px;
   bottom: 40px;
   z-index: 100;
-}
-.anchor-panel {
-  margin-bottom: 16px;
-  width: 200px;
-}
-.fab-button {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 </style> 
