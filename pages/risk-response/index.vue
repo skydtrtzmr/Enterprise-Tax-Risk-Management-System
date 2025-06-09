@@ -12,16 +12,16 @@
       >
         <el-menu-item index="four-flows">
           <el-icon><Document /></el-icon>
-          <span>四流不一致</span>
+          <span>接收风险</span>
         </el-menu-item>
         <el-menu-item index="rd-deduction">
           <el-icon><CreditCard /></el-icon>
-          <span>研发费用加计扣除</span>
+          <span>测评风险</span>
         </el-menu-item>
         <el-sub-menu index="subsidy-management">
           <template #title>
             <el-icon><Money /></el-icon>
-            <span>补贴管理</span>
+            <span>补贴管理系统</span>
           </template>
           <el-menu-item index="subsidy-management-SUB-2024-001">SUB-2024-001</el-menu-item>
           <el-menu-item index="subsidy-management-SUB-2024-002">SUB-2024-002</el-menu-item>
@@ -35,12 +35,12 @@
     <el-main class="content-main">
       <!-- 根据选择的菜单项显示不同内容 -->
       <div v-if="activeTab === 'four-flows'">
-        <!-- 四流不一致的内容将放在这里 -->
-        <h2>四流不一致</h2>
+        <!-- 接收风险的内容将放在这里 -->
+        <h2>接收风险</h2>
       </div>
       <div v-if="activeTab === 'rd-deduction'">
-        <!-- 研发费用加计扣除的内容将放在这里 -->
-        <h2>研发费用加计扣除</h2>
+        <!-- 测评风险的内容将放在这里 -->
+        <h2>测评风险</h2>
       </div>
       <div v-if="activeTab === 'subsidy-management'">
         <SubsidyManagementDetail
