@@ -37,6 +37,8 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Filter, Printer, Download } from '@element-plus/icons-vue';
+// Import the risk data from the central file
+import { allRisksData } from '~/server/data/risks';
 
 const props = defineProps<{
   riskType: string;
@@ -48,19 +50,9 @@ const statusFilter = ref('all');
 
 const STORAGE_KEY = 'risk_statuses';
 
-// Mock data based on the screenshot with new alphanumeric IDs
-const allRisks = ref([
-    { id: 'FEE-VAR-01', type: 'jieshou', name: '期间费用变动率与营业收入变动率比对异常风险', year: '2022', month: '-', status: '未应对' },
-    { id: 'VAT-RENT-01', type: 'jieshou', name: '增值税不动产租赁税目申报金额与房产税比对异常风险', year: '2021,2022', month: '-', status: '未应对' },
-    { id: 'STAMP-DUTY-01', type: 'ceping', name: '买卖合同印花税比对存在差异', year: '2021', month: '-', status: '未应对' },
-    { id: 'BANK-PAY-01', type: 'ceping', name: '纳税人【银行存款】是否有期末余额委托付款进项转出风险', year: '2021,2022', month: '-', status: '未应对' },
-    { id: 'CASH-BAL-01', type: 'butie-SUB-2024-001', name: '纳税人【库存现金】是否有期末余额', year: '2020,2021,2022', month: '-', status: '未应对' },
-    { id: 'ASSET-LOSS-01', type: 'butie-SUB-2024-001', name: '非房地产企业房产未清算或未按公允价值清算，车辆、设备等资产损失未按规定进行资产损失申报的风险', year: '2020,2021,2022', month: '-', status: '未应对' },
-    { id: 'LAND-TAX-01', type: 'butie-SUB-2024-002', name: '土地未清算或未按公允价值清算少缴税款风险', year: '2020,2021,2022', month: '-', status: '未应对' },
-    { id: 'INV-SALE-01', type: 'butie-SUB-2024-003', name: '存货未清算或未做视同销售处理少缴税款风险', year: '2020,2021,2022', month: '-', status: '已应对' },
-    { id: 'AR-RISK-01', type: 'butie-SUB-2024-004', name: '应收类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
-    { id: 'AP-RISK-01', type: 'butie-SUB-2024-005', name: '应付类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
-]);
+// Create a reactive reference of the imported data for this component instance
+// Use structuredClone to ensure the original array is not mutated
+const allRisks = ref(structuredClone(allRisksData));
 
 onMounted(() => {
   const savedStatuses = localStorage.getItem(STORAGE_KEY);
