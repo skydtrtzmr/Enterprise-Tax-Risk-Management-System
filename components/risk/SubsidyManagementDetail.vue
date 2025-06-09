@@ -1,15 +1,42 @@
 <template>
   <div class="subsidy-detail-container">
+    <!-- Collapsible Project Info -->
+    <div
+      v-if="!isProjectInfoExpanded"
+      class="project-info-collapsed"
+      @click="isProjectInfoExpanded = true"
+    >
+      <div class="info-title">
+        <el-icon><CollectionTag /></el-icon>
+        <span>项目信息：新型锂电池材料研发补贴</span>
+      </div>
+      <el-button type="primary" link>
+        展开详情 <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+      </el-button>
+    </div>
+
+    <!-- Expanded Project Info -->
     <el-descriptions
-      title="项目信息：新型锂电池材料研发补贴"
+      v-else
       :column="3"
       border
-      class="project-info"
+      class="project-info-expanded"
     >
-      <template #extra>
-        <el-button type="primary">点击展开项目详情</el-button>
+      <template #title>
+        <div class="info-title">
+          <el-icon><CollectionTag /></el-icon>
+          <span>项目信息</span>
+        </div>
       </template>
-      <el-descriptions-item label="项目编号">SUB-2024-001</el-descriptions-item>
+      <template #extra>
+        <el-button
+          :icon="Close"
+          circle
+          plain
+          @click="isProjectInfoExpanded = false"
+        />
+      </template>
+      <el-descriptions-item label="项目编号">{{ projectId }}</el-descriptions-item>
       <el-descriptions-item label="补贴金额">200 万元</el-descriptions-item>
       <el-descriptions-item label="管理状态">
         <el-tag size="small">全流程管控中</el-tag>
@@ -104,7 +131,7 @@
 
       <el-collapse-item title="6. 鉴证结论摘要表" name="6">
         <el-table :data="tableData6" border style="width: 100%">
-           <el-table-column type="expand">
+          <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
                 <p>详细信息 for: {{ props.row.type }}</p>
@@ -119,7 +146,7 @@
 
       <el-collapse-item title="7. 平台操作日志" name="7">
         <el-table :data="tableData7" border style="width: 100%">
-           <el-table-column type="expand">
+          <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
                 <p>详细信息 for: {{ props.row.operator }} at {{ props.row.time }}</p>
@@ -138,12 +165,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { CollectionTag, ArrowDown, Close } from '@element-plus/icons-vue';
 
 defineProps<{
   projectId: string;
 }>();
 
-const activeCollapse = ref(['1', '2', '3', '4', '5', '6', '7']); // Default to all open
+const isProjectInfoExpanded = ref(false);
+const activeCollapse = ref(['1']); // Default to first open
 
 // Data based on 补贴全流程管理平台设计.md
 const tableData1 = ref([
@@ -197,17 +226,69 @@ const tableData7 = ref([
   gap: 20px;
 }
 
-.project-info {
-  margin-bottom: 20px;
+.project-info-collapsed {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #ffffff;
+  border: 1px solid #ebeef5;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.project-info-collapsed:hover {
+  border-color: #c8e0ff;
+  box-shadow: 0 2px 12px 0 rgba(64, 158, 255, 0.1);
+}
+
+.project-info-expanded {
+  border-radius: 8px;
+  overflow: hidden; /* To make border-radius work with el-descriptions */
+  border: 1px solid #ebeef5;
+}
+
+.info-title {
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #303133;
 }
 
 .data-tables-collapse {
-  border-top: 1px solid #ebeef5;
-  border-bottom: 1px solid #ebeef5;
+  border: none;
+}
+
+:deep(.el-collapse-item) {
+  background-color: #fff;
+  border: 1px solid #ebeef5;
+  border-radius: 8px !important;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+:deep(.el-collapse-item__header) {
+  padding: 0 20px;
+  font-size: 15px;
+  font-weight: 500;
+  height: 52px;
+  line-height: 52px;
+}
+
+:deep(.el-collapse-item__wrap) {
+  will-change: height;
+}
+
+:deep(.el-collapse-item__content) {
+  padding: 20px;
+  padding-top: 10px;
 }
 
 .expanded-content {
   padding: 16px;
-  background-color: #fafafa;
+  background-color: #f8f9fa;
+  border-radius: 4px;
 }
 </style> 
