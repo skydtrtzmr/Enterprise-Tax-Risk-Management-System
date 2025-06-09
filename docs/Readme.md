@@ -35,3 +35,13 @@
 1. 可交互的表格
 2. Markdown
 
+## 技术栈
+
+Nuxt.js
+Element Plus
+Vue 3
+TypeScript
+Pinia
+
+包管理工具：pnpm
+
