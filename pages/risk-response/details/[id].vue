@@ -1,23 +1,51 @@
 <template>
-  <el-card>
+  <el-card class="details-card" v-loading="pending">
     <template #header>
-      <h1>风险详情 #{{ $route.params.id }}</h1>
+      <div class="card-header">
+        <span>风险详情</span>
+        <el-button @click="$router.back()">返回列表</el-button>
+      </div>
     </template>
-    <p>这里是风险的详细信息。</p>
-    <p>后续可以根据风险类型，在这里展示不同的详情组件，比如之前为补贴设计的 `SubsidyManagementDetail.vue`。</p>
-    <el-button @click="$router.back()">返回列表</el-button>
+
+    <div v-if="error" class="error-state">
+      <el-alert
+        :title="`加载风险详情失败 (ID: ${riskId})`"
+        type="error"
+        :description="error.statusMessage || error.message"
+        show-icon
+        :closable="false"
+      />
+    </div>
+
+    <div v-else class="markdown-body" v-html="renderedMarkdown"></div>
   </el-card>
 </template>
 
 <script setup lang="ts">
-// Using definePageMeta for Nuxt 3 to set layout or other page options if needed
-// definePageMeta({
-//   layout: 'default',
-// });
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { marked } from 'marked';
+
+const route = useRoute();
+const riskId = computed(() => route.params.id as string);
+
+const { data: renderedMarkdown, pending, error } = useFetch(
+  () => `/risks/${riskId.value}`, // The specific endpoint, made reactive
+  {
+    // Explicitly set the base URL for all API requests
+    baseURL: '/api', 
+    async transform(response: { content: string }) {
+      if (response && response.content) {
+        return await marked(response.content);
+      }
+      return '<p>未能加载内容或内容为空。</p>';
+    },
+  }
+);
 </script>
 
 <style scoped>
-.el-card {
-    margin: 20px;
+.details-card {
+  margin: 20px;
 }
 </style> 

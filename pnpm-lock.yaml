@@ -14,12 +14,18 @@ importers:
       '@element-plus/nuxt':
         specifier: ^1.1.2
         version: 1.1.2(@element-plus/icons-vue@2.3.1(vue@3.5.16(typescript@5.8.3)))(element-plus@2.10.0(vue@3.5.16(typescript@5.8.3)))(magicast@0.3.5)
+      '@types/marked':
+        specifier: ^6.0.0
+        version: 6.0.0
       echarts:
         specifier: ^5.6.0
         version: 5.6.0
       element-plus:
         specifier: ^2.10.0
         version: 2.10.0(vue@3.5.16(typescript@5.8.3))
+      marked:
+        specifier: ^15.0.12
+        version: 15.0.12
       nuxt:
         specifier: ^3.17.5
         version: 3.17.5(@parcel/watcher@2.5.1)(@types/node@22.15.30)(db0@0.3.2)(ioredis@5.6.1)(magicast@0.3.5)(rollup@4.42.0)(terser@5.41.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.30)(jiti@2.4.2)(terser@5.41.0)(yaml@2.8.0))(yaml@2.8.0)
@@ -911,6 +917,10 @@ packages:
 
   '@types/lodash@4.17.17':
     resolution: {integrity: sha512-RRVJ+J3J+WmyOTqnz3PiBLA501eKwXl2noseKOrNo/6+XEHjTAxO4xHvxQB6QuNm+s4WRbn6rSiap8+EA+ykFQ==}
+
+  '@types/marked@6.0.0':
+    resolution: {integrity: sha512-jmjpa4BwUsmhxcfsgUit/7A9KbrC48Q0q8KvnY107ogcjGgTFDlIL3RpihNpx2Mu1hM4mdFQjoVc4O6JoGKHsA==}
+    deprecated: This is a stub types definition. marked provides its own type definitions, so you do not need this installed.
 
   '@types/node@22.15.30':
     resolution: {integrity: sha512-6Q7lr06bEHdlfplU6YRbgG1SFBdlsfNC4/lX+SkhiTs0cpJkOElmWls8PxDFv4yY/xKb8Y6SO0OmSX4wgqTZbA==}
@@ -2200,6 +2210,11 @@ packages:
 
   magicast@0.3.5:
     resolution: {integrity: sha512-L0WhttDl+2BOsybvEOLK7fW3UA0OQ0IQ2d6Zl2x/a6vVRs3bAY0ECOSHHeL5jD+SbOpOCUEi0y1DgHEn9Qn1AQ==}
+
+  marked@15.0.12:
+    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
+    engines: {node: '>= 18'}
+    hasBin: true
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -4556,6 +4571,10 @@ snapshots:
 
   '@types/lodash@4.17.17': {}
 
+  '@types/marked@6.0.0':
+    dependencies:
+      marked: 15.0.12
+
   '@types/node@22.15.30':
     dependencies:
       undici-types: 6.21.0
@@ -5936,6 +5955,8 @@ snapshots:
       '@babel/parser': 7.27.5
       '@babel/types': 7.27.6
       source-map-js: 1.2.1
+
+  marked@15.0.12: {}
 
   math-intrinsics@1.1.0: {}
 
