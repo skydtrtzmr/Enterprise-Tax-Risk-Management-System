@@ -371,4 +371,40 @@ const tableData7 = ref([
   z-index: 100;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
+:deep(.anchor-panel.el-card) {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #ebeef5;
+  box-shadow: var(--el-box-shadow-light);
+}
+
+:deep(.anchor-panel .el-card__body) {
+  padding: 8px;
+}
+
+:deep(.anchor-panel .el-anchor-link) {
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  border-bottom: none;
+}
+
+:deep(.anchor-panel .el-anchor-link .el-anchor-link__title) {
+  color: #606266;
+  font-size: 14px;
+}
+
+:deep(.anchor-panel .el-anchor-link:hover) {
+  background-color: #f5f7fa;
+}
+
+:deep(.anchor-panel .el-anchor-link.is-active) {
+  background-color: #ecf5ff;
+}
+
+:deep(.anchor-panel .el-anchor-link.is-active > .el-anchor-link__title) {
+  color: #409eff;
+  font-weight: 500;
+}
 </style> 
