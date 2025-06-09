@@ -107,4 +107,31 @@ watch(
 .content-card {
     border-radius: 8px;
 }
+
+.markdown-body {
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.markdown-body :deep(table) {
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.markdown-body :deep(th),
+.markdown-body :deep(td) {
+  border: 1px solid #dfe2e5;
+  padding: 8px 12px;
+}
+
+.markdown-body :deep(th) {
+  background-color: #f6f8fa;
+  font-weight: 600;
+  text-align: left;
+}
+
+.markdown-body :deep(tr:nth-of-type(2n)) {
+  background-color: #f6f8fa;
+}
 </style>
