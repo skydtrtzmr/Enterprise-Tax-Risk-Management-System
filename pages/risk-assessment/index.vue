@@ -16,16 +16,27 @@
         </div>
         <template #tip>
           <div class="el-upload__tip">
-            请上传文件（文件名以 "v0" 结尾为高风险，以 "v1" 结尾为低风险）
+            请上传文件
           </div>
         </template>
       </el-upload>
-      <div v-if="!isAnalyzing && fileName" class="file-info">
-        当前文件: <strong>{{ fileName }}</strong> &rArr;
-        风险等级:
-        <span :class="riskLevel === 'high' ? 'high' : riskLevel === 'low' ? 'low' : 'none'">
-          {{ riskLevel === 'high' ? '高风险' : (riskLevel === 'low' ? '低风险' : '未识别') }}
-        </span>
+      <div class="info-panel">
+        <div v-if="!isAnalyzing && fileName && riskLevel !== 'none'" class="result-display">
+          <p class="file-name-display">当前文件: <strong>{{ fileName }}</strong></p>
+          <div :class="['risk-box', riskLevel]">
+             <div class="risk-box-title">风险等级</div>
+             <div class="risk-box-level">{{ riskLevel === 'high' ? '高风险' : '低风险' }}</div>
+          </div>
+        </div>
+        <div v-else class="instructions">
+          <h4>风险测评使用说明</h4>
+          <ul>
+            <li>点击或拖拽您的税务报表文件到左侧上传区域。</li>
+            <li>系统将对文件进行智能分析，请确保文件名符合规范。</li>
+            <li>分析过程将持续数秒，请耐心等待。</li>
+            <li>完成后，系统将展示详细的风险等级和测评报告。</li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -93,7 +104,7 @@ const handleFileChange = (file: UploadFile) => {
   } else {
     riskLevel.value = 'none'
     fileName.value = ''
-    ElMessage.error('无法识别的文件名格式。请确保文件名在扩展名之前以 "v0" 或 "v1" 结尾。')
+    ElMessage.error('无法识别的文件名格式。')
     return
   }
 
@@ -190,23 +201,63 @@ const removeTab = (targetName: TabPaneName) => {
   margin-top: 20px;
   border-radius: 4px;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 20px;
 }
 
-.file-info {
+.info-panel {
+  flex: 1;
+  padding: 10px 10px 10px 30px;
+  border-left: 1px solid #e4e7ed;
+}
+
+.instructions h4 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #303133;
+  margin-bottom: 15px;
+}
+
+.instructions ul {
+  padding-left: 20px;
+  margin: 0;
+  font-size: 13px;
+  color: #606266;
+  line-height: 1.8;
+}
+
+.result-display .file-name-display {
   font-size: 14px;
+  margin-bottom: 10px;
+  color: #606266;
 }
-.file-info .low {
-  color: #00c484;
-  font-weight: bold;
+
+.risk-box {
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  color: white;
 }
-.file-info .high {
-  color: red;
-  font-weight: bold;
+
+.risk-box.high {
+  background-color: #fde2e2;
+  border: 1px solid #f56c6c;
+  color: #f56c6c;
 }
-.file-info .none {
-  color: #909399;
+
+.risk-box.low {
+  background-color: #e9f9f4;
+  border: 1px solid #67c23a;
+  color: #67c23a;
+}
+
+.risk-box-title {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.risk-box-level {
+  font-size: 28px;
   font-weight: bold;
 }
 
