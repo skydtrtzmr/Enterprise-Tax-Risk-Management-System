@@ -60,7 +60,16 @@
           <el-table-column label="申请金额（万元）" prop="amount" />
           <el-table-column label="占比" prop="percentage" />
           <el-table-column label="对应项目 / 人员" prop="correspondence" />
-          <el-table-column label="系统匹配状态" prop="status" />
+          <el-table-column label="系统匹配状态" prop="status">
+            <template #default="scope">
+              <el-tag
+                :type="scope.row.status === '已匹配' ? 'success' : 'warning'"
+                disable-transitions
+              >
+                {{ scope.row.status }}
+              </el-tag>
+            </template>
+          </el-table-column>
         </el-table>
       </el-collapse-item>
 
@@ -77,7 +86,13 @@
           <el-table-column label="关联研发项目" prop="project" />
           <el-table-column label="项目编号" prop="projectId" />
           <el-table-column label="预计投入占比" prop="ratio" />
-          <el-table-column label="系统自动关联状态" prop="status" />
+          <el-table-column label="系统自动关联状态" prop="status">
+            <template #default="scope">
+              <el-tag type="success" disable-transitions>{{
+                scope.row.status
+              }}</el-tag>
+            </template>
+          </el-table-column>
         </el-table>
       </el-collapse-item>
 
@@ -92,7 +107,13 @@
           </el-table-column>
           <el-table-column label="业务场景" prop="scenario" />
           <el-table-column label="会计分录" prop="entry" />
-          <el-table-column label="系统自动生成标记" prop="tag" />
+          <el-table-column label="系统自动生成标记" prop="tag">
+            <template #default="scope">
+              <el-tag type="success" disable-transitions>{{
+                scope.row.tag
+              }}</el-tag>
+            </template>
+          </el-table-column>
         </el-table>
       </el-collapse-item>
 
@@ -107,9 +128,27 @@
           </el-table-column>
           <el-table-column label="校验维度" prop="dimension" />
           <el-table-column label="系统校验内容" prop="content" />
-          <el-table-column label="校验结果" prop="result" />
+          <el-table-column label="校验结果" prop="result">
+            <template #default="scope">
+              <el-tag
+                :type="scope.row.result === '一致' ? 'success' : 'warning'"
+                disable-transitions
+              >
+                {{ scope.row.result }}
+              </el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="差异金额" prop="difference" />
-          <el-table-column label="处理状态" prop="status" />
+          <el-table-column label="处理状态" prop="status">
+            <template #default="scope">
+              <el-tag
+                :type="scope.row.status === '已结案' ? 'success' : 'primary'"
+                disable-transitions
+              >
+                {{ scope.row.status }}
+              </el-tag>
+            </template>
+          </el-table-column>
         </el-table>
       </el-collapse-item>
 
@@ -124,8 +163,20 @@
           </el-table-column>
           <el-table-column label="鉴证项目" prop="item" />
           <el-table-column label="鉴证内容" prop="content" />
-          <el-table-column label="鉴证结论" prop="conclusion" />
-          <el-table-column label="证据附件" prop="attachment" />
+          <el-table-column label="鉴证结论" prop="conclusion">
+            <template #default="scope">
+              <el-tag type="success" disable-transitions>{{
+                scope.row.conclusion
+              }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="证据附件" prop="attachment">
+            <template #default="scope">
+              <el-button type="primary" link>{{
+                scope.row.attachment
+              }}</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-collapse-item>
 
@@ -138,7 +189,11 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="结论类型" prop="type" />
+          <el-table-column label="结论类型" prop="type">
+            <template #default="scope">
+              <el-tag disable-transitions>{{ scope.row.type }}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="结论内容" prop="content" />
           <el-table-column label="税务影响" prop="impact" />
         </el-table>
@@ -149,14 +204,22 @@
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
-                <p>详细信息 for: {{ props.row.operator }} at {{ props.row.time }}</p>
+                <p>
+                  详细信息 for: {{ props.row.operator }} at {{ props.row.time }}
+                </p>
               </div>
             </template>
           </el-table-column>
           <el-table-column label="操作时间" prop="time" />
           <el-table-column label="操作人" prop="operator" />
           <el-table-column label="操作内容" prop="action" />
-          <el-table-column label="系统反馈" prop="feedback" />
+          <el-table-column label="系统反馈" prop="feedback">
+            <template #default="scope">
+              <el-tag type="success" disable-transitions>{{
+                scope.row.feedback
+              }}</el-tag>
+            </template>
+          </el-table-column>
         </el-table>
       </el-collapse-item>
     </el-collapse>
@@ -182,15 +245,15 @@ const tableData1 = ref([
 ]);
 
 const tableData2 = ref([
-  { usage: '材料采购', project: '新型锂电池研发', projectId: 'RD-2024-06', ratio: '50%', status: '✅ 已关联' },
-  { usage: '人员工资', project: '新型锂电池研发', projectId: 'RD-2024-06', ratio: '30%', status: '✅ 已关联' },
-  { usage: '设备租赁', project: '新型锂电池研发', projectId: 'RD-2024-06', ratio: '20%', status: '✅ 已关联' },
+  { usage: '材料采购', project: '新型锂电池研发', projectId: 'RD-2024-06', ratio: '50%', status: '已关联' },
+  { usage: '人员工资', project: '新型锂电池研发', projectId: 'RD-2024-06', ratio: '30%', status: '已关联' },
+  { usage: '设备租赁', project: '新型锂电池研发', projectId: 'RD-2024-06', ratio: '20%', status: '已关联' },
 ]);
 
 const tableData3 = ref([
-  { scenario: '收到补贴', entry: '借：银行存款 200 万  贷：递延收益 - 研发补贴 200 万', tag: '✅ 已生成' },
-  { scenario: '采购电解液', entry: '借：研发支出 - 材料 - 项目 B 100 万  贷：银行存款 100 万  借：递延收益 - 研发补贴 100 万  贷：其他收益 - 补贴收入 100 万', tag: '✅ 已生成' },
-  { scenario: '支付工资', entry: '借：研发支出 - 人工 - 项目 B 60 万  贷：应付职工薪酬 60 万  借：递延收益 - 研发补贴 60 万  贷：其他收益 - 补贴收入 60 万', tag: '✅ 已生成' },
+  { scenario: '收到补贴', entry: '借：银行存款 200 万  贷：递延收益 - 研发补贴 200 万', tag: '已生成' },
+  { scenario: '采购电解液', entry: '借：研发支出 - 材料 - 项目 B 100 万  贷：银行存款 100 万  借：递延收益 - 研发补贴 100 万  贷：其他收益 - 补贴收入 100 万', tag: '已生成' },
+  { scenario: '支付工资', entry: '借：研发支出 - 人工 - 项目 B 60 万  贷：应付职工薪酬 60 万  借：递延收益 - 研发补贴 60 万  贷：其他收益 - 补贴收入 60 万', tag: '已生成' },
 ]);
 
 const tableData4 = ref([
