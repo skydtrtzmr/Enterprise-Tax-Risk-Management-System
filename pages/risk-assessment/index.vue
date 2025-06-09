@@ -8,6 +8,7 @@
         :on-change="handleFileChange"
         :show-file-list="false"
         class="upload-dragger"
+        :disabled="isAnalyzing"
       >
         <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
         <div class="el-upload__text">
@@ -19,7 +20,7 @@
           </div>
         </template>
       </el-upload>
-      <div v-if="fileName" class="file-info">
+      <div v-if="!isAnalyzing && fileName" class="file-info">
         当前文件: <strong>{{ fileName }}</strong> &rArr;
         风险等级:
         <span :class="riskLevel === 'high' ? 'high' : riskLevel === 'low' ? 'low' : 'none'">
@@ -27,34 +28,42 @@
         </span>
       </div>
     </div>
-    <el-tabs
-      v-model="activeTab"
-      type="card"
-      class="main-tabs"
-      closable
-      @tab-remove="removeTab"
-    >
-      <el-tab-pane
-        v-for="item in openTabs"
-        :key="item.name"
-        :label="item.title"
-        :name="item.name"
-      >
-      </el-tab-pane>
-    </el-tabs>
 
-    <div class="tab-content">
-      <template v-if="activeComponent">
-        <component :is="activeComponent" v-bind="activeComponentProps" />
-      </template>
+    <div v-if="isAnalyzing" class="analysis-progress">
+      <h3>{{ analysisStage }}</h3>
+      <el-progress :percentage="progress" :stroke-width="20" striped striped-flow />
     </div>
+
+    <template v-else-if="fileName">
+      <el-tabs
+        v-model="activeTab"
+        type="card"
+        class="main-tabs"
+        closable
+        @tab-remove="removeTab"
+      >
+        <el-tab-pane
+          v-for="item in openTabs"
+          :key="item.name"
+          :label="item.title"
+          :name="item.name"
+        >
+        </el-tab-pane>
+      </el-tabs>
+
+      <div class="tab-content">
+        <template v-if="activeComponent">
+          <component :is="activeComponent" v-bind="activeComponentProps" />
+        </template>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, shallowRef, computed, markRaw } from 'vue'
 import { UploadFilled } from '@element-plus/icons-vue'
-import type { UploadFile } from 'element-plus'
+import type { UploadFile, TabPaneName } from 'element-plus'
 import OneKeyScan from '~/components/OneKeyScan.vue'
 import RiskPool from '~/components/RiskPool.vue'
 import TestReport from '~/components/TestReport.vue'
@@ -65,22 +74,63 @@ const TestReportComponent = markRaw(TestReport)
 
 const riskLevel = ref<'low' | 'high' | 'none'>('none')
 const fileName = ref('')
+const isAnalyzing = ref(false)
+const progress = ref(0)
+const analysisStage = ref('')
 
 const handleFileChange = (file: UploadFile) => {
   const name = file.name || ''
-  fileName.value = name
 
   const dotIndex = name.lastIndexOf('.')
   const baseName = dotIndex === -1 ? name : name.slice(0, dotIndex)
 
+  let newRiskLevel: 'low' | 'high' | 'none' = 'none'
+
   if (baseName.endsWith('v0')) {
-    riskLevel.value = 'high'
+    newRiskLevel = 'high'
   } else if (baseName.endsWith('v1')) {
-    riskLevel.value = 'low'
+    newRiskLevel = 'low'
   } else {
     riskLevel.value = 'none'
+    fileName.value = ''
     ElMessage.error('无法识别的文件名格式。请确保文件名在扩展名之前以 "v0" 或 "v1" 结尾。')
+    return
   }
+
+  fileName.value = name
+  riskLevel.value = 'none'
+  isAnalyzing.value = true
+  progress.value = 0
+  
+  const analysisStages = [
+    '正在初始化分析引擎...',
+    '正在进行税务风险扫描...',
+    '正在分析发票数据...',
+    '正在比对合同信息...',
+    '正在进行历史数据比对...',
+    '正在生成税务风险报告...',
+  ]
+  let stageIndex = 0
+  const intervalTime = 2000 // 2 seconds per stage
+
+  const runAnalysis = () => {
+    if (stageIndex < analysisStages.length) {
+      analysisStage.value = analysisStages[stageIndex]
+      progress.value = Math.round((stageIndex / analysisStages.length) * 100)
+      stageIndex++
+      setTimeout(runAnalysis, intervalTime)
+    } else {
+      analysisStage.value = '分析完成'
+      progress.value = 100
+      setTimeout(() => {
+        isAnalyzing.value = false
+        riskLevel.value = newRiskLevel
+        activeTab.value = 'test-report'
+      }, 500)
+    }
+  }
+
+  runAnalysis()
 }
 
 const tabsMap = {
@@ -109,7 +159,7 @@ const activeComponentProps = computed(() => {
 })
 
 
-const removeTab = (targetName: string) => {
+const removeTab = (targetName: TabPaneName) => {
   const tabs = openTabs.value
   let activeName = activeTab.value
 
@@ -175,5 +225,19 @@ const removeTab = (targetName: string) => {
 .upload-dragger {
   flex: 1;
   min-width: 300px;
+}
+
+.analysis-progress {
+  margin-top: 20px;
+  background: white;
+  padding: 40px 20px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.analysis-progress h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #303133;
 }
 </style> 
