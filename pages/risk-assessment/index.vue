@@ -281,10 +281,6 @@ const removeTab = (targetName: TabPaneName) => {
     font-weight: bold;
 }
 
-.main-tabs {
-    /* margin-top: 20px; */
-}
-
 :deep(.el-tabs__header) {
     margin: 0;
 }
