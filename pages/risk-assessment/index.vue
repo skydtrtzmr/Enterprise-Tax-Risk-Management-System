@@ -103,7 +103,7 @@ const startAnalysis = (selectedRisk: "high" | "low") => {
 
 const tabsMap = {
     "one-key-scan": {
-        title: "智能问答",
+        title: "处理方式选择",
         name: "one-key-scan",
         component: OneKeyScanComponent,
     },

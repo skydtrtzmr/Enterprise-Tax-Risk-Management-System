@@ -132,7 +132,6 @@ body {
 
 .header-center {
     display: flex;
-    gap: 8px; /* Slightly more gap */
     height: 100%;
 }
 
@@ -169,6 +168,23 @@ body {
 }
 .header-center .nav-item:nth-child(5) {
     animation-delay: 0.7s;
+}
+
+/* 菜单项之间的分割线 */
+.nav-item:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 48px;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
 }
 
 .nav-item:hover {
