@@ -52,117 +52,169 @@
           <template #header>
             <div class="card-header">
               <span>1. 补贴用途分配表</span>
+              <el-button :icon="cardCollapseState['table-1'] ? ArrowDown : ArrowUp" text circle @click="toggleCardCollapse('table-1')" />
             </div>
           </template>
-          <el-table :data="tableData1" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
-            <el-table-column type="expand">
-              <template #default="props">
-                <div class="expanded-content"><p>详细信息 for: {{ props.row.category }}</p></div>
-              </template>
-            </el-table-column>
-            <el-table-column label="用途类别" prop="category" />
-            <el-table-column label="申请金额（万元）" prop="amount" />
-            <el-table-column label="占比" prop="percentage" />
-            <el-table-column label="对应项目 / 人员" prop="correspondence" />
-            <el-table-column label="系统匹配状态" prop="status">
-              <template #default="scope">
-                <el-tag :type="scope.row.status === '已匹配' ? 'success' : 'warning'" disable-transitions>{{ scope.row.status }}</el-tag>
-              </template>
-            </el-table-column>
-          </el-table>
+          <el-collapse-transition>
+            <div v-show="!cardCollapseState['table-1']">
+              <el-table :data="tableData1" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
+                <el-table-column type="expand">
+                  <template #default="props">
+                    <div class="expanded-content"><p>详细信息 for: {{ props.row.category }}</p></div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="用途类别" prop="category" />
+                <el-table-column label="申请金额（万元）" prop="amount" />
+                <el-table-column label="占比" prop="percentage" />
+                <el-table-column label="对应项目 / 人员" prop="correspondence" />
+                <el-table-column label="系统匹配状态" prop="status">
+                  <template #default="scope">
+                    <el-tag :type="scope.row.status === '已匹配' ? 'success' : 'warning'" disable-transitions>{{ scope.row.status }}</el-tag>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-collapse-transition>
         </el-card>
 
         <el-card id="table-2" class="box-card" shadow="never">
-          <template #header><div class="card-header"><span>2. 项目关联表</span></div></template>
-          <el-table :data="tableData2" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
-            <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.usage }}</p></div></template></el-table-column>
-            <el-table-column label="补贴用途" prop="usage" />
-            <el-table-column label="关联研发项目" prop="project" />
-            <el-table-column label="项目编号" prop="projectId" />
-            <el-table-column label="预计投入占比" prop="ratio" />
-            <el-table-column label="系统自动关联状态" prop="status">
-              <template #default="scope"><el-tag type="success" disable-transitions>{{ scope.row.status }}</el-tag></template>
-            </el-table-column>
-          </el-table>
+          <template #header>
+            <div class="card-header">
+              <span>2. 项目关联表</span>
+              <el-button :icon="cardCollapseState['table-2'] ? ArrowDown : ArrowUp" text circle @click="toggleCardCollapse('table-2')" />
+            </div>
+          </template>
+          <el-collapse-transition>
+            <div v-show="!cardCollapseState['table-2']">
+              <el-table :data="tableData2" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
+                <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.usage }}</p></div></template></el-table-column>
+                <el-table-column label="补贴用途" prop="usage" />
+                <el-table-column label="关联研发项目" prop="project" />
+                <el-table-column label="项目编号" prop="projectId" />
+                <el-table-column label="预计投入占比" prop="ratio" />
+                <el-table-column label="系统自动关联状态" prop="status">
+                  <template #default="scope"><el-tag type="success" disable-transitions>{{ scope.row.status }}</el-tag></template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-collapse-transition>
         </el-card>
 
         <el-card id="table-3" class="box-card" shadow="never">
-          <template #header><div class="card-header"><span>3. 会计科目设置与分录</span></div></template>
-          <el-table :data="tableData3" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
-            <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.scenario }}</p></div></template></el-table-column>
-            <el-table-column label="业务场景" prop="scenario" />
-            <el-table-column label="会计分录" prop="entry" />
-            <el-table-column label="系统自动生成标记" prop="tag">
-              <template #default="scope"><el-tag type="success" disable-transitions>{{ scope.row.tag }}</el-tag></template>
-            </el-table-column>
-          </el-table>
+          <template #header>
+            <div class="card-header">
+              <span>3. 会计科目设置与分录</span>
+              <el-button :icon="cardCollapseState['table-3'] ? ArrowDown : ArrowUp" text circle @click="toggleCardCollapse('table-3')" />
+            </div>
+          </template>
+          <el-collapse-transition>
+            <div v-show="!cardCollapseState['table-3']">
+              <el-table :data="tableData3" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
+                <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.scenario }}</p></div></template></el-table-column>
+                <el-table-column label="业务场景" prop="scenario" />
+                <el-table-column label="会计分录" prop="entry" />
+                <el-table-column label="系统自动生成标记" prop="tag">
+                  <template #default="scope"><el-tag type="success" disable-transitions>{{ scope.row.tag }}</el-tag></template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-collapse-transition>
         </el-card>
 
         <el-card id="table-4" class="box-card" shadow="never">
-          <template #header><div class="card-header"><span>4. 数据对账校验结果</span></div></template>
-          <el-table :data="tableData4" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
-            <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.dimension }}</p></div></template></el-table-column>
-            <el-table-column label="校验维度" prop="dimension" />
-            <el-table-column label="系统校验内容" prop="content" />
-            <el-table-column label="校验结果" prop="result">
-              <template #default="scope"><el-tag :type="scope.row.result === '一致' ? 'success' : 'warning'" disable-transitions>{{ scope.row.result }}</el-tag></template>
-            </el-table-column>
-            <el-table-column label="差异金额" prop="difference" />
-            <el-table-column label="处理状态" prop="status">
-              <template #default="scope"><el-tag :type="scope.row.status === '已结案' ? 'success' : 'primary'" disable-transitions>{{ scope.row.status }}</el-tag></template>
-            </el-table-column>
-          </el-table>
+          <template #header>
+            <div class="card-header">
+              <span>4. 数据对账校验结果</span>
+              <el-button :icon="cardCollapseState['table-4'] ? ArrowDown : ArrowUp" text circle @click="toggleCardCollapse('table-4')" />
+            </div>
+          </template>
+          <el-collapse-transition>
+            <div v-show="!cardCollapseState['table-4']">
+              <el-table :data="tableData4" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
+                <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.dimension }}</p></div></template></el-table-column>
+                <el-table-column label="校验维度" prop="dimension" />
+                <el-table-column label="系统校验内容" prop="content" />
+                <el-table-column label="校验结果" prop="result">
+                  <template #default="scope"><el-tag :type="scope.row.result === '一致' ? 'success' : 'warning'" disable-transitions>{{ scope.row.result }}</el-tag></template>
+                </el-table-column>
+                <el-table-column label="差异金额" prop="difference" />
+                <el-table-column label="处理状态" prop="status">
+                  <template #default="scope"><el-tag :type="scope.row.status === '已结案' ? 'success' : 'primary'" disable-transitions>{{ scope.row.status }}</el-tag></template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-collapse-transition>
         </el-card>
         
         <el-card id="table-5" class="box-card" shadow="never">
-          <template #header><div class="card-header"><span>5. 税务师鉴证项目清单</span></div></template>
-          <el-table :data="tableData5" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
-            <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.item }}</p></div></template></el-table-column>
-            <el-table-column label="鉴证项目" prop="item" />
-            <el-table-column label="鉴证内容" prop="content" />
-            <el-table-column label="鉴证结论" prop="conclusion">
-              <template #default="scope"><el-tag type="success" disable-transitions>{{ scope.row.conclusion }}</el-tag></template>
-            </el-table-column>
-            <el-table-column label="证据附件" prop="attachment">
-              <template #default="scope"><el-button type="primary" link>{{ scope.row.attachment }}</el-button></template>
-            </el-table-column>
-          </el-table>
+           <template #header>
+            <div class="card-header">
+              <span>5. 税务师鉴证项目清单</span>
+              <el-button :icon="cardCollapseState['table-5'] ? ArrowDown : ArrowUp" text circle @click="toggleCardCollapse('table-5')" />
+            </div>
+          </template>
+          <el-collapse-transition>
+            <div v-show="!cardCollapseState['table-5']">
+              <el-table :data="tableData5" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
+                <el-table-column type="expand"><template #default="props"><div class="expanded-content"><p>详细信息 for: {{ props.row.item }}</p></div></template></el-table-column>
+                <el-table-column label="鉴证项目" prop="item" />
+                <el-table-column label="鉴证内容" prop="content" />
+                <el-table-column label="鉴证结论" prop="conclusion">
+                  <template #default="scope"><el-tag type="success" disable-transitions>{{ scope.row.conclusion }}</el-tag></template>
+                </el-table-column>
+                <el-table-column label="证据附件" prop="attachment">
+                  <template #default="scope"><el-button type="primary" link>{{ scope.row.attachment }}</el-button></template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-collapse-transition>
         </el-card>
 
         <el-card id="table-6" class="box-card" shadow="never">
-          <template #header><div class="card-header"><span>6. 鉴证结论摘要表</span></div></template>
-          <el-table :data="tableData6" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
-            <el-table-column type="expand">
-              <template #default="props">
-                <div class="expanded-content">
-                  <p>详细信息 for: {{ props.row.type }}</p>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="结论类型" prop="type">
-              <template #default="scope">
-                <el-tag disable-transitions>{{ scope.row.type }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="结论内容" prop="content" />
-            <el-table-column label="税务影响" prop="impact" />
-          </el-table>
+          <template #header>
+            <div class="card-header">
+              <span>6. 鉴证结论摘要表</span>
+              <el-button :icon="cardCollapseState['table-6'] ? ArrowDown : ArrowUp" text circle @click="toggleCardCollapse('table-6')" />
+            </div>
+          </template>
+          <el-collapse-transition>
+            <div v-show="!cardCollapseState['table-6']">
+              <el-table :data="tableData6" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
+                <el-table-column label="结论类型" prop="type">
+                  <template #default="scope">
+                    <el-tag disable-transitions>{{ scope.row.type }}</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="结论内容" prop="content" />
+                <el-table-column label="税务影响" prop="impact" />
+              </el-table>
+            </div>
+          </el-collapse-transition>
         </el-card>
 
         <el-card id="table-7" class="box-card" shadow="never">
-          <template #header><div class="card-header"><span>7. 平台操作日志</span></div></template>
-           <el-timeline>
-            <el-timeline-item
-              v-for="(activity, index) in tableData7"
-              :key="index"
-              :timestamp="activity.time"
-              type="primary"
-            >
-             <p><strong>操作人:</strong> {{ activity.operator }}</p>
-             <p><strong>操作内容:</strong> {{ activity.action }}</p>
-             <p><strong>系统反馈:</strong> <el-tag size="small" type="success">{{ activity.feedback }}</el-tag></p>
-            </el-timeline-item>
-          </el-timeline>
+          <template #header>
+            <div class="card-header">
+              <span>7. 平台操作日志</span>
+              <el-button :icon="cardCollapseState['table-7'] ? ArrowDown : ArrowUp" text circle @click="toggleCardCollapse('table-7')" />
+            </div>
+          </template>
+          <el-collapse-transition>
+            <div v-show="!cardCollapseState['table-7']">
+              <el-timeline>
+                <el-timeline-item
+                  v-for="(activity, index) in tableData7"
+                  :key="index"
+                  :timestamp="activity.time"
+                  type="primary"
+                >
+                <p><strong>操作人:</strong> {{ activity.operator }}</p>
+                <p><strong>操作内容:</strong> {{ activity.action }}</p>
+                <p><strong>系统反馈:</strong> <el-tag size="small" type="success">{{ activity.feedback }}</el-tag></p>
+                </el-timeline-item>
+              </el-timeline>
+            </div>
+          </el-collapse-transition>
         </el-card>
       </el-col>
     </el-row>
@@ -196,13 +248,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { CollectionTag, ArrowDown, Close, List } from '@element-plus/icons-vue';
+import { ref, reactive } from 'vue';
+import { CollectionTag, ArrowDown, Close, List, ArrowUp } from '@element-plus/icons-vue';
 
 defineProps<{ projectId: string }>();
 
 const isProjectInfoExpanded = ref(false);
 const isAnchorVisible = ref(false);
+
+const cardCollapseState = reactive({
+  'table-1': false,
+  'table-2': false,
+  'table-3': false,
+  'table-4': false,
+  'table-5': false,
+  'table-6': false,
+  'table-7': false,
+});
+
+const toggleCardCollapse = (cardId: keyof typeof cardCollapseState) => {
+  cardCollapseState[cardId] = !cardCollapseState[cardId];
+};
 
 const tableData1 = ref([
   { category: '材料采购', amount: 100, percentage: '50%', correspondence: '研发项目 B、电解液采购', status: '已匹配' },
@@ -312,45 +378,6 @@ const tableData7 = ref([
 :deep(.el-table) {
   border-radius: 6px;
   overflow: hidden;
-}
-
-/* New styles for summary box */
-.summary-box {
-  border: 1px solid #e9ecf3;
-  border-radius: 6px;
-  padding: 16px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.2s ease-in-out;
-}
-.summary-box:hover {
-  box-shadow: var(--el-box-shadow-light);
-}
-.summary-box-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.summary-box-title {
-  font-weight: 500;
-  color: var(--el-text-color-primary);
-}
-.summary-box-content {
-  color: var(--el-text-color-regular);
-  font-size: 14px;
-  flex-grow: 1;
-}
-.summary-box-footer {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #f2f3f5;
-  font-size: 14px;
-  color: var(--el-text-color-secondary);
-}
-.summary-box-footer strong {
-  color: #409eff;
 }
 
 /* New styles for FAB Anchor */
