@@ -92,11 +92,40 @@ import type { PropType } from 'vue';
 
 type RiskLevel = 'low' | 'high' | 'none';
 
+interface TableRow {
+  dimension: string;
+  indicator: string;
+  description: string;
+  level: string;
+}
+
+interface CoreRisk {
+  text: string;
+  tag: string;
+  type: 'danger' | 'warning' | 'success' | 'info';
+}
+
+interface ReportData {
+  percentage: number;
+  totalChecks: number;
+  bar: {
+    categories: string[];
+    values: number[];
+  };
+  pie: {
+    value: number;
+    name: string;
+    itemStyle?: { color: string };
+  }[];
+  table: TableRow[];
+  core: CoreRisk[];
+}
+
 const props = defineProps({
   riskLevel: {
     type: String as PropType<RiskLevel>,
     default: 'none',
-  },
+  },  
 });
 
 const percentage = ref(85);
@@ -110,10 +139,10 @@ const colors = [
   { color: '#6f7ad3', percentage: 100 },
 ];
 
-const tableData = ref([]);
-const coreRisks = ref([]);
+const tableData = ref<TableRow[]>([]);
+const coreRisks = ref<CoreRisk[]>([]);
 
-const highRiskData = {
+const highRiskData: ReportData = {
   percentage: 45,
   totalChecks: 150,
   bar: {
@@ -121,9 +150,9 @@ const highRiskData = {
     values: [8, 12, 5, 9, 11]
   },
   pie: [
-    { value: 18, name: '高风险' },
-    { value: 20, name: '中风险' },
-    { value: 7, name: '低风险' },
+    { value: 18, name: '高风险', itemStyle: { color: '#f56c6c' } },
+    { value: 20, name: '中风险', itemStyle: { color: '#e6a23c' } },
+    { value: 7, name: '低风险', itemStyle: { color: '#67c23a' } },
   ],
   table: [
     { dimension: '发票管理', indicator: '发票开具异常', description: '存在大量连号、作废发票', level: '高' },
@@ -136,7 +165,7 @@ const highRiskData = {
   ]
 };
 
-const lowRiskData = {
+const lowRiskData: ReportData = {
   percentage: 88,
   totalChecks: 110,
   bar: {
@@ -144,9 +173,9 @@ const lowRiskData = {
     values: [2, 1, 3, 1, 0]
   },
   pie: [
-    { value: 1, name: '高风险' },
-    { value: 3, name: '中风险' },
-    { value: 15, name: '低风险' },
+    { value: 1, name: '高风险', itemStyle: { color: '#f56c6c' } },
+    { value: 3, name: '中风险', itemStyle: { color: '#e6a23c' } },
+    { value: 15, name: '低风险', itemStyle: { color: '#67c23a' } },
   ],
   table: [
      { dimension: '成本管理', indicator: '部分差旅费用票据不合规', description: '少量差旅报销缺少有效凭证', level: '中' },
@@ -157,7 +186,7 @@ const lowRiskData = {
   ]
 };
 
-const defaultData = {
+const defaultData: ReportData = {
   percentage: 0,
   totalChecks: 0,
   bar: { categories: ['发票合规', '税务申报', '成本票据', '合同涉税', '关联交易'], values: [0, 0, 0, 0, 0]},
@@ -171,7 +200,7 @@ const barOption = ref({});
 const pieOption = ref({});
 
 const updateReportData = (level: RiskLevel) => {
-  let data;
+  let data: ReportData;
   if (level === 'high') {
     data = highRiskData;
   } else if (level === 'low') {
@@ -251,7 +280,7 @@ watch(() => props.riskLevel, (newLevel) => {
 }, { immediate: true });
 
 
-const tableRowClassName = ({ row }) => {
+const tableRowClassName = ({ row }: { row: TableRow }) => {
   if (row.level === '高') {
     return 'danger-row';
   } else if (row.level === '中') {
