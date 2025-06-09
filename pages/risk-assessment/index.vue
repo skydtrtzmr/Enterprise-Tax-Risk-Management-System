@@ -20,10 +20,10 @@
             <template v-if="activeTab === 'one-key-scan'">
                 <div v-if="!isAnalyzing" class="question-container">
                     <h3>60万元政府补助是否需要缴纳企业所得税？</h3>
-                    <p class="subtitle">请根选择对应的处理方式：</p>
+                    <p class="subtitle">请选择对应的处理方式：</p>
                     <div class="button-group">
-                        <el-button type="danger" size="large" @click="startAnalysis('high')">缴纳企业所得税</el-button>
-                        <el-button type="success" size="large" @click="startAnalysis('low')">不缴纳企业所得税</el-button>
+                        <el-button type="danger" size="large" @click="startAnalysis('high')"><span class="button-text">缴纳企业所得税</span></el-button>
+                        <el-button type="success" size="large" @click="startAnalysis('low')"><span class="button-text">不缴纳企业所得税</span></el-button>
                     </div>
                 </div>
 
@@ -166,11 +166,11 @@ const removeTab = (targetName: TabPaneName) => {
 }
 .question-container h3 {
     margin-bottom: 20px;
-    font-size: 22px;
+    font-size: 28px;
 }
 .question-container p {
     color: #606266;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.8;
     max-width: 800px;
     margin: 0 auto 20px;
@@ -179,7 +179,7 @@ const removeTab = (targetName: TabPaneName) => {
 .question-container .subtitle {
     font-weight: bold;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
     color: #303133;
 }
 .button-group {
@@ -187,6 +187,11 @@ const removeTab = (targetName: TabPaneName) => {
     display: flex;
     justify-content: center;
     gap: 20px;
+}
+
+.button-text {
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .main-tabs {
@@ -212,7 +217,7 @@ const removeTab = (targetName: TabPaneName) => {
 
 .analysis-progress h3 {
     margin-bottom: 20px;
-    font-size: 18px;
+    font-size: 20px;
     color: #303133;
 }
 </style>
