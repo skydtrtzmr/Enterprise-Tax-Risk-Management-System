@@ -83,7 +83,7 @@ export const allRisksData: Risk[] = [
     {
         id: "CASH-BAL-01",
         type: "butie-SUB-2024-001",
-        name: "纳税人【库存现金】是否有期末余额",
+        name: "不征税补贴资金用于支出所形成的费用或资产的纳税调整风险",
         year: "2022,2023,2024",
         month: "-",
         status: "未应对",
@@ -91,7 +91,7 @@ export const allRisksData: Risk[] = [
     {
         id: "ASSET-LOSS-01",
         type: "butie-SUB-2024-001",
-        name: "非房地产企业房产未清算或未按公允价值清算，车辆、设备等资产损失未按规定进行资产损失申报的风险",
+        name: "享受补贴的资产发生损失未按规定申报的风险",
         year: "2022",
         month: "-",
         status: "未应对",
