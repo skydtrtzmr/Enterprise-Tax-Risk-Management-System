@@ -12,11 +12,28 @@
             </el-progress>
           </div>
         </el-col>
-        <el-col :span="18">
+        <el-col :span="12">
           <h2 class="report-title">企业年度税务风险测评报告</h2>
           <p class="report-subtitle">
             根据您提交的数据，系统完成了 {{ totalChecks }} 项指标的全面检测，综合评定企业的税务健康状况。
           </p>
+        </el-col>
+        <el-col :span="6">
+            <div v-if="riskLevel !== 'none'" :class="['risk-box', riskLevel]">
+                 <div
+                    class="risk-box-description"
+                    v-if="riskLevel === 'high'"
+                >
+                    <p>检测完成，高风险！！</p>
+                </div>
+                <div
+                    class="risk-box-description"
+                    v-if="riskLevel === 'low'"
+                >
+                    <p>检测完成，无风险或风险较低。</p>
+                    <p>请注意高新技术企业认定标准。</p>
+                </div>
+            </div>
         </el-col>
       </el-row>
     </el-card>
@@ -355,6 +372,34 @@ const tableRowClassName = ({ row }: { row: TableRow }) => {
 .risk-summary li .el-tag {
   margin-right: 10px;
   flex-shrink: 0;
+}
+
+.risk-box {
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.risk-box.high {
+    background-color: #fde2e2;
+    border: 1px solid #f56c6c;
+    color: #f56c6c;
+}
+
+.risk-box.low {
+    background-color: #e9f9f4;
+    border: 1px solid #67c23a;
+    color: #67c23a;
+}
+
+.risk-box-description {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.risk-box-description p {
+    margin: 0;
+    line-height: 1.4;
 }
 </style>
 

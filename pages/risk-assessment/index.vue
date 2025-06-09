@@ -44,21 +44,6 @@
                             <p class="file-name-display">
                                 当前文件: <strong>{{ fileName }}</strong>
                             </p>
-                            <div :class="['risk-box', riskLevel]">
-                                <div
-                                    class="risk-box-description"
-                                    v-if="riskLevel === 'high'"
-                                >
-                                    <p>检测完成，高风险！！</p>
-                                </div>
-                                <div
-                                    class="risk-box-description"
-                                    v-if="riskLevel === 'low'"
-                                >
-                                    <p>检测完成，无风险或风险较低。</p>
-                                    <p>请注意高新技术企业认定标准。</p>
-                                </div>
-                            </div>
                         </div>
                         <div v-else class="instructions">
                             <h4>风险测评使用说明</h4>
@@ -99,11 +84,9 @@ import { ref, shallowRef, computed, markRaw } from "vue";
 import { UploadFilled } from "@element-plus/icons-vue";
 import type { UploadFile, TabPaneName } from "element-plus";
 import OneKeyScan from "~/components/OneKeyScan.vue";
-import RiskPool from "~/components/RiskPool.vue";
 import TestReport from "~/components/TestReport.vue";
 
 const OneKeyScanComponent = markRaw(OneKeyScan);
-const RiskPoolComponent = markRaw(RiskPool);
 const TestReportComponent = markRaw(TestReport);
 
 const riskLevel = ref<"low" | "high" | "none">("none");
@@ -137,6 +120,7 @@ const handleFileChange = (file: UploadFile) => {
     progress.value = 0;
 
     const analysisStages = [
+        "正在初始化分析引擎...",
         "正在进行税务风险扫描...",
         "正在分析发票数据...",
         "正在比对合同信息...",
@@ -144,7 +128,7 @@ const handleFileChange = (file: UploadFile) => {
         "正在生成税务风险报告...",
     ];
     let stageIndex = 0;
-    const intervalTime = 2000; // 2 seconds per stage
+    const intervalTime = 1000; // 2 seconds per stage
 
     const runAnalysis = () => {
         if (stageIndex < analysisStages.length) {
@@ -174,11 +158,6 @@ const tabsMap = {
         name: "one-key-scan",
         component: OneKeyScanComponent,
     },
-    "risk-pool": {
-        title: "风险池",
-        name: "risk-pool",
-        component: RiskPoolComponent,
-    },
     "test-report": {
         title: "测评报告",
         name: "test-report",
@@ -188,7 +167,6 @@ const tabsMap = {
 
 const openTabs = shallowRef([
     tabsMap["one-key-scan"],
-    tabsMap["risk-pool"],
     tabsMap["test-report"],
 ]);
 const activeTab = ref("one-key-scan");
