@@ -3,7 +3,7 @@
     <el-header class="main-header">
       <div class="header-left">
         <div class="title">企业税收风险管理系统 F8</div>
-        <div class="subtitle">由无锡博盾授权试用90天-剩余89天</div>
+        <div class="subtitle">（已授权）</div>
       </div>
       <div class="header-center">
         <NuxtLink to="/data-management" class="nav-item">
