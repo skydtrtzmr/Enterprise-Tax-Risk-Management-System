@@ -5,9 +5,7 @@ import path from 'path';
 export default defineEventHandler(async (event) => {
   const params = getRouterParams(event);
   const riskId = params.id;
-  console.log('riskId');
-  console.log(riskId);
-  
+ 
 
   if (!riskId) {
     throw createError({
