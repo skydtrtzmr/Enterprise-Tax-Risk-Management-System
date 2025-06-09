@@ -48,7 +48,7 @@
 
     <el-collapse v-model="activeCollapse" class="data-tables-collapse">
       <el-collapse-item title="1. 补贴用途分配表" name="1">
-        <el-table :data="tableData1" border style="width: 100%">
+        <el-table :data="tableData1" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
@@ -74,7 +74,7 @@
       </el-collapse-item>
 
       <el-collapse-item title="2. 项目关联表" name="2">
-        <el-table :data="tableData2" border style="width: 100%">
+        <el-table :data="tableData2" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
@@ -97,7 +97,7 @@
       </el-collapse-item>
 
       <el-collapse-item title="3. 会计科目设置与分录" name="3">
-        <el-table :data="tableData3" border style="width: 100%">
+        <el-table :data="tableData3" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
@@ -118,7 +118,7 @@
       </el-collapse-item>
 
       <el-collapse-item title="4. 数据对账校验结果" name="4">
-        <el-table :data="tableData4" border style="width: 100%">
+        <el-table :data="tableData4" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
@@ -153,7 +153,7 @@
       </el-collapse-item>
 
       <el-collapse-item title="5. 税务师鉴证项目清单" name="5">
-        <el-table :data="tableData5" border style="width: 100%">
+        <el-table :data="tableData5" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
@@ -181,7 +181,7 @@
       </el-collapse-item>
 
       <el-collapse-item title="6. 鉴证结论摘要表" name="6">
-        <el-table :data="tableData6" border style="width: 100%">
+        <el-table :data="tableData6" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
@@ -200,7 +200,7 @@
       </el-collapse-item>
 
       <el-collapse-item title="7. 平台操作日志" name="7">
-        <el-table :data="tableData7" border style="width: 100%">
+        <el-table :data="tableData7" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
           <el-table-column type="expand">
             <template #default="props">
               <div class="expanded-content">
@@ -251,7 +251,7 @@ const tableData2 = ref([
 ]);
 
 const tableData3 = ref([
-  { scenario: '收到补贴', entry: '借：银行存款 200 万  贷：递延收益 - 研发补贴 200 万', tag: '已生成' },
+  { scenario: '收到补贴', entry: '借：银行存款 200 万\n  贷：递延收益 - 研发补贴 200 万', tag: '已生成' },
   { scenario: '采购电解液', entry: '借：研发支出 - 材料 - 项目 B 100 万  贷：银行存款 100 万  借：递延收益 - 研发补贴 100 万  贷：其他收益 - 补贴收入 100 万', tag: '已生成' },
   { scenario: '支付工资', entry: '借：研发支出 - 人工 - 项目 B 60 万  贷：应付职工薪酬 60 万  借：递延收益 - 研发补贴 60 万  贷：其他收益 - 补贴收入 60 万', tag: '已生成' },
 ]);
@@ -353,5 +353,14 @@ const tableData7 = ref([
   padding: 16px;
   background-color: #f8f9fa;
   border-radius: 4px;
+}
+
+:deep(.el-table th.el-table__cell) {
+  background-color: #f5f7fa;
+}
+
+:deep(.el-table) {
+  border-radius: 6px;
+  overflow: hidden;
 }
 </style> 
