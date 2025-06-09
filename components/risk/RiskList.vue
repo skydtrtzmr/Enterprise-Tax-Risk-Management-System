@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Filter, Printer, Download } from '@element-plus/icons-vue';
 
@@ -44,6 +44,8 @@ const props = defineProps<{
 const router = useRouter();
 
 const statusFilter = ref('all');
+
+const STORAGE_KEY = 'risk_statuses';
 
 // Mock data based on the screenshot
 const allRisks = ref([
@@ -58,6 +60,18 @@ const allRisks = ref([
     { id: 9, type: 'butie-SUB-2024-004', name: '应收类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
     { id: 10, type: 'butie-SUB-2024-005', name: '应付类往来账户涉税风险模型', year: '2020,2021,2022', month: '-', status: '已应对' },
 ]);
+
+onMounted(() => {
+  const savedStatuses = localStorage.getItem(STORAGE_KEY);
+  if (savedStatuses) {
+    const statuses = JSON.parse(savedStatuses);
+    allRisks.value.forEach(risk => {
+      if (statuses[risk.id]) {
+        risk.status = statuses[risk.id];
+      }
+    });
+  }
+});
 
 const tableData = ref<any[]>([]);
 
@@ -91,7 +105,13 @@ const createResponse = (row: { id: number }) => {
   const risk = allRisks.value.find(r => r.id === row.id);
   if (risk) {
     risk.status = '已应对';
+    // Persist the change to localStorage
+    const savedStatuses = localStorage.getItem(STORAGE_KEY);
+    const statuses = savedStatuses ? JSON.parse(savedStatuses) : {};
+    statuses[risk.id] = risk.status;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(statuses));
   }
+  router.push(`/risk-response/response/${row.id}`);
 };
 </script>
 
