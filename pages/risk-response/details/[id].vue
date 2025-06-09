@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { marked } from 'marked';
 
@@ -37,17 +37,32 @@ const onBack = () => {
   router.back();
 };
 
-const { data: renderedMarkdown, pending, error } = useFetch(
-  () => `/risks/${riskId.value}`,
-  {
-    baseURL: '/api', 
-    async transform(response: { content: string }) {
-      if (response && response.content) {
-        return await marked(response.content);
-      }
-      return '<p>未能加载内容或内容为空。</p>';
-    },
-  }
+const {
+  data: renderedMarkdown,
+  pending,
+  error,
+  execute,
+} = useFetch(() => `/risks/${riskId.value}`, {
+  baseURL: '/api',
+  immediate: false,
+  watch: false,
+  // 通过watch: flase 来避免重复请求
+  async transform(response: { content: string }) {
+    if (response && response.content) {
+      return await marked(response.content);
+    }
+    return '<p>未能加载内容或内容为空。</p>';
+  },
+});
+
+watch(
+  riskId,
+  (newId) => {
+    if (newId) {
+      execute();
+    }
+  },
+  { immediate: true }
 );
 </script>
 
