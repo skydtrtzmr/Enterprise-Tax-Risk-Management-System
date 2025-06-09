@@ -1,101 +1,96 @@
 <template>
     <div class="page-container">
-        <div class="upload-section">
-            <el-upload
-                drag
-                action="#"
-                :auto-upload="false"
-                :on-change="handleFileChange"
-                :show-file-list="false"
-                class="upload-dragger"
-                :disabled="isAnalyzing"
+        <el-tabs
+            v-model="activeTab"
+            type="card"
+            class="main-tabs"
+            closable
+            @tab-remove="removeTab"
+        >
+            <el-tab-pane
+                v-for="item in openTabs"
+                :key="item.name"
+                :label="item.title"
+                :name="item.name"
             >
-                <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
-                <div class="el-upload__text">
-                    将文件拖到此处，或<em>点击上传</em>
-                </div>
-                <template #tip>
-                    <div class="el-upload__tip">请上传文件</div>
-                </template>
-            </el-upload>
-            <div class="info-panel">
-                <div
-                    v-if="!isAnalyzing && fileName && riskLevel !== 'none'"
-                    class="result-display"
-                >
-                    <p class="file-name-display">
-                        当前文件: <strong>{{ fileName }}</strong>
-                    </p>
-                    <div :class="['risk-box', riskLevel]">
-                        <!-- <div class="risk-box-title">风险等级</div> -->
-                        <!-- <div class="risk-box-level">
-                            {{ riskLevel === "high" ? "高风险" : "低风险" }}
-                        </div> -->
-                        <div
-                            class="risk-box-description"
-                            v-if="riskLevel === 'high'"
-                        >
-                            <p>检测完成，高风险！！</p>
+            </el-tab-pane>
+        </el-tabs>
+
+        <div class="tab-content">
+            <template v-if="activeTab === 'one-key-scan'">
+                <div class="upload-section">
+                    <el-upload
+                        drag
+                        action="#"
+                        :auto-upload="false"
+                        :on-change="handleFileChange"
+                        :show-file-list="false"
+                        class="upload-dragger"
+                        :disabled="isAnalyzing"
+                    >
+                        <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或<em>点击上传</em>
                         </div>
+                        <template #tip>
+                            <div class="el-upload__tip">请上传文件</div>
+                        </template>
+                    </el-upload>
+                    <div class="info-panel">
                         <div
-                            class="risk-box-description"
-                            v-if="riskLevel === 'low'"
+                            v-if="!isAnalyzing && fileName && riskLevel !== 'none'"
+                            class="result-display"
                         >
-                            <p>检测完成，无风险或风险较低。</p>
-                            <p>请注意高新技术企业认定标准。</p>
+                            <p class="file-name-display">
+                                当前文件: <strong>{{ fileName }}</strong>
+                            </p>
+                            <div :class="['risk-box', riskLevel]">
+                                <div
+                                    class="risk-box-description"
+                                    v-if="riskLevel === 'high'"
+                                >
+                                    <p>检测完成，高风险！！</p>
+                                </div>
+                                <div
+                                    class="risk-box-description"
+                                    v-if="riskLevel === 'low'"
+                                >
+                                    <p>检测完成，无风险或风险较低。</p>
+                                    <p>请注意高新技术企业认定标准。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="instructions">
+                            <h4>风险测评使用说明</h4>
+                            <ul>
+                                <li>点击或拖拽您的税务报表文件到左侧上传区域。</li>
+                                <li>
+                                    系统将对文件进行智能分析，请确保文件名符合规范。
+                                </li>
+                                <li>分析过程将持续数秒，请耐心等待。</li>
+                                <li>完成后，系统将展示详细的风险等级和测评报告。</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div v-else class="instructions">
-                    <h4>风险测评使用说明</h4>
-                    <ul>
-                        <li>点击或拖拽您的税务报表文件到左侧上传区域。</li>
-                        <li>
-                            系统将对文件进行智能分析，请确保文件名符合规范。
-                        </li>
-                        <li>分析过程将持续数秒，请耐心等待。</li>
-                        <li>完成后，系统将展示详细的风险等级和测评报告。</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
 
-        <div v-if="isAnalyzing" class="analysis-progress">
-            <h3>{{ analysisStage }}</h3>
-            <el-progress
-                :percentage="progress"
-                :stroke-width="20"
-                striped
-                striped-flow
-            />
-        </div>
-
-        <template v-else-if="fileName">
-            <el-tabs
-                v-model="activeTab"
-                type="card"
-                class="main-tabs"
-                closable
-                @tab-remove="removeTab"
-            >
-                <el-tab-pane
-                    v-for="item in openTabs"
-                    :key="item.name"
-                    :label="item.title"
-                    :name="item.name"
-                >
-                </el-tab-pane>
-            </el-tabs>
-
-            <div class="tab-content">
-                <template v-if="activeComponent">
-                    <component
-                        :is="activeComponent"
-                        v-bind="activeComponentProps"
+                <div v-if="isAnalyzing" class="analysis-progress">
+                    <h3>{{ analysisStage }}</h3>
+                    <el-progress
+                        :percentage="progress"
+                        :stroke-width="20"
+                        striped
+                        striped-flow
                     />
-                </template>
-            </div>
-        </template>
+                </div>
+            </template>
+            <template v-else-if="activeComponent">
+                <component
+                    :is="activeComponent"
+                    v-bind="activeComponentProps"
+                />
+            </template>
+        </div>
     </div>
 </template>
 
@@ -196,9 +191,10 @@ const openTabs = shallowRef([
     tabsMap["risk-pool"],
     tabsMap["test-report"],
 ]);
-const activeTab = ref("test-report");
+const activeTab = ref("one-key-scan");
 
 const activeComponent = computed(() => {
+    if (activeTab.value === 'one-key-scan') return null;
     const active = openTabs.value.find((tab) => tab.name === activeTab.value);
     return active ? active.component : null;
 });
@@ -232,7 +228,7 @@ const removeTab = (targetName: TabPaneName) => {
 
 <style scoped>
 .page-container {
-    padding: 0 20px;
+    padding: 20px;
 }
 
 .upload-section {
@@ -308,7 +304,7 @@ const removeTab = (targetName: TabPaneName) => {
 }
 
 .main-tabs {
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 :deep(.el-tabs__header) {
