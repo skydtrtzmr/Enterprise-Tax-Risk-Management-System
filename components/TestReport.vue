@@ -31,7 +31,8 @@
                     class="risk-box-description"
                     v-if="riskLevel === 'low'"
                 >
-                    <p>检测完成，无风险或风险较低。</p>
+                    <p>检测完成</p>
+                    <p>无风险或风险较低。</p>
                     <p class="risk-box-subtitle">请注意高新技术企业认定标准。</p>
                 </div>
             </div>
