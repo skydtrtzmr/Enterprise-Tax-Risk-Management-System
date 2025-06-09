@@ -155,7 +155,7 @@ const removeTab = (targetName: TabPaneName) => {
 
 <style scoped>
 .page-container {
-    padding: 20px;
+    padding: 0;
 }
 
 .question-container {
@@ -190,7 +190,7 @@ const removeTab = (targetName: TabPaneName) => {
 }
 
 .main-tabs {
-  margin-top: 20px;
+  margin-top: 0;
 }
 
 :deep(.el-tabs__header) {
@@ -199,7 +199,7 @@ const removeTab = (targetName: TabPaneName) => {
 
 .tab-content {
     background-color: #f0f2f5;
-    padding-top: 20px;
+    padding-top: 0;
 }
 
 .analysis-progress {
