@@ -12,7 +12,8 @@
           >
             <div class="info-title">
               <el-icon><CollectionTag /></el-icon>
-              <span>项目信息：新型锂电池材料研发补贴</span>
+              <span>项目信息</span>
+              <span class="collapsed-project-name">新型锂电池材料研发补贴</span>
             </div>
             <el-button type="primary" link>
               展开详情 <el-icon class="el-icon--right"><ArrowDown /></el-icon>
@@ -34,15 +35,16 @@
                 />
               </div>
             </template>
-            <el-descriptions :column="3" border>
+            <el-descriptions :column="2" border>
               <el-descriptions-item label="项目编号">{{ projectId }}</el-descriptions-item>
+              <el-descriptions-item label="项目名称">新型锂电池材料研发补贴</el-descriptions-item>
               <el-descriptions-item label="补贴金额">200 万元</el-descriptions-item>
-              <el-descriptions-item label="管理状态">
-                <el-tag size="small">全流程管控中</el-tag>
-              </el-descriptions-item>
               <el-descriptions-item label="申请日期">2024-03-15</el-descriptions-item>
               <el-descriptions-item label="到账日期">2024-04-20</el-descriptions-item>
               <el-descriptions-item label="补贴类型">研发专项补贴</el-descriptions-item>
+              <el-descriptions-item label="管理状态">
+                <el-tag size="small">全流程管控中</el-tag>
+              </el-descriptions-item>
             </el-descriptions>
           </el-card>
         </div>
@@ -345,6 +347,12 @@ const tableData7 = ref([
   align-items: center;
   gap: 8px;
   color: #303133;
+}
+
+.collapsed-project-name {
+  font-weight: 400;
+  color: #606266;
+  margin-left: 8px;
 }
 
 .box-card {

@@ -12,18 +12,18 @@
     </div>
     <el-table :data="filteredData" stripe style="width: 100%" :header-cell-style="{ background: '#f5f7fa', color: '#606266' }">
       <el-table-column type="index" label="序号" width="60" />
-      <el-table-column prop="id" label="ID" width="150" />
+      <el-table-column prop="id" label="ID" width="160" />
       <el-table-column prop="name" label="风险名称" min-width="300" />
-      <el-table-column prop="year" label="风险年度" width="120" />
-      <el-table-column prop="month" label="风险月份" width="120" />
-      <el-table-column prop="status" label="状态" width="120">
+      <el-table-column prop="year" label="风险年度" width="160" />
+      <el-table-column prop="month" label="风险月份" width="100" />
+      <el-table-column prop="status" label="状态" width="100">
         <template #default="scope">
           <el-tag :type="scope.row.status === '未应对' ? 'danger' : 'success'" disable-transitions>
             {{ scope.row.status }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180">
+      <el-table-column label="操作" width="160">
         <template #default="scope">
           <el-button type="primary" link @click="viewDetails(scope.row)">详情</el-button>
           <el-button type="primary" link @click="createResponse(scope.row)">对策制定</el-button>
