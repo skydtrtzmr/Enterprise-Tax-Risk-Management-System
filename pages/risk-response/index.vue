@@ -43,9 +43,14 @@
         <h2>研发费用加计扣除</h2>
       </div>
       <div v-if="activeTab === 'subsidy-management'">
-        <!-- 补贴管理的内容将放在这里 -->
-        <h2>补贴管理</h2>
-        <p v-if="activeMenu.startsWith('subsidy-management-')">当前选择的项目: {{ activeMenu.replace('subsidy-management-', '') }}</p>
+        <SubsidyManagementDetail
+          v-if="activeMenu.startsWith('subsidy-management-')"
+          :project-id="activeMenu.replace('subsidy-management-', '')"
+        />
+        <div v-else class="empty-state">
+          <h2>补贴管理</h2>
+          <p>请在左侧选择一个项目查看详情。</p>
+        </div>
       </div>
     </el-main>
   </el-container>
@@ -53,6 +58,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import SubsidyManagementDetail from '~/components/risk/SubsidyManagementDetail.vue';
 import {
   Document,
   CreditCard,
@@ -116,5 +122,14 @@ const activeTab = computed(() => {
 .content-main {
   padding: 20px;
   background-color: #f0f2f5;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #909399;
 }
 </style> 
