@@ -68,7 +68,7 @@ export const allRisksData: Risk[] = [
         type: "ceping",
         name: "研发费用加计扣除企业所得税存在差异",
         year: "2024",
-        month: "-",
+        month: "4",
         status: "未应对"
     },
     // 补贴管理系统
