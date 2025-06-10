@@ -14,14 +14,16 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  try {
-    const filePath = path.join(process.cwd(), 'content', 'solutions', `${riskId}.md`);
-    const content = await fs.readFile(filePath, 'utf-8');
-    return { content };
-  } catch (error) {
+  const assetPath = `solutions:${riskId}.md`;
+
+  const content = await useStorage('assets:server').getItem(assetPath);
+
+  if (content === null) {
     throw createError({
       statusCode: 404,
       statusMessage: `Risk content for ID ${riskId} not found`,
     });
   }
+
+  return { content };
 }); 
