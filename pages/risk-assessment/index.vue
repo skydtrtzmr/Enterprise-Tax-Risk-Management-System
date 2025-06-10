@@ -22,8 +22,8 @@
                     <h3>60万元政府补助是否需要缴纳企业所得税？</h3>
                     <p class="subtitle">请选择对应的处理方式：</p>
                     <div class="button-group">
-                        <el-button type="danger" size="large" @click="startAnalysis('high')"><span class="button-text">缴纳企业所得税</span></el-button>
-                        <el-button type="success" size="large" @click="startAnalysis('low')"><span class="button-text">不缴纳企业所得税</span></el-button>
+                        <el-button type="info" size="large" @click="startAnalysis('high')"><span class="button-text">缴纳企业所得税</span></el-button>
+                        <el-button type="info" size="large" @click="startAnalysis('low')"><span class="button-text">不缴纳企业所得税</span></el-button>
                     </div>
                 </div>
 
