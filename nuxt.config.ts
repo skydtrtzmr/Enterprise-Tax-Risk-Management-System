@@ -13,6 +13,8 @@ export default defineNuxtConfig({
         baseURL: "./",
         buildAssetsDir: "assets",
     },
+    // css: ["/assets/main.css"],
+
 
     compatibilityDate: "2025-05-15",
     devtools: { enabled: true },
