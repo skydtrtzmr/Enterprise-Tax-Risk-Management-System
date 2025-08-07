@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>风险自查</h1>
-    <MapContainer />
+    <HeatmapIframe />
   </div>
 </template>
 
