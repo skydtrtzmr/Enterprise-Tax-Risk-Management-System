@@ -7,11 +7,11 @@ export default defineNuxtConfig({
     // Error matching route rules. TypeError: Cannot read properties of undefined (reading 'entries')
     // 参考：https://github.com/nuxt-modules/ionic/issues/591
 
-    ssr: false,
+    // ssr: false,
 
     app: {
-        baseURL: "./",
-        buildAssetsDir: "assets",
+        // baseURL: "./",
+        // buildAssetsDir: "assets",
     },
     // css: ["/assets/main.css"],
 
