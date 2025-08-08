@@ -12,16 +12,20 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+// 添加props接收动态src
+const props = defineProps({
+  src: {
+    type: String,
+    required: true
+  }
+})
 
-// iframe的src路径，指向public目录下的HTML文件
-const iframeSrc = ref('/heatmap.html1')
+const iframeSrc = ref(props.src) // 从props获取src
 
-// iframe加载完成后的回调
 const onIframeLoad = () => {
   console.log('Heatmap iframe loaded successfully')
 }
 
-// 组件挂载时的逻辑
 onMounted(() => {
   console.log('HeatmapIframe component mounted')
 })
@@ -38,6 +42,6 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   border: none;
-  min-height: 500px; /* 设置最小高度 */
+  min-height: 500px;
 }
 </style>
