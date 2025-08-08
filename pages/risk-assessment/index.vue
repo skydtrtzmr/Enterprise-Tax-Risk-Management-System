@@ -158,7 +158,7 @@ useHead({
         {
             innerHTML: `
                 window.difyChatbotConfig = {
-  token: 'S5qckSjGKqfJycCP',
+  token: 'OQcJr3tsihy4PNui',
   baseUrl: 'http://localhost',
   systemVariables: {
     // user_id: 'YOU CAN DEFINE USER ID HERE',

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>物流路线图</title>
+        <style>
+            html,
+            body,
+            #map {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .demo-title {
+                position: absolute;
+                top: 25px;
+                left: 25px;
+                z-index: 1;
+            }
+
+            .zoom-display {
+                position: absolute;
+                top: 25px;
+                right: 25px;
+                z-index: 1;
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 5px;
+                font-size: 14px;
+                font-weight: bold;
+                line-height: 1.5;
+            }
+
+            h1 {
+                font-size: 18px;
+                margin: 0;
+                color: rgb(180, 180, 190);
+            }
+
+            h3 {
+                font-size: 12px;
+                font-weight: normal;
+                margin-top: 5px;
+                color: rgb(150, 150, 150);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="demo-title">
+            <h1>物流图</h1>
+            <!-- <h3>通过热力暂时房产出售分布情况，颜色和高度体现出售量</h3> -->
+        </div>
+
+        <!-- 添加zoom显示元素 -->
+        <div class="zoom-display" id="zoomDisplay">Zoom: 16<br /></div>
+
+        <div id="map"></div>
+        <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
+        <script src="https://webapi.amap.com/loca?v=2.0.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
+
+        <script>
+            var map = new AMap.Map("map", {
+                zoom: 12,
+                center: [118.967756, 31.364896],
+                pitch: 45,
+                showLabel: false,
+                viewMode: "2D",
+                mapStyle: "amap://styles/45311ae996a8bea0da10ad5151f72979",
+            });
+
+            var path = [
+          [119.05198, 30.603678],
+          [119.007944, 30.710433],
+          [118.939888, 30.789562],
+          [118.919871, 30.872062],
+          [118.895851, 30.937324],
+          [118.882522, 30.983258],
+          [118.85391, 30.988946],
+          [118.748558, 30.999965],
+          [118.67143, 30.985747],
+          [118.655459, 31.009979],
+          [118.651313, 31.030234],
+          [118.640946, 31.05013],
+          [118.638873, 31.0789],
+          [118.624949, 31.107512],
+          [118.613338, 31.121357],
+          [118.615974, 31.14494],
+          [118.605611, 31.194503],
+          [118.597604, 31.211624],
+          [118.571583, 31.23901],
+          [118.557732, 31.259581],
+          [118.613203, 31.271997],
+          [118.642871, 31.281177],
+          [118.6664, 31.282489],
+          [118.700437, 31.282514],
+          [118.716743, 31.285354],
+          [118.720993, 31.28225],
+          [118.725166, 31.28476],
+          [118.73073, 31.289382],
+          [118.731911, 31.308243],
+          [118.745596, 31.314089],
+          [118.746354, 31.317542],
+          [118.759829, 31.317395],
+          [118.781115, 31.317175],
+          [118.809067, 31.320066],
+          [118.824279, 31.328575],
+          [118.830825, 31.334131],
+          [118.829219, 31.336452]
+        ];
+
+            var polyline = new AMap.Polyline({
+                path: path,
+                isOutline: true,
+                outlineColor: "#4c0099",
+                borderWeight: 2,
+                strokeColor: "#66B2FF",
+                strokeOpacity: 1,
+                strokeWeight: 4,
+                // 折线样式还支持 'dashed'
+                strokeStyle: "solid",
+                // strokeStyle是dashed时有效
+                strokeDasharray: [10, 5],
+                lineJoin: "round",
+                lineCap: "round",
+                zIndex: 50,
+            });
+            map.add(polyline);
+            map.setFitView();
+
+            // 获取zoom显示元素
+            var zoomDisplay = document.getElementById("zoomDisplay");
+
+            // 初始化显示当前zoom级别和透明度
+            zoomDisplay.innerHTML = "Zoom: " + map.getZoom();
+
+            // 监听地图缩放事件，实时更新zoom显示
+            map.on("zoomend", function () {
+                var currentZoom = map.getZoom();
+                updateDisplayValues();
+            });
+
+            // 也可以在viewchange事件中更新，这样在拖动地图时也会更新
+            map.on("viewchange", function () {
+                updateDisplayValues();
+
+                var z = map.getZoom();
+                var outZ = 20;
+            });
+
+            // 更新显示值的函数
+            function updateDisplayValues() {
+                var currentZoom = map.getZoom();
+
+                zoomDisplay.innerHTML = "Zoom: " + currentZoom;
+            }
+
+            var loca = new Loca.Container({
+                map,
+            });
+
+            var geo = new Loca.GeoJSONSource({
+                url: "geo.json",
+            });
+            // 这里是记录每个坐标点的数值
+
+            // 自定义只显示某地点标签
+
+            // 自定义只显示某地点标签
+            var locations = [
+                {
+                    name: "⭐中比新能源公司",
+                    lnglat: [118.967756, 31.364896],
+                    priority: 1,
+                },
+                {
+                    name: "金属制品有限公司",
+                    lnglat: [118.96881, 31.367662],
+                    priority: 2,
+                },
+                {
+                    name: "哈雷星激光科技有限公司",
+                    lnglat: [118.968861, 31.364325],
+                    priority: 2,
+                },
+                {
+                    name: "绿色产业园",
+                    lnglat: [118.965717, 31.37062],
+                    priority: 3,
+                },
+                {
+                    name: "医疗产业园",
+                    lnglat: [118.964171, 31.369735],
+                    priority: 3,
+                },
+                // {
+                //     name: "开发区政务服务中心",
+                //     lnglat: [118.942484, 31.357135],
+                //     priority: 4,
+                // },
+                {
+                    name: "智能科技有限公司",
+                    lnglat: [118.964366, 31.365745],
+                    priority: 2,
+                },
+
+                {
+                    name: "辰茂新材料科技有限公司",
+                    lnglat: [118.966065, 31.367878],
+                    priority: 3,
+                },
+                {
+                    name: "生物科技有限公司",
+                    lnglat: [118.965536, 31.367405],
+                    priority: 2,
+                },
+
+                {
+                    name: "盛凯斯新材料有限公司",
+                    lnglat: [118.966065, 31.367878],
+                    priority: 3,
+                },
+
+                // 可以添加更多地点
+            ];
+
+            // 存储所有标签的数组
+            var textOverlaps = [];
+
+            // 添加自定义标签
+            locations.forEach(function (location) {
+                // 创建文本覆盖物
+                var textOverlap = new AMap.Text({
+                    text: location.name,
+                    position: location.lnglat,
+                    offset: new AMap.Pixel(0, -20), // 标签位置偏移
+                    style: {
+                        "background-color": "rgba(0, 0, 0, 0.5)",
+                        color: "white",
+                        padding: "5px",
+                        "border-radius": "3px",
+                        "font-size": "12px",
+                    },
+                });
+                textOverlap.setMap(map);
+                textOverlaps.push({
+                    text: textOverlap,
+                    location: location,
+                });
+            });
+
+            // 计算两点之间的距离（像素）
+            function getPixelDistance(point1, point2) {
+                var pixel1 = map.lngLatToContainer(point1);
+                var pixel2 = map.lngLatToContainer(point2);
+                var dx = pixel1.x - pixel2.x;
+                var dy = pixel1.y - pixel2.y;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            // 定义三个关键坐标点
+            var startPoint = path[0]; // 发货地（path起点）
+            var targetPoint = [118.967756, 31.364896]; // 目标收货地（地图center）
+            var endPoint = path[path.length - 1]; // 实际收货地（path终点）
+
+            // 通用标记创建函数
+            function createMarker(position, name, iconUrl) {
+                return new AMap.Marker({
+                    position: position,
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(32, 32),
+                        image:
+                            iconUrl ||
+                            "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+                    }),
+                    label: {
+                        content: name,
+                        offset: new AMap.Pixel(0, 0),
+                        style: {
+                            color: "#333",
+                            fontSize: "12px",
+                            backgroundColor: "#fff",
+                            padding: "2px 5px",
+                            borderRadius: "3px",
+                        },
+                    },
+                });
+            }
+
+            // 添加三个标记
+            createMarker(startPoint, "发货地").setMap(map);
+            createMarker(
+                targetPoint,
+                "目标收货地",
+                "http://localhost:3000/icons/end1.png"
+            ).setMap(map);
+            createMarker(
+                endPoint,
+                "实际收货地",
+                "http://localhost:3000/icons/end2.png"
+            ).setMap(map);
+
+            // 绘制实际收货地到目标收货地的直线
+            var targetLine = new AMap.Polyline({
+                path: [endPoint, targetPoint],
+                strokeColor: "#FF0000",
+                strokeWeight: 2,
+                strokeDasharray: [5, 5],
+            });
+            map.add(targetLine);
+
+            // 计算并显示距离
+            var distance = AMap.GeometryUtil.distance(
+                endPoint,
+                targetPoint
+            ).toFixed(2);
+            var distanceText = new AMap.Text({
+                // text: `距离：${distance}米`,
+                text: "距离：15千米",
+                position: [
+                    (endPoint[0] + targetPoint[0]) / 2,
+                    (endPoint[1] + targetPoint[1]) / 2,
+                ],
+                offset: new AMap.Pixel(-50, 0),
+                style: {
+                    color: "#FF0000",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                },
+            });
+            map.add(distanceText);
+
+            // 智能标签显示（结合缩放级别和防重叠）
+            function updateAdvancedLabels() {
+                var currentZoom = map.getZoom();
+                var showZoomThreshold = 14; // 显示标签的缩放级别阈值
+                var minDistance = 60; // 最小像素距离
+
+                // 如果缩放级别小于阈值，隐藏所有标签
+                if (currentZoom < showZoomThreshold) {
+                    textOverlaps.forEach(function (item) {
+                        item.text.hide();
+                    });
+                    return;
+                }
+
+                // 根据缩放级别调整最小距离
+                var zoomFactor = Math.max(
+                    1,
+                    (currentZoom - showZoomThreshold) * 0.5
+                );
+                var dynamicMinDistance = minDistance / zoomFactor;
+
+                // 重置所有标签可见性
+                textOverlaps.forEach(function (item) {
+                    item.text.show();
+                });
+
+                // 按优先级排序
+                var sortedOverlaps = textOverlaps.slice().sort(function (a, b) {
+                    return (
+                        (a.location.priority || 1) - (b.location.priority || 1)
+                    );
+                });
+
+                // 检查并处理重叠
+                for (var i = 0; i < sortedOverlaps.length; i++) {
+                    for (var j = i + 1; j < sortedOverlaps.length; j++) {
+                        var distance = getPixelDistance(
+                            sortedOverlaps[i].location.lnglat,
+                            sortedOverlaps[j].location.lnglat
+                        );
+
+                        // 如果距离太近，隐藏优先级较低的标签
+                        if (distance < dynamicMinDistance) {
+                            sortedOverlaps[j].text.hide();
+                        }
+                    }
+                }
+            }
+
+            // 监听缩放和拖动事件
+            map.on("zoomend", updateAdvancedLabels);
+            map.on("viewchange", updateAdvancedLabels);
+
+            // 初始化时执行一次
+            updateAdvancedLabels();
+
+            // 创建纯文本标记
+            var text = new AMap.Text({
+                text: "纯文本标记",
+                anchor: "center", // 设置文本标记锚点
+                draggable: true,
+                cursor: "pointer",
+                angle: 0,
+                visible: false,
+                offset: [0, 0],
+                style: {
+                    padding: ".45rem 0.15rem",
+                    "margin-bottom": "1rem",
+                    "border-radius": ".25rem",
+                    "background-color": "rgba(0,0,0,0.5)",
+                    width: "15rem",
+                    "border-width": 0,
+                    "box-shadow": "0 2px 6px 0 rgba(255, 255, 255, .3)",
+                    "text-align": "center",
+                    "font-size": "15px",
+                    color: "#fff",
+                },
+            });
+            text.setMap(map);
+        </script>
+    </body>
+</html>
