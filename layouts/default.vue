@@ -44,8 +44,11 @@
                                     class="message-item"
                                     @click="showDetail(msg)"
                                 >
-                                    <div class="message-title">
+                                    <div class="message-title" >
                                         {{ msg.title }}
+                                    </div>
+                                    <div class="message-type">
+                                        {{ msg.riskType }}
                                     </div>
                                     <!-- <div class="message-content">{{ msg.content }}</div> -->
                                     <div class="message-time">
@@ -144,18 +147,26 @@ const selectedMessage = ref();
 const unreadMessages = ref([
     {
         id: 1,
-        title: "新风险预警",
+        title: "新风险预警！",
         riskType: "四流不一致",
-        content: "检测到四流不一致风险条目",
-        time: new Date("2023-01-01"),
+        content: "发票流与货物流不一致。",
+        time: new Date("2024-03-12"),
     },
 
     {
         id: 2,
-        title: "漏税预警",
-        riskType: "漏税",
-        content: "检测到漏税风险条目",
-        time: new Date("2025-03-03"),
+        title: "新风险预警！",
+        riskType: "上下游一致的过票行为",
+        content: "开具发票商品编码类似接收发票商品编码。",
+        time: new Date("2024-03-13"),
+    },
+    
+    {
+        id: 3,
+        title: "新风险预警！",
+        riskType: "进项发票高危品目",
+        content: "敏感商品发票金额，取得虚开发票风险。",
+        time: new Date("2024-03-13"),
     },
 ]);
 // 新增方法
@@ -409,11 +420,22 @@ body {
 }
 
 .message-title {
+    font-weight: bold;
     flex: 1;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.message-type {
+
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 20px;
 }
 
 .message-time {
