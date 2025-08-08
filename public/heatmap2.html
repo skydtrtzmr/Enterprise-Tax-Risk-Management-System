@@ -57,11 +57,11 @@
         </div>
 
         <!-- 添加zoom显示元素 -->
-        <div class="zoom-display" id="zoomDisplay">
+        <!-- <div class="zoom-display" id="zoomDisplay">
             Zoom: 16<br />
             Heatmap Opacity: 1.00<br />
             Scatter Opacity: 0.00
-        </div>
+        </div> -->
 
         <div id="map"></div>
         <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
@@ -69,8 +69,8 @@
 
         <script>
             var map = new AMap.Map("map", {
-                zoom: 13,
-                center: [118.967756, 31.364896],
+                zoom: 12,
+                center: [118.904315,31.347511],
                 pitch: 45,
                 showLabel: false,
                 viewMode: "3D",
@@ -81,10 +81,10 @@
             var zoomDisplay = document.getElementById("zoomDisplay");
 
             // 初始化显示当前zoom级别和透明度
-            zoomDisplay.innerHTML =
-                "Zoom: " +
-                map.getZoom() +
-                "<br>Heatmap Opacity: 1.00<br>Scatter Opacity: 0.00";
+            // zoomDisplay.innerHTML =
+            //     "Zoom: " +
+            //     map.getZoom() +
+            //     "<br>Heatmap Opacity: 1.00<br>Scatter Opacity: 0.00";
 
             // 监听地图缩放事件，实时更新zoom显示
             map.on("zoomend", function () {
@@ -116,13 +116,13 @@
                 var heatmapOpacity = heatmap.opacity ? heatmap.opacity : 0;
                 var scatterOpacity = scatter.opacity ? scatter.opacity : 0;
 
-                zoomDisplay.innerHTML =
-                    "Zoom: " +
-                    currentZoom +
-                    "<br>Heatmap Opacity: " +
-                    heatmapOpacity.toFixed(2) +
-                    "<br>Scatter Opacity: " +
-                    scatterOpacity.toFixed(2);
+                // zoomDisplay.innerHTML =
+                //     "Zoom: " +
+                //     currentZoom +
+                //     "<br>Heatmap Opacity: " +
+                //     heatmapOpacity.toFixed(2) +
+                //     "<br>Scatter Opacity: " +
+                //     scatterOpacity.toFixed(2);
             }
 
             var loca = new Loca.Container({

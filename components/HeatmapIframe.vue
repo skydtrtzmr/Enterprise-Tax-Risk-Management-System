@@ -11,23 +11,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 // 添加props接收动态src
-const props = defineProps({
-  src: {
-    type: String,
-    required: true
-  }
+const props = defineProps({ 
+  src: { 
+    type: String, 
+    required: true 
+  } 
 })
 
-const iframeSrc = ref(props.src) // 从props获取src
+// 使用computed响应props.src的变化
+const iframeSrc = computed(() => props.src) // 改为computed跟踪props变化
 
-const onIframeLoad = () => {
-  console.log('Heatmap iframe loaded successfully')
+const onIframeLoad = () => { 
+  console.log('Heatmap iframe loaded successfully') 
 }
 
-onMounted(() => {
-  console.log('HeatmapIframe component mounted')
+onMounted(() => { 
+  console.log('HeatmapIframe component mounted') 
 })
 </script>
 
