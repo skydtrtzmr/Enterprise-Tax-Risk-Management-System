@@ -52,14 +52,43 @@
             <slot />
         </el-main>
     </el-container>
-        <el-dialog 
-        v-model="detailVisible" 
-        :title="selectedMessage?.title"
-        width="30%">
-        <p>{{ selectedMessage?.content }}</p>
-        <p  class="time-align"> 时间：{{ formatTime(selectedMessage?.time) }}</p>
+        <el-dialog
+            v-model="detailVisible"
+            :title="selectedMessage?.title"
+            width="450px"
+            custom-class="risk-dialog">
+            <template #header>
+                <div class="dialog-header">
+                    <el-icon><Warning /></el-icon>
+                    <span class="dialog-title">{{ selectedMessage?.title }}</span>
+                    <el-tag type="warning" size="small">未读</el-tag>
+                </div>
+            </template>
 
-    </el-dialog>
+            <el-divider />
+
+            <div class="dialog-content">
+                <div class="content-row">
+                    <span class="label">风险类型：</span>
+                    <span class="value">{{ selectedMessage?.riskType || '通用风险' }}</span>
+                </div>
+                <div class="content-row">
+                    <span class="label">发现时间：</span>
+                    <span class="value time">{{ formatTime(selectedMessage?.time) }}</span>
+                </div>
+                <el-divider content-position="left">风险描述</el-divider>
+                <div class="risk-description">
+                    {{ selectedMessage?.content }}
+                </div>
+            </div>
+
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button type="primary" @click="detailVisible = false">标记已读</el-button>
+                    <el-button>查看详情</el-button>
+                </div>
+            </template>
+        </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -80,6 +109,7 @@ const unreadMessages = ref([
     {
         id: 1,
         title: '新风险预警',
+        riskType: '四流不一致',
         content: '检测到四流不一致风险条目',
         time: new Date("2023-01-01")
 
@@ -88,6 +118,7 @@ const unreadMessages = ref([
     {
         id: 2,
         title: '漏税预警',
+        riskType: '漏税',
         content: '检测到漏税风险条目',
         time: new Date("2025-03-03")
     }
@@ -331,5 +362,64 @@ body {
     margin-left: auto;
     color: #909399;
     font-size: 0.9em;
+}
+</style>
+
+<style scoped>
+/* 新增对话框样式 */
+.dialog-header {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.dialog-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #303133;
+}
+
+.dialog-content {
+    min-height: 200px;
+    padding: 0 20px;
+}
+
+.content-row {
+    display: flex;
+    margin: 15px 0;
+    align-items: baseline;
+}
+
+.label {
+    width: 80px;
+    color: #909399;
+    font-size: 14px;
+}
+
+.value {
+    flex: 1;
+    color: #606266;
+    font-size: 14px;
+}
+
+.time {
+    color: #f56c6c;
+    font-weight: 500;
+}
+
+.risk-description {
+    line-height: 1.8;
+    color: #606266;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
 }
 </style>
