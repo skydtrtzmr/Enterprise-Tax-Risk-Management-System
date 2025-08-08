@@ -10,9 +10,41 @@
                 <el-sub-menu index="statistical-functions">
                     <template #title>
                         <el-icon><Setting /></el-icon>
-                        <span>统计功能</span>
+                        <span>风险分析</span>
                     </template>
                     <el-menu-item index="logisticmap">物流图分析</el-menu-item>
+                    <!-- 可扩展其他二级菜单 -->
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><Setting /></el-icon>
+                        <span>财务分析</span>
+                    </template>
+                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
+                    <!-- 可扩展其他二级菜单 -->
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><Setting /></el-icon>
+                        <span>发票分析</span>
+                    </template>
+                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
+                    <!-- 可扩展其他二级菜单 -->
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><Setting /></el-icon>
+                        <span>申报分析</span>
+                    </template>
+                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
+                    <!-- 可扩展其他二级菜单 -->
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><Setting /></el-icon>
+                        <span>经营分析</span>
+                    </template>
+                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
                     <!-- 可扩展其他二级菜单 -->
                 </el-sub-menu>
             </el-menu>
