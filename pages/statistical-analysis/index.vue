@@ -28,7 +28,7 @@
       <!-- 物流图弹窗 -->
       <el-dialog
         title="物流图分析"
-        :visible.sync="isDialogVisible"
+        v-model="isDialogVisible"
         width="90%"
         :before-close="handleClose"
       >
