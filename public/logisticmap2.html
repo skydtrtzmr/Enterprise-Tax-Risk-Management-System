@@ -57,7 +57,7 @@
         </div>
 
         <!-- 添加zoom显示元素 -->
-        <div class="zoom-display" id="zoomDisplay">Zoom: 16<br /></div>
+        <div class="zoom-display" id="zoomDisplay">Zoom: 12<br /></div>
 
         <div id="map"></div>
         <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
@@ -65,8 +65,8 @@
 
         <script>
             var map = new AMap.Map("map", {
-                zoom: 12,
-                center: [118.967756, 31.364896],
+                zoom: 16,
+                center: [119.013107, 31.427418],
                 pitch: 45,
                 showLabel: false,
                 viewMode: "2D",
@@ -74,43 +74,26 @@
             });
 
             var path = [
-                [119.05198, 30.603678],
-                [119.007944, 30.710433],
-                [118.939888, 30.789562],
-                [118.919871, 30.872062],
-                [118.895851, 30.937324],
-                [118.882522, 30.983258],
-                [118.85391, 30.988946],
-                [118.748558, 30.999965],
-                [118.67143, 30.985747],
-                [118.655459, 31.009979],
-                [118.651313, 31.030234],
-                [118.640946, 31.05013],
-                [118.638873, 31.0789],
-                [118.624949, 31.107512],
-                [118.613338, 31.121357],
-                [118.615974, 31.14494],
-                [118.605611, 31.194503],
-                [118.597604, 31.211624],
-                [118.571583, 31.23901],
-                [118.557732, 31.259581],
-                [118.613203, 31.271997],
-                [118.642871, 31.281177],
-                [118.6664, 31.282489],
-                [118.700437, 31.282514],
-                [118.716743, 31.285354],
-                [118.720993, 31.28225],
-                [118.725166, 31.28476],
-                [118.73073, 31.289382],
-                [118.731911, 31.308243],
-                [118.745596, 31.314089],
-                [118.746354, 31.317542],
-                [118.759829, 31.317395],
-                [118.781115, 31.317175],
-                [118.809067, 31.320066],
-                [118.824279, 31.328575],
-                [118.830825, 31.334131],
-                [118.829219, 31.336452],
+                [119.060498, 31.444482],
+                [119.057503, 31.446907],
+                [119.053763, 31.443944],
+                [119.04989, 31.442406],
+                [119.046418, 31.441609],
+                [119.044682, 31.440469],
+                [119.042478, 31.440013],
+                [119.025893, 31.441255],
+                [119.0101, 31.441255],
+                [119.009975, 31.436871],
+                [119.009777, 31.431197],
+                [119.005548, 31.416528],
+                [119.001072, 31.408251],
+                [118.996947, 31.39855],
+                [118.994843, 31.391984],
+                [118.964496, 31.371],
+                [118.967414, 31.367751],
+                [118.966214, 31.366901],
+                [118.96518, 31.366116],
+                [118.967756, 31.364896],
             ];
 
             var polyline = new AMap.Polyline({
@@ -265,8 +248,10 @@
             }
 
             // 定义三个关键坐标点
-            var startPoint = path[0]; // 发货地（path起点）
-            var targetPoint = [118.967756, 31.364896]; // 目标收货地（地图center）
+            var startPoint = path[0]; // 实际发货地（path起点）
+            var targetPoint = [119.046864, 31.477661]; // 计划发货地（地图center）
+
+            // var targetPoint = [118.967756, 31.364896]; // 目标收货地（地图center）
             var endPoint = path[path.length - 1]; // 实际收货地（path终点）
 
             // 通用标记创建函数
@@ -303,14 +288,14 @@
 
             // 添加三个标记
             createMarker(startPoint, "实际发货地").setMap(map);
-            createMarker(
-                startPoint,
-                "计划发货地",
-                "http://localhost:3000/icons/start2.png"
-            ).setMap(map);
+            // createMarker(
+            //     startPoint,
+            //     "计划发货地",
+            //     "http://localhost:3000/icons/start2.png"
+            // ).setMap(map);
             createMarker(
                 targetPoint,
-                "目标收货地",
+                "计划发货地",
                 "http://localhost:3000/icons/end1.png"
             ).setMap(map);
             createMarker(
@@ -321,7 +306,7 @@
 
             // 绘制实际收货地到目标收货地的直线
             var targetLine = new AMap.Polyline({
-                path: [endPoint, targetPoint],
+                path: [startPoint, targetPoint],
                 strokeColor: "#FF0000",
                 strokeWeight: 2,
                 strokeDasharray: [5, 5],
@@ -330,15 +315,15 @@
 
             // 计算并显示距离
             var distance = AMap.GeometryUtil.distance(
-                endPoint,
+                startPoint,
                 targetPoint
             ).toFixed(2);
             var distanceText = new AMap.Text({
                 // text: `距离：${distance}米`,
-                text: "距离：15千米",
+                text: "距离：15.3千米",
                 position: [
-                    (endPoint[0] + targetPoint[0]) / 2,
-                    (endPoint[1] + targetPoint[1]) / 2,
+                    (startPoint[0] + targetPoint[0]) / 2,
+                    (startPoint[1] + targetPoint[1]) / 2,
                 ],
                 offset: new AMap.Pixel(-35, -25), // 正上方偏移，略大于其他标签
                 style: {
@@ -353,86 +338,6 @@
             map.add(distanceText);
 
             // 智能标签显示（结合缩放级别和防重叠）
-            function updateAdvancedLabels() {
-                var currentZoom = map.getZoom();
-                var showZoomThreshold = 14; // 显示标签的缩放级别阈值
-                var minDistance = 60; // 最小像素距离
-
-                // 只合并 locations 和 marker 标签
-                var allOverlaps = [];
-                textOverlaps.forEach(function (item) {
-                    allOverlaps.push({
-                        type: 'location',
-                        text: item.text,
-                        position: item.location.lnglat,
-                        priority: item.location.priority || 1,
-                    });
-                });
-                markerLabelOverlaps.forEach(function (item, idx) {
-                    allOverlaps.push({
-                        type: 'marker',
-                        text: item.marker.getLabel && item.marker.getLabel() ? item.marker.getLabel() : null,
-                        position: item.position,
-                        priority: 2,
-                    });
-                });
-
-                // 距离标签单独控制显示
-                if (currentZoom >= 10) {
-                    if (distanceText && distanceText.show) distanceText.show();
-                } else {
-                    if (distanceText && distanceText.hide) distanceText.hide();
-                }
-
-                // 如果缩放级别小于阈值，隐藏所有标签
-                if (currentZoom < showZoomThreshold) {
-                    allOverlaps.forEach(function (item) {
-                        if (item.text && item.text.hide) item.text.hide();
-                    });
-                    return;
-                }
-
-                // 根据缩放级别调整最小距离
-                var zoomFactor = Math.max(
-                    1,
-                    (currentZoom - showZoomThreshold) * 0.5
-                );
-                var dynamicMinDistance = minDistance / zoomFactor;
-
-                // 重置所有标签可见性
-                allOverlaps.forEach(function (item) {
-                    if (item.text && item.text.show) item.text.show();
-                });
-
-                // 按优先级排序
-                var sortedOverlaps = allOverlaps.slice().sort(function (a, b) {
-                    return a.priority - b.priority;
-                });
-
-                // 检查并处理重叠
-                for (var i = 0; i < sortedOverlaps.length; i++) {
-                    for (var j = i + 1; j < sortedOverlaps.length; j++) {
-                        var distance = getPixelDistance(
-                            sortedOverlaps[i].position,
-                            sortedOverlaps[j].position
-                        );
-                        if (distance < dynamicMinDistance) {
-                            if (sortedOverlaps[j].priority <= sortedOverlaps[i].priority) {
-                                if (sortedOverlaps[j].text && sortedOverlaps[j].text.hide) {
-                                    sortedOverlaps[j].text.hide();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 监听缩放和拖动事件
-            map.on("zoomend", updateAdvancedLabels);
-            map.on("viewchange", updateAdvancedLabels);
-
-            // 初始化时执行一次
-            updateAdvancedLabels();
 
             // 创建纯文本标记
             var text = new AMap.Text({

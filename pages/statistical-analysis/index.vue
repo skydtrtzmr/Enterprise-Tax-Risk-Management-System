@@ -1,112 +1,129 @@
 <template>
-  <el-container class="full-height" @keydown.ctrl.l.prevent="handleViewLogisticMap">
-    <!-- 侧边栏菜单 -->
-    <el-aside width="240px" class="aside-menu">
-      <div class="aside-header">
-        <el-icon :size="20" color="#409eff"><Document /></el-icon>
-        <span class="aside-title">统计分析</span>
-      </div>
-      <el-menu
-        default-active="logisticmap"
-        class="el-menu-vertical-demo"
-      >
-        <el-sub-menu index="statistical-functions">
-          <template #title>
-            <el-icon><Setting /></el-icon>
-            <span>统计功能</span>
-          </template>
-          <el-menu-item index="logisticmap">物流图分析</el-menu-item>
-          <!-- 可扩展其他二级菜单 -->
-        </el-sub-menu>
-      </el-menu>
-    </el-aside>
+    <el-container class="full-height">
+        <!-- 侧边栏菜单 -->
+        <el-aside width="240px" class="aside-menu">
+            <div class="aside-header">
+                <el-icon :size="20" color="#409eff"><Document /></el-icon>
+                <span class="aside-title">统计分析</span>
+            </div>
+            <el-menu default-active="logisticmap" class="el-menu-vertical-demo">
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><Setting /></el-icon>
+                        <span>统计功能</span>
+                    </template>
+                    <el-menu-item index="logisticmap">物流图分析</el-menu-item>
+                    <!-- 可扩展其他二级菜单 -->
+                </el-sub-menu>
+            </el-menu>
+        </el-aside>
 
-    <!-- 主内容区域 -->
-    <el-main class="content-main">
-      <!-- <el-button type="primary" @click="handleViewLogisticMap">查看物流图</el-button> -->
-
-      <!-- 物流图弹窗 -->
-      <el-dialog
-        title="物流图分析"
-        v-model="isDialogVisible"
-        width="90%"
-        :before-close="handleClose"
-      >
-        <LogisticmapIframe />
-      </el-dialog>
-    </el-main>
-  </el-container>
+        <!-- 主内容区域 -->
+        <el-main class="content-main">
+            <!-- 物流图弹窗 -->
+            <el-dialog
+                title="物流图分析"
+                v-model="isDialogVisible1"
+                width="90%"
+                :before-close="handleClose"
+            >
+                <LogisticmapIframe />
+            </el-dialog>
+            <el-dialog
+                title="物流图分析2"
+                v-model="isDialogVisible2"
+                width="90%"
+                :before-close="handleClose2"
+            >
+                <LogisticmapIframe2 />
+            </el-dialog>
+        </el-main>
+    </el-container>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import LogisticmapIframe from '@/components/LogisticmapIframe.vue';
-import { Document, Setting } from '@element-plus/icons-vue';
+import { ref } from "vue";
+import LogisticmapIframe from "@/components/LogisticmapIframe.vue";
+import { Document, Setting } from "@element-plus/icons-vue";
 
 // 控制弹窗显示的响应式变量
-const isDialogVisible = ref(false);
+const isDialogVisible1 = ref(false);
+
+const isDialogVisible2 = ref(false);
 
 // 点击查看物流图处理函数
 const handleViewLogisticMap = () => {
-  console.log('点击查看物流图'); // 添加控制台日志
-  isDialogVisible.value = true;
+    console.log("点击查看物流图"); // 添加控制台日志
+    isDialogVisible1.value = true;
+};
+
+const handleViewLogisticMap2 = () => {
+    console.log("点击查看物流图"); // 添加控制台日志
+    isDialogVisible2.value = true;
 };
 
 // 弹窗关闭回调
 const handleClose = () => {
-  isDialogVisible.value = false;
+    isDialogVisible1.value = false;
+};
+
+const handleClose2 = () => {
+    isDialogVisible2.value = false;
 };
 
 // 添加键盘事件监听
 const onKeyPress = (e: KeyboardEvent) => {
-  if (e.ctrlKey && e.key.toLowerCase() === 'i') {
-    handleViewLogisticMap();
-  }
+    if (e.shiftKey && e.key.toLowerCase() === "i") {
+        handleViewLogisticMap();
+    }
+    if (e.shiftKey && e.key.toLowerCase() === "j") {
+        handleViewLogisticMap2();
+    }
 };
 
 // 生命周期钩子
 onMounted(() => {
-  window.addEventListener('keydown', onKeyPress);
+    window.addEventListener("keydown", onKeyPress);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', onKeyPress);
+    window.removeEventListener("keydown", onKeyPress);
 });
 </script>
 
 <style scoped>
 /* 复用风险自查侧边栏样式 */
 .full-height {
-  height: calc(100vh - 64px);
+    height: calc(100vh - 64px);
 }
 
 .aside-menu {
-  background-color: #ffffff;
-  border-right: 1px solid #e6e6e6;
-  display: flex;
-  flex-direction: column;
+    background-color: #ffffff;
+    border-right: 1px solid #e6e6e6;
+    display: flex;
+    flex-direction: column;
 }
 
 .aside-header {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e6e6e6;
 }
 
 .aside-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-left: 10px;
-  color: #303133;
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 10px;
+    color: #303133;
 }
 
 .el-menu-vertical-demo {
-  border-right: none;
+    border-right: none;
 }
 
 .content-main {
-  padding: 20px;
-  background-color: #f0f2f5;
+    padding: 20px;
+    background-color: #f0f2f5;
 }
 </style>

@@ -57,7 +57,7 @@
         </div>
 
         <!-- 添加zoom显示元素 -->
-        <div class="zoom-display" id="zoomDisplay">Zoom: 16<br /></div>
+        <div class="zoom-display" id="zoomDisplay">Zoom: 12<br /></div>
 
         <div id="map"></div>
         <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
@@ -66,7 +66,7 @@
         <script>
             var map = new AMap.Map("map", {
                 zoom: 12,
-                center: [118.967756, 31.364896],
+                center: [119.180155, 31.103332],
                 pitch: 45,
                 showLabel: false,
                 viewMode: "2D",
@@ -335,7 +335,7 @@
             ).toFixed(2);
             var distanceText = new AMap.Text({
                 // text: `距离：${distance}米`,
-                text: "距离：15千米",
+                text: "距离：15.6千米",
                 position: [
                     (endPoint[0] + targetPoint[0]) / 2,
                     (endPoint[1] + targetPoint[1]) / 2,
