@@ -30,7 +30,7 @@
             <div class="header-right">
                 <el-dropdown trigger="click" class="message-dropdown">
                     <el-badge :value="3" class="message-badge">
-                        <el-icon :size="24"><Message /></el-icon>
+                        <el-icon :size="28" style="color: #FFFFFF"><Message /></el-icon>
                     </el-badge>
                     <template #dropdown>
                         <el-dropdown-menu>
@@ -40,7 +40,7 @@
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
-                <el-icon><User /></el-icon>
+                <el-icon :size="28"><User /></el-icon>
                 <span>您好, 中比新能源公司</span>
             </div>
         </el-header>
@@ -256,7 +256,7 @@ body {
 
 .header-right {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
 }
 
 .header-right .el-icon {
