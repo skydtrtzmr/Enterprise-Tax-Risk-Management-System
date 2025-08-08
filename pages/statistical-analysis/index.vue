@@ -9,7 +9,7 @@
             <el-menu default-active="logisticmap" class="el-menu-vertical-demo">
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><Setting /></el-icon>
+                        <el-icon><WarnTriangleFilled /></el-icon>
                         <span>风险分析</span>
                     </template>
                     <el-menu-item index="logisticmap">风险分析总览</el-menu-item>
@@ -18,7 +18,7 @@
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><Setting /></el-icon>
+                        <el-icon><Money /></el-icon>
                         <span>财务分析</span>
                     </template>
                     <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
@@ -26,7 +26,7 @@
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><Setting /></el-icon>
+                        <el-icon><Tickets /></el-icon>
                         <span>发票分析</span>
                     </template>
                     <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
@@ -34,7 +34,7 @@
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><Setting /></el-icon>
+                        <el-icon><Upload /></el-icon>
                         <span>申报分析</span>
                     </template>
                     <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
@@ -42,7 +42,7 @@
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><Setting /></el-icon>
+                        <el-icon><Management /></el-icon>
                         <span>经营分析</span>
                     </template>
                     <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import LogisticmapIframe from "@/components/LogisticmapIframe.vue";
-import { Document, Setting } from "@element-plus/icons-vue";
+import { Document, Setting, WarnTriangleFilled, Money, Tickets, Management, UploadFilled, Upload } from "@element-plus/icons-vue";
 import TestReport from '@/components/TestReport.vue';
 import { useRoute } from '#imports';
 
