@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>热力图</title>
+        <style>
+            html,
+            body,
+            #map {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .demo-title {
+                position: absolute;
+                top: 25px;
+                left: 25px;
+                z-index: 1;
+            }
+
+            .zoom-display {
+                position: absolute;
+                top: 25px;
+                right: 25px;
+                z-index: 1;
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 5px;
+                font-size: 14px;
+                font-weight: bold;
+                line-height: 1.5;
+            }
+
+            h1 {
+                font-size: 18px;
+                margin: 0;
+                color: rgb(180, 180, 190);
+            }
+
+            h3 {
+                font-size: 12px;
+                font-weight: normal;
+                margin-top: 5px;
+                color: rgb(150, 150, 150);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="demo-title">
+            <h1>热力图--中比新能源公司公车使用情况</h1>
+            <h3></h3>
+        </div>
+
+        <!-- 添加zoom显示元素 -->
+        <div class="zoom-display" id="zoomDisplay">
+            Zoom: 16<br />
+            Heatmap Opacity: 1.00<br />
+            Scatter Opacity: 0.00
+        </div>
+
+        <div id="map"></div>
+        <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
+        <script src="https://webapi.amap.com/loca?v=2.0.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
+
+        <script>
+            var map = new AMap.Map("map", {
+                zoom: 13,
+                center: [118.967756, 31.364896],
+                pitch: 45,
+                showLabel: false,
+                viewMode: "3D",
+                mapStyle: "amap://styles/45311ae996a8bea0da10ad5151f72979",
+            });
+
+            // 获取zoom显示元素
+            var zoomDisplay = document.getElementById("zoomDisplay");
+
+            // 初始化显示当前zoom级别和透明度
+            zoomDisplay.innerHTML =
+                "Zoom: " +
+                map.getZoom() +
+                "<br>Heatmap Opacity: 1.00<br>Scatter Opacity: 0.00";
+
+            // 监听地图缩放事件，实时更新zoom显示
+            map.on("zoomend", function () {
+                var currentZoom = map.getZoom();
+                updateDisplayValues();
+            });
+
+            // 也可以在viewchange事件中更新，这样在拖动地图时也会更新
+            map.on("viewchange", function () {
+                updateDisplayValues();
+
+                var z = map.getZoom();
+                var outZ = 20;
+                // 14 - 16 级别淡出
+                // var heatmapOpacity = 10 - (z - 16) / (outZ - 16);
+
+                var heatmapOpacity = 10;
+                heatmap.setOpacity(heatmapOpacity);
+
+                // 圆点
+                // var scatterOpacity = (z - 14) / (16.3 - 14);
+                var scatterOpacity = 0 ;
+                scatter.setOpacity(scatterOpacity);
+            });
+
+            // 更新显示值的函数
+            function updateDisplayValues() {
+                var currentZoom = map.getZoom();
+                var heatmapOpacity = heatmap.opacity ? heatmap.opacity : 0;
+                var scatterOpacity = scatter.opacity ? scatter.opacity : 0;
+
+                zoomDisplay.innerHTML =
+                    "Zoom: " +
+                    currentZoom +
+                    "<br>Heatmap Opacity: " +
+                    heatmapOpacity.toFixed(2) +
+                    "<br>Scatter Opacity: " +
+                    scatterOpacity.toFixed(2);
+            }
+
+            var loca = new Loca.Container({
+                map,
+            });
+
+            var geo = new Loca.GeoJSONSource({
+                url: "geo2.json",
+            });
+            // 这里是记录每个坐标点的数值
+
+            var heatmap = new Loca.HeatMapLayer({
+                // loca,
+                zIndex: 10,
+                opacity: 1,
+                visible: true,
+                zooms: [2, 22],
+            });
+
+            heatmap.setSource(geo, {
+                radius: 10,
+                unit: "px",
+                height: 10,
+                // radius: 10,
+                // unit: 'px',
+                // height: 10,
+                gradient: {
+                    0.0: "rgba(0,0,0,0)",
+                    0.1: "rgba(204,255,229,1)",
+                    0.3: "rgba(153,210,153,1)",
+                    0.4: "rgba(236,220,79,1)",
+                    0.8: "rgba(255,98,4,1)",
+                    1: "rgba(254,64,95,1)",
+                },
+                value: function (index, feature) {
+                    return feature.properties.count;
+                },
+                min: 0,
+                max: 10, //4.6
+                heightBezier: [0, 0.11, 0.4, 0.98],
+            });
+            loca.add(heatmap);
+
+            // 自定义只显示某地点标签
+            var locations = [
+                {
+                    name: "⭐中比新能源公司",
+                    lnglat: [118.967756, 31.364896],
+                    priority: 1,
+                },
+                {
+                    name: "金属制品有限公司",
+                    lnglat: [118.96881, 31.367662],
+                    priority: 2,
+                },
+                {
+                    name: "哈雷星激光科技有限公司",
+                    lnglat: [118.968861, 31.364325],
+                    priority: 2,
+                },
+                {
+                    name: "绿色产业园",
+                    lnglat: [118.965717, 31.37062],
+                    priority: 3,
+                },
+                {
+                    name: "医疗产业园",
+                    lnglat: [118.964171, 31.369735],
+                    priority: 3,
+                },
+                // {
+                //     name: "开发区政务服务中心",
+                //     lnglat: [118.942484, 31.357135],
+                //     priority: 4,
+                // },
+                {
+                    name: "智能科技有限公司",
+                    lnglat: [118.964366, 31.365745],
+                    priority: 2,
+                },
+
+                {
+                    name: "辰茂新材料科技有限公司",
+                    lnglat: [118.966065, 31.367878],
+                    priority: 3,
+                },
+                {
+                    name: "生物科技有限公司",
+                    lnglat: [118.965536, 31.367405],
+                    priority: 2,
+                },
+
+                {
+                    name: "盛凯斯新材料有限公司",
+                    lnglat: [118.966065, 31.367878],
+                    priority: 3,
+                },
+
+                // 可以添加更多地点
+            ];
+
+            // 存储所有标签的数组
+            var textOverlaps = [];
+
+            // 添加自定义标签
+            locations.forEach(function (location) {
+                // 创建文本覆盖物
+                var textOverlap = new AMap.Text({
+                    text: location.name,
+                    position: location.lnglat,
+                    offset: new AMap.Pixel(0, -20), // 标签位置偏移
+                    style: {
+                        "background-color": "rgba(0, 0, 0, 0.5)",
+                        color: "white",
+                        padding: "5px",
+                        "border-radius": "3px",
+                        "font-size": "12px",
+                    },
+                });
+                textOverlap.setMap(map);
+                textOverlaps.push({
+                    text: textOverlap,
+                    location: location,
+                });
+            });
+
+            // 计算两点之间的距离（像素）
+            function getPixelDistance(point1, point2) {
+                var pixel1 = map.lngLatToContainer(point1);
+                var pixel2 = map.lngLatToContainer(point2);
+                var dx = pixel1.x - pixel2.x;
+                var dy = pixel1.y - pixel2.y;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            // 智能标签显示（结合缩放级别和防重叠）
+            function updateAdvancedLabels() {
+                var currentZoom = map.getZoom();
+                var showZoomThreshold = 14; // 显示标签的缩放级别阈值
+                var minDistance = 60; // 最小像素距离
+
+                // 如果缩放级别小于阈值，隐藏所有标签
+                if (currentZoom < showZoomThreshold) {
+                    textOverlaps.forEach(function (item) {
+                        item.text.hide();
+                    });
+                    return;
+                }
+
+                // 根据缩放级别调整最小距离
+                var zoomFactor = Math.max(
+                    1,
+                    (currentZoom - showZoomThreshold) * 0.5
+                );
+                var dynamicMinDistance = minDistance / zoomFactor;
+
+                // 重置所有标签可见性
+                textOverlaps.forEach(function (item) {
+                    item.text.show();
+                });
+
+                // 按优先级排序
+                var sortedOverlaps = textOverlaps.slice().sort(function (a, b) {
+                    return (
+                        (a.location.priority || 1) - (b.location.priority || 1)
+                    );
+                });
+
+                // 检查并处理重叠
+                for (var i = 0; i < sortedOverlaps.length; i++) {
+                    for (var j = i + 1; j < sortedOverlaps.length; j++) {
+                        var distance = getPixelDistance(
+                            sortedOverlaps[i].location.lnglat,
+                            sortedOverlaps[j].location.lnglat
+                        );
+
+                        // 如果距离太近，隐藏优先级较低的标签
+                        if (distance < dynamicMinDistance) {
+                            sortedOverlaps[j].text.hide();
+                        }
+                    }
+                }
+            }
+
+            // 监听缩放和拖动事件
+            map.on("zoomend", updateAdvancedLabels);
+            map.on("viewchange", updateAdvancedLabels);
+
+            // 初始化时执行一次
+            updateAdvancedLabels();
+
+            // 贴地点，在zoom18可见
+            var pointColors = [
+                "rgba(0,0,0,0)",
+                "rgba(204,255,229,1)",
+                "rgba(153,210,153,1)",
+                "rgba(236,220,79,1)",
+                "rgba(255,98,4,1)",
+                "rgba(254,64,95,1)",
+            ];
+            // .reverse()
+            var scatter = new Loca.ScatterLayer({
+                loca: loca,
+                zIndex: 9,
+                zooms: [14, 22],
+                opacity: 1,
+            });
+            scatter.setSource(geo);
+            scatter.setStyle({
+                unit: "meter",
+                size: [10, 10],
+                color: function (index, feat) {
+                    const count = parseInt(feat.properties.count * 10);
+                    return pointColors[count % pointColors.length];
+                },
+            });
+
+            // 创建纯文本标记
+            var text = new AMap.Text({
+                text: "纯文本标记",
+                anchor: "center", // 设置文本标记锚点
+                draggable: true,
+                cursor: "pointer",
+                angle: 0,
+                visible: false,
+                offset: [0, -25],
+                style: {
+                    padding: ".45rem 0.15rem",
+                    "margin-bottom": "1rem",
+                    "border-radius": ".25rem",
+                    "background-color": "rgba(0,0,0,0.1)",
+                    width: "15rem",
+                    "border-width": 0,
+                    "box-shadow": "0 2px 6px 0 rgba(255, 255, 255, .3)",
+                    "text-align": "center",
+                    "font-size": "15px",
+                    color: "#fff",
+                },
+            });
+            text.setMap(map);
+            map.on("mousemove", function (e) {
+                var selectPoint = scatter.queryFeature(e.pixel.toArray());
+                // console.log(selectPoint);
+                if (selectPoint) {
+                    text.show();
+                    var count = selectPoint.properties.count;
+                    text.setText(
+                        "Housing sales volume：" +
+                            parseInt(count * 10) +
+                            " sets"
+                    );
+                    text.setPosition(e.lnglat);
+                } else {
+                    text.hide();
+                }
+            });
+        </script>
+    </body>
+</html>
