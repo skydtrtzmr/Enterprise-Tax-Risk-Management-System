@@ -12,7 +12,8 @@
                         <el-icon><Setting /></el-icon>
                         <span>风险分析</span>
                     </template>
-                    <el-menu-item index="logisticmap">物流图分析</el-menu-item>
+                    <el-menu-item index="logisticmap">风险分析总览</el-menu-item>
+                    <el-menu-item index="riskanalysis">风险分析详情</el-menu-item>
                     <!-- 可扩展其他二级菜单 -->
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
@@ -52,6 +53,7 @@
 
         <!-- 主内容区域 -->
         <el-main class="content-main">
+            <TestReport2 :riskLevel="'low'"/>
             <!-- 物流图弹窗 -->
             <el-dialog
                 title="物流图分析"
@@ -77,6 +79,22 @@
 import { ref } from "vue";
 import LogisticmapIframe from "@/components/LogisticmapIframe.vue";
 import { Document, Setting } from "@element-plus/icons-vue";
+import TestReport from '@/components/TestReport.vue';
+import { useRoute } from '#imports';
+
+// 使用与风险应对页面相同的状态管理逻辑
+const activeMenu = useState('activeStatisticalMenu', () => 'logisticmap');
+
+// 监听路由变化
+const route = useRoute();
+watch(
+  () => route.path,
+  () => {
+    if (route.path === '/statistical-analysis') {
+      activeMenu.value = 'logisticmap';
+    }
+  }
+);
 
 // 控制弹窗显示的响应式变量
 const isDialogVisible1 = ref(false);
