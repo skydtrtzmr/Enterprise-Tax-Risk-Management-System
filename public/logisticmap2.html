@@ -33,6 +33,7 @@
                 font-size: 14px;
                 font-weight: bold;
                 line-height: 1.5;
+                /* display: none; */
             }
 
             h1 {
@@ -57,7 +58,7 @@
         </div>
 
         <!-- 添加zoom显示元素 -->
-        <!-- <div class="zoom-display" id="zoomDisplay">Zoom: 12<br /></div> -->
+        <div class="zoom-display" id="zoomDisplay">Zoom: 12<br /></div>
 
         <div id="map"></div>
         <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
@@ -65,8 +66,8 @@
 
         <script>
             var map = new AMap.Map("map", {
-                zoom: 12,
-                center: [119.079966, 31.420307],
+                zoom: 9,
+                center: [119.903184, 31.642777],
                 pitch: 45,
                 showLabel: false,
                 viewMode: "3D",
@@ -74,34 +75,70 @@
             });
 
             var path = [
-                [119.060498, 31.444482],
-                [119.057503, 31.446907],
-                [119.053763, 31.443944],
-                [119.04989, 31.442406],
-                [119.046418, 31.441609],
-                [119.044682, 31.440469],
-                [119.042478, 31.440013],
-                [119.025893, 31.441255],
-                [119.0101, 31.441255],
-                [119.009975, 31.436871],
-                [119.009777, 31.431197],
-                [119.005548, 31.416528],
-                [119.001072, 31.408251],
-                [118.996947, 31.39855],
-                [118.994843, 31.391984],
-                [118.964496, 31.371],
-                [118.967414, 31.367751],
-                [118.966214, 31.366901],
-                [118.96518, 31.366116],
-                [118.967756, 31.364896],
+                [119.424984, 32.185119],
+                [119.405954, 32.184826],
+                [119.400764, 32.177505],
+                [119.388181, 32.173658],
+                [119.412951, 32.13686],
+                [119.410948, 32.09988],
+                [119.406141, 32.074086],
+                [119.402618, 32.059538],
+                [119.405374, 32.044224],
+                [119.408713, 32.017386],
+                [119.402135, 31.99426],
+                [119.403259, 31.968764],
+                [119.398447, 31.939639],
+                [119.394925, 31.893327],
+                [119.397729, 31.854206],
+                [119.406541, 31.815069],
+                [119.409746, 31.7926],
+                [119.409345, 31.773871],
+                [119.420962, 31.747305],
+                [119.427372, 31.730952],
+                [119.429375, 31.710848],
+                [119.425706, 31.670771],
+                [119.41554, 31.603692],
+                [119.402013, 31.515235],
+                [119.400116, 31.49826],
+                [119.393717, 31.481888],
+                [119.388265, 31.467131],
+                [119.378784, 31.452574],
+                [119.366222, 31.437003],
+                [119.359822, 31.425016],
+                [119.355793, 31.414295],
+                [119.349393, 31.404181],
+                [119.324269, 31.406001],
+                [119.300329, 31.404383],
+                [119.286108, 31.408631],
+                [119.268568, 31.40944],
+                [119.237755, 31.403978],
+                [119.214764, 31.408227],
+                [119.190155, 31.40762],
+                [119.172853, 31.407417],
+                [119.158868, 31.403978],
+                [119.128055, 31.399123],
+                [119.100323, 31.402562],
+                [119.07828, 31.40681],
+                [119.054642, 31.41518],
+                [119.013977, 31.413011],
+                [118.993795, 31.412674],
+                [118.989568, 31.390042],
+                [118.988271, 31.387399],
+                [118.983043, 31.383857],
+                [118.965172, 31.371138],
+                [118.968139, 31.367961],
+                [118.965849, 31.366424],
+                [118.967207, 31.365152],
+                [118.967585, 31.364748],
+                [118.967717, 31.36482],
             ];
 
             var polyline = new AMap.Polyline({
                 path: path,
                 isOutline: true,
-                outlineColor: "#4c0099",
-                borderWeight: 2,
-                strokeColor: "#66B2FF",
+                outlineColor: "#0A6B60",
+                borderWeight: 3,
+                strokeColor: "#12BFAB",
                 strokeOpacity: 1,
                 strokeWeight: 4,
                 // 折线样式还支持 'dashed'
@@ -113,28 +150,27 @@
                 zIndex: 50,
             });
             map.add(polyline);
-            // map.setFitView();
             // 注意如果加setFitView的话前面手动设置的center就会无效了
 
             // 获取zoom显示元素
-            // var zoomDisplay = document.getElementById("zoomDisplay");
+            var zoomDisplay = document.getElementById("zoomDisplay");
 
-            // // 初始化显示当前zoom级别和透明度
-            // zoomDisplay.innerHTML = "Zoom: " + map.getZoom();
+            // 初始化显示当前zoom级别和透明度
+            zoomDisplay.innerHTML = "Zoom: " + map.getZoom();
 
-            // // 监听地图缩放事件，实时更新zoom显示
-            // map.on("zoomend", function () {
-            //     var currentZoom = map.getZoom();
-            //     updateDisplayValues();
-            // });
+            // 监听地图缩放事件，实时更新zoom显示
+            map.on("zoomend", function () {
+                var currentZoom = map.getZoom();
+                updateDisplayValues();
+            });
 
-            // // 也可以在viewchange事件中更新，这样在拖动地图时也会更新
-            // map.on("viewchange", function () {
-            //     updateDisplayValues();
+            // 也可以在viewchange事件中更新，这样在拖动地图时也会更新
+            map.on("viewchange", function () {
+                updateDisplayValues();
 
-            //     var z = map.getZoom();
-            //     var outZ = 20;
-            // });
+                var z = map.getZoom();
+                var outZ = 20;
+            });
 
             // 更新显示值的函数
             function updateDisplayValues() {
@@ -229,7 +265,7 @@
                         color: "white",
                         padding: "5px",
                         "border-radius": "3px",
-                        "font-size": "12px",
+                        "font-size": "14px",
                     },
                 });
                 textOverlap.setMap(map);
@@ -250,7 +286,7 @@
 
             // 定义三个关键坐标点
             var startPoint = path[0]; // 实际发货地（path起点）
-            var targetPoint = [119.046864, 31.477661]; // 计划发货地（地图center）
+            var targetPoint = [119.279197, 32.124126]; // 计划发货地（地图center）
 
             // var targetPoint = [118.967756, 31.364896]; // 目标收货地（地图center）
             var endPoint = path[path.length - 1]; // 实际收货地（path终点）
@@ -267,7 +303,7 @@
                         offset: new AMap.Pixel(0, -25), // 正上方偏移
                         style: {
                             color: "#333",
-                            fontSize: "14px",
+                            fontSize: "16px",
                             backgroundColor: "#fff",
                             padding: "2px 5px",
                             borderRadius: "3px",
@@ -283,21 +319,6 @@
                 });
                 return marker;
             }
-
-            // 添加三个标记
-            createMarker(
-                startPoint,
-                "实际发货地",
-                `<img src="http://localhost:3000/icons/start1.png" style="width: 30px;">
-                `
-            ).setMap(map);
-
-            createMarker(
-                targetPoint,
-                "计划发货地",
-                `<img src="http://localhost:3000/icons/start2.png" style="width: 30px;">
-                `
-            ).setMap(map);
 
             function createMarker2(position, name, iconContent) {
                 var marker = new AMap.Marker({
@@ -330,15 +351,33 @@
             createMarker2(
                 endPoint,
                 "中比新能源",
-                `<img src="http://localhost:3000/icons/end2.png"  style="width: 30px;">
+                `<img src="http://localhost:3000/icons/end1.png"  style="width: 30px;">
                 `
             ).setMap(map);
+
+            // 添加三个标记
+            createMarker(
+                startPoint,
+                "实际发货地",
+                `<img src="http://localhost:3000/icons/start2.png" style="width: 30px;">
+                `
+            ).setMap(map);
+
+            createMarker(
+                targetPoint,
+                "计划发货地",
+                `<img src="http://localhost:3000/icons/start1.png" style="width: 30px;">
+                `
+            ).setMap(map);
+
+            
 
             // 绘制实际收货地到目标收货地的直线
             var targetLine = new AMap.Polyline({
                 path: [startPoint, targetPoint],
                 strokeColor: "#FF0000",
-                strokeWeight: 2,
+                strokeWeight: 8,
+                strokeOpacity: 1,
                 strokeDasharray: [5, 5],
             });
             map.add(targetLine);
@@ -349,8 +388,8 @@
                 targetPoint
             ).toFixed(2);
             var distanceText = new AMap.Text({
-                // text: `距离：${distance}米`,
-                text: "距离：15.3千米",
+                text: `距离：${distance}米`,
+                // text: "距离：15.3千米",
                 position: [
                     (startPoint[0] + targetPoint[0]) / 2,
                     (startPoint[1] + targetPoint[1]) / 2,
@@ -481,6 +520,8 @@
                 },
             });
             text.setMap(map);
+            
+            map.setFitView();
         </script>
     </body>
 </html>
