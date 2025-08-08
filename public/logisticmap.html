@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>物流路线图</title>
+        <title>物流路线图1</title>
         <style>
             html,
             body,
@@ -57,7 +57,7 @@
         </div>
 
         <!-- 添加zoom显示元素 -->
-        <div class="zoom-display" id="zoomDisplay">Zoom: 12<br /></div>
+        <!-- <div class="zoom-display" id="zoomDisplay">Zoom: 9<br /></div> -->
 
         <div id="map"></div>
         <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
@@ -65,11 +65,11 @@
 
         <script>
             var map = new AMap.Map("map", {
-                zoom: 12,
+                zoom: 9,
                 center: [119.180155, 31.103332],
                 pitch: 45,
                 showLabel: false,
-                viewMode: "2D",
+                viewMode: "3D",
                 mapStyle: "amap://styles/45311ae996a8bea0da10ad5151f72979",
             });
 
@@ -130,27 +130,27 @@
                 zIndex: 50,
             });
             map.add(polyline);
-            map.setFitView();
+            // map.setFitView();
 
             // 获取zoom显示元素
-            var zoomDisplay = document.getElementById("zoomDisplay");
+            // var zoomDisplay = document.getElementById("zoomDisplay");
 
-            // 初始化显示当前zoom级别和透明度
-            zoomDisplay.innerHTML = "Zoom: " + map.getZoom();
+            // // 初始化显示当前zoom级别和透明度
+            // zoomDisplay.innerHTML = "Zoom: " + map.getZoom();
 
-            // 监听地图缩放事件，实时更新zoom显示
-            map.on("zoomend", function () {
-                var currentZoom = map.getZoom();
-                updateDisplayValues();
-            });
+            // // 监听地图缩放事件，实时更新zoom显示
+            // map.on("zoomend", function () {
+            //     var currentZoom = map.getZoom();
+            //     updateDisplayValues();
+            // });
 
-            // 也可以在viewchange事件中更新，这样在拖动地图时也会更新
-            map.on("viewchange", function () {
-                updateDisplayValues();
+            // // 也可以在viewchange事件中更新，这样在拖动地图时也会更新
+            // map.on("viewchange", function () {
+            //     updateDisplayValues();
 
-                var z = map.getZoom();
-                var outZ = 20;
-            });
+            //     var z = map.getZoom();
+            //     var outZ = 20;
+            // });
 
             // 更新显示值的函数
             function updateDisplayValues() {
@@ -270,21 +270,18 @@
             var endPoint = path[path.length - 1]; // 实际收货地（path终点）
 
             // 通用标记创建函数
-            function createMarker(position, name, iconUrl) {
+            function createMarker(position, name, iconContent) {
                 var marker = new AMap.Marker({
                     position: position,
-                    // icon: iconUrl
-                    //     ? new AMap.Icon({
-                    //           size: new AMap.Size(32, 32),
-                    //           image: iconUrl,
-                    //       })
-                    //     : undefined,
+                    content: iconContent,
+                    offset: new AMap.Pixel(0, 0),
+                    anchor: "bottom-center",
                     label: {
                         content: name,
-                        offset: new AMap.Pixel(-40, -25), // 正上方偏移
+                        offset: new AMap.Pixel(0, -25), // 正上方偏移
                         style: {
                             color: "#333",
-                            fontSize: "12px",
+                            fontSize: "14px",
                             backgroundColor: "#fff",
                             padding: "2px 5px",
                             borderRadius: "3px",
@@ -302,21 +299,53 @@
             }
 
             // 添加三个标记
-            createMarker(startPoint, "实际发货地").setMap(map);
             createMarker(
                 startPoint,
-                "计划发货地",
-                "http://localhost:3000/icons/start2.png"
+                "实际发货地",
+                `<img src="http://localhost:3000/icons/start1.png" style="width: 20px;">
+                `
             ).setMap(map);
+
             createMarker(
                 targetPoint,
-                "目标收货地",
-                "http://localhost:3000/icons/end1.png"
+                "计划收货地",
+                `<img src="http://localhost:3000/icons/end1.png" style="width: 20px;">
+                `
             ).setMap(map);
-            createMarker(
+
+            function createMarker2(position, name, iconContent) {
+                var marker = new AMap.Marker({
+                    position: position,
+                    content: iconContent,
+                    offset: new AMap.Pixel(0, 0),
+                    anchor: "bottom-center",
+                    label: {
+                        content: name,
+                        offset: new AMap.Pixel(0, -25), // 正上方偏移
+                        style: {
+                            // color: "#333",
+                            fontSize: "16px",
+                            // backgroundColor: "#fff",
+                            padding: "2px 5px",
+                            borderRadius: "3px",
+                        },
+                    },
+                });
+                // 将 marker 的 label 也加入 markerLabelOverlaps
+                markerLabelOverlaps.push({
+                    marker: marker,
+                    label: marker.getLabel(),
+                    position: position,
+                    name: name,
+                });
+                return marker;
+            }
+
+            createMarker2(
                 endPoint,
                 "实际收货地",
-                "http://localhost:3000/icons/end2.png"
+                `<img src="http://localhost:3000/icons/end2.png"  style="width: 20px;">
+                `
             ).setMap(map);
 
             // 绘制实际收货地到目标收货地的直线
@@ -362,7 +391,7 @@
                 var allOverlaps = [];
                 textOverlaps.forEach(function (item) {
                     allOverlaps.push({
-                        type: 'location',
+                        type: "location",
                         text: item.text,
                         position: item.location.lnglat,
                         priority: item.location.priority || 1,
@@ -370,8 +399,11 @@
                 });
                 markerLabelOverlaps.forEach(function (item, idx) {
                     allOverlaps.push({
-                        type: 'marker',
-                        text: item.marker.getLabel && item.marker.getLabel() ? item.marker.getLabel() : null,
+                        type: "marker",
+                        text:
+                            item.marker.getLabel && item.marker.getLabel()
+                                ? item.marker.getLabel()
+                                : null,
                         position: item.position,
                         priority: 2,
                     });
@@ -417,8 +449,14 @@
                             sortedOverlaps[j].position
                         );
                         if (distance < dynamicMinDistance) {
-                            if (sortedOverlaps[j].priority <= sortedOverlaps[i].priority) {
-                                if (sortedOverlaps[j].text && sortedOverlaps[j].text.hide) {
+                            if (
+                                sortedOverlaps[j].priority <=
+                                sortedOverlaps[i].priority
+                            ) {
+                                if (
+                                    sortedOverlaps[j].text &&
+                                    sortedOverlaps[j].text.hide
+                                ) {
                                     sortedOverlaps[j].text.hide();
                                 }
                             }
