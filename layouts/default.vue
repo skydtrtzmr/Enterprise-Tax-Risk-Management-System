@@ -30,15 +30,27 @@
             <div class="header-right">
                 <el-dropdown trigger="click" class="message-dropdown">
                     <el-badge :value="3" class="message-badge">
-                        <el-icon :size="28" style="color: #FFFFFF"><Message /></el-icon>
+                        <el-icon :size="28" style="color: #ffffff"
+                            ><Message
+                        /></el-icon>
                     </el-badge>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item v-for="msg in unreadMessages" :key="msg.id">
-                                <div class="message-item" @click="showDetail(msg)">
-                                    <div class="message-title">{{ msg.title }}</div>
+                            <el-dropdown-item
+                                v-for="msg in unreadMessages"
+                                :key="msg.id"
+                            >
+                                <div
+                                    class="message-item"
+                                    @click="showDetail(msg)"
+                                >
+                                    <div class="message-title">
+                                        {{ msg.title }}
+                                    </div>
                                     <!-- <div class="message-content">{{ msg.content }}</div> -->
-                                    <div class="message-time">{{ formatTime(msg.time) }}</div>
+                                    <div class="message-time">
+                                        {{ formatTime(msg.time) }}
+                                    </div>
                                 </div>
                             </el-dropdown-item>
                         </el-dropdown-menu>
@@ -52,43 +64,67 @@
             <slot />
         </el-main>
     </el-container>
-        <el-dialog
-            v-model="detailVisible"
-            :title="selectedMessage?.title"
-            width="450px"
-            custom-class="risk-dialog">
-            <template #header>
-                <div class="dialog-header">
-                    <el-icon><Warning /></el-icon>
-                    <span class="dialog-title">{{ selectedMessage?.title }}</span>
-                    <el-tag type="warning" size="small">未读</el-tag>
-                </div>
-            </template>
-
-            <el-divider />
-
-            <div class="dialog-content">
-                <div class="content-row">
-                    <span class="label">风险类型：</span>
-                    <span class="value">{{ selectedMessage?.riskType || '通用风险' }}</span>
-                </div>
-                <div class="content-row">
-                    <span class="label">发现时间：</span>
-                    <span class="value time">{{ formatTime(selectedMessage?.time) }}</span>
-                </div>
-                <el-divider content-position="left">风险描述</el-divider>
-                <div class="risk-description">
-                    {{ selectedMessage?.content }}
-                </div>
+    <el-dialog
+        v-model="detailVisible"
+        :title="selectedMessage?.title"
+        width="450px"
+        custom-class="risk-dialog"
+    >
+        <template #header>
+            <div class="dialog-header">
+                <el-icon><Warning /></el-icon>
+                <span class="dialog-title">{{ selectedMessage?.title }}</span>
+                <el-tag type="warning" size="small">未读</el-tag>
             </div>
+        </template>
 
-            <template #footer>
-                <div class="dialog-footer">
-                    <el-button type="primary" @click="detailVisible = false">标记已读</el-button>
-                    <el-button>查看详情</el-button>
-                </div>
-            </template>
-        </el-dialog>
+        <el-divider />
+
+        <div class="dialog-content">
+            <div class="content-row">
+                <span class="label">风险类型：</span>
+                <span class="value">{{
+                    selectedMessage?.riskType || "通用风险"
+                }}</span>
+            </div>
+            <div class="content-row">
+                <span class="label">发现时间：</span>
+                <span class="value time">{{
+                    formatTime(selectedMessage?.time)
+                }}</span>
+            </div>
+            <el-divider content-position="left">风险描述</el-divider>
+            <div class="risk-description">
+                {{ selectedMessage?.content }}
+            </div>
+        </div>
+
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="primary" @click="detailVisible = false"
+                    >标记已读</el-button
+                >
+                <el-button @click="handleViewLogisticMap">查看详情</el-button>
+            </div>
+        </template>
+    </el-dialog>
+    <!-- 物流图弹窗 -->
+    <el-dialog
+        title="物流图分析"
+        v-model="isDialogVisible1"
+        width="90%"
+        :before-close="handleClose"
+    >
+        <LogisticmapIframe />
+    </el-dialog>
+    <el-dialog
+        title="物流图分析2"
+        v-model="isDialogVisible2"
+        width="90%"
+        :before-close="handleClose2"
+    >
+        <LogisticmapIframe2 />
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -99,7 +135,7 @@ import {
     Finished,
     TrendCharts,
     User,
-    Message
+    Message,
 } from "@element-plus/icons-vue";
 
 const unreadVisible = ref(false);
@@ -108,30 +144,53 @@ const selectedMessage = ref();
 const unreadMessages = ref([
     {
         id: 1,
-        title: '新风险预警',
-        riskType: '四流不一致',
-        content: '检测到四流不一致风险条目',
-        time: new Date("2023-01-01")
-
+        title: "新风险预警",
+        riskType: "四流不一致",
+        content: "检测到四流不一致风险条目",
+        time: new Date("2023-01-01"),
     },
-    
+
     {
         id: 2,
-        title: '漏税预警',
-        riskType: '漏税',
-        content: '检测到漏税风险条目',
-        time: new Date("2025-03-03")
-    }
+        title: "漏税预警",
+        riskType: "漏税",
+        content: "检测到漏税风险条目",
+        time: new Date("2025-03-03"),
+    },
 ]);
 // 新增方法
-const showDetail = (msg:any) => {
+const showDetail = (msg: any) => {
     selectedMessage.value = msg;
     detailVisible.value = true;
     unreadVisible.value = false;
 };
 
-const formatTime = (timestamp:any) => {
+const formatTime = (timestamp: any) => {
     return new Date(timestamp).toLocaleDateString();
+};
+
+const isDialogVisible1 = ref(false);
+
+const isDialogVisible2 = ref(false);
+
+// 点击查看物流图处理函数
+const handleViewLogisticMap = () => {
+    console.log("点击查看物流图"); // 添加控制台日志
+    isDialogVisible1.value = true;
+};
+
+const handleViewLogisticMap2 = () => {
+    console.log("点击查看物流图"); // 添加控制台日志
+    isDialogVisible2.value = true;
+};
+
+// 弹窗关闭回调
+const handleClose = () => {
+    isDialogVisible1.value = false;
+};
+
+const handleClose2 = () => {
+    isDialogVisible2.value = false;
 };
 </script>
 
@@ -143,10 +202,9 @@ body {
 </style>
 
 <style scoped>
-
 .message-badge {
-  margin-right: 20px;
-  cursor: pointer;
+    margin-right: 20px;
+    cursor: pointer;
 }
 
 /* .message-dropdown {
@@ -154,8 +212,8 @@ body {
 } */
 
 .el-dropdown-menu__item {
-  white-space: normal;
-  line-height: 1.5;
+    white-space: normal;
+    line-height: 1.5;
 }
 @keyframes header-fade-in {
     from {
