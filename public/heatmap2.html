@@ -99,14 +99,14 @@
                 var z = map.getZoom();
                 var outZ = 20;
                 // 14 - 16 级别淡出
-                // var heatmapOpacity = 10 - (z - 16) / (outZ - 16);
+                var heatmapOpacity = 10 - (z - 16) / (outZ - 16);
 
                 var heatmapOpacity = 10;
                 heatmap.setOpacity(heatmapOpacity);
 
                 // 圆点
-                // var scatterOpacity = (z - 14) / (16.3 - 14);
-                var scatterOpacity = 0 ;
+                var scatterOpacity = (z - 14) / (16.3 - 14);
+                // var scatterOpacity = 0 ;
                 scatter.setOpacity(scatterOpacity);
             });
 
