@@ -230,14 +230,16 @@
 
             // 存储所有标签的数组
             var textOverlaps = [];
+            // 存储所有 createMarker 创建的 marker label
+            var markerLabelOverlaps = [];
 
             // 添加自定义标签
             locations.forEach(function (location) {
-                // 创建文本覆盖物
+                // 创建文本覆盖物，offset设置为正上方
                 var textOverlap = new AMap.Text({
                     text: location.name,
                     position: location.lnglat,
-                    offset: new AMap.Pixel(0, -20), // 标签位置偏移
+                    offset: new AMap.Pixel(0, -2120), // 正上方偏移
                     style: {
                         "background-color": "rgba(0, 0, 0, 0.5)",
                         color: "white",
@@ -269,18 +271,17 @@
 
             // 通用标记创建函数
             function createMarker(position, name, iconUrl) {
-                return new AMap.Marker({
+                var marker = new AMap.Marker({
                     position: position,
-                    // icon: new AMap.Icon({
-                    //     size: new AMap.Size(32, 32),
-                    //     image:
-                    //         iconUrl ||
-                    //         // "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-                    //         "http://localhost:3000/icons/start1.png",
-                    // }),
+                    // icon: iconUrl
+                    //     ? new AMap.Icon({
+                    //           size: new AMap.Size(32, 32),
+                    //           image: iconUrl,
+                    //       })
+                    //     : undefined,
                     label: {
                         content: name,
-                        offset: new AMap.Pixel(0, 0),
+                        offset: new AMap.Pixel(-40, -25), // 正上方偏移
                         style: {
                             color: "#333",
                             fontSize: "12px",
@@ -290,6 +291,14 @@
                         },
                     },
                 });
+                // 将 marker 的 label 也加入 markerLabelOverlaps
+                markerLabelOverlaps.push({
+                    marker: marker,
+                    label: marker.getLabel(),
+                    position: position,
+                    name: name,
+                });
+                return marker;
             }
 
             // 添加三个标记
@@ -331,11 +340,14 @@
                     (endPoint[0] + targetPoint[0]) / 2,
                     (endPoint[1] + targetPoint[1]) / 2,
                 ],
-                offset: new AMap.Pixel(-50, 0),
+                offset: new AMap.Pixel(0, -30), // 正上方偏移，略大于其他标签
                 style: {
                     color: "#FF0000",
                     fontSize: "14px",
                     fontWeight: "bold",
+                    backgroundColor: "#fff",
+                    padding: "2px 8px",
+                    borderRadius: "4px",
                 },
             });
             map.add(distanceText);
@@ -346,10 +358,41 @@
                 var showZoomThreshold = 14; // 显示标签的缩放级别阈值
                 var minDistance = 60; // 最小像素距离
 
+                // 合并所有需要智能显示的标签（locations + marker labels + 距离标签）
+                var allOverlaps = [];
+                // locations 标签
+                textOverlaps.forEach(function (item) {
+                    allOverlaps.push({
+                        type: 'location',
+                        text: item.text,
+                        position: item.location.lnglat,
+                        priority: item.location.priority || 1,
+                    });
+                });
+                // marker 标签
+                markerLabelOverlaps.forEach(function (item, idx) {
+                    allOverlaps.push({
+                        type: 'marker',
+                        text: item.marker.getLabel && item.marker.getLabel() ? item.marker.getLabel() : null,
+                        position: item.position,
+                        priority: 2, // marker标签优先级略高于普通点
+                    });
+                });
+                // 距离标签，优先级最高
+                allOverlaps.push({
+                    type: 'distance',
+                    text: distanceText,
+                    position: [
+                        (endPoint[0] + targetPoint[0]) / 2,
+                        (endPoint[1] + targetPoint[1]) / 2,
+                    ],
+                    priority: 10
+                });
+
                 // 如果缩放级别小于阈值，隐藏所有标签
                 if (currentZoom < showZoomThreshold) {
-                    textOverlaps.forEach(function (item) {
-                        item.text.hide();
+                    allOverlaps.forEach(function (item) {
+                        if (item.text && item.text.hide) item.text.hide();
                     });
                     return;
                 }
@@ -362,28 +405,29 @@
                 var dynamicMinDistance = minDistance / zoomFactor;
 
                 // 重置所有标签可见性
-                textOverlaps.forEach(function (item) {
-                    item.text.show();
+                allOverlaps.forEach(function (item) {
+                    if (item.text && item.text.show) item.text.show();
                 });
 
-                // 按优先级排序
-                var sortedOverlaps = textOverlaps.slice().sort(function (a, b) {
-                    return (
-                        (a.location.priority || 1) - (b.location.priority || 1)
-                    );
+                // 按优先级排序（优先级高的尽量显示）
+                var sortedOverlaps = allOverlaps.slice().sort(function (a, b) {
+                    return a.priority - b.priority;
                 });
 
                 // 检查并处理重叠
                 for (var i = 0; i < sortedOverlaps.length; i++) {
                     for (var j = i + 1; j < sortedOverlaps.length; j++) {
                         var distance = getPixelDistance(
-                            sortedOverlaps[i].location.lnglat,
-                            sortedOverlaps[j].location.lnglat
+                            sortedOverlaps[i].position,
+                            sortedOverlaps[j].position
                         );
-
-                        // 如果距离太近，隐藏优先级较低的标签
                         if (distance < dynamicMinDistance) {
-                            sortedOverlaps[j].text.hide();
+                            // 只有优先级低的才被隐藏
+                            if (sortedOverlaps[j].priority <= sortedOverlaps[i].priority) {
+                                if (sortedOverlaps[j].text && sortedOverlaps[j].text.hide) {
+                                    sortedOverlaps[j].text.hide();
+                                }
+                            }
                         }
                     }
                 }
