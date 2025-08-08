@@ -28,6 +28,18 @@
                 </NuxtLink>
             </div>
             <div class="header-right">
+                <el-dropdown trigger="click" class="message-dropdown">
+                    <el-badge :value="3" class="message-badge">
+                        <el-icon :size="24"><Message /></el-icon>
+                    </el-badge>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item v-for="i in 3" :key="i">
+                                系统消息 {{ i }}（未读）
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
                 <el-icon><User /></el-icon>
                 <span>您好, 中比新能源公司</span>
             </div>
@@ -47,6 +59,14 @@ import {
     TrendCharts,
     User,
 } from "@element-plus/icons-vue";
+
+import { Message } from "@element-plus/icons-vue";
+
+const mockMessages = ref([
+  { id: 1, title: '风险预警', content: '您有3条待处理风险' },
+  { id: 2, title: '系统通知', content: '新版本已发布' },
+]);
+
 </script>
 
 <style>
@@ -57,6 +77,20 @@ body {
 </style>
 
 <style scoped>
+
+.message-badge {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.message-dropdown {
+  width: 250px;
+}
+
+.el-dropdown-menu__item {
+  white-space: normal;
+  line-height: 1.5;
+}
 @keyframes header-fade-in {
     from {
         transform: translateY(-20px);
@@ -101,7 +135,7 @@ body {
 
 /* 使用伪元素在头部右侧添加局部装饰性条纹 */
 .main-header::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -113,7 +147,7 @@ body {
         transparent 5px,
         rgba(255, 255, 255, 0.06) 5px,
         rgba(255, 255, 255, 0.06) 10px
-      );
+    );
     pointer-events: none; /* 确保不影响鼠标交互 */
 }
 
@@ -172,7 +206,7 @@ body {
 
 /* 菜单项之间的分割线 */
 .nav-item:not(:first-child)::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 50%;
