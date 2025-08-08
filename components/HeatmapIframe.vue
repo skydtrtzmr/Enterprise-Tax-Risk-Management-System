@@ -14,7 +14,7 @@
 import { ref, onMounted } from 'vue'
 
 // iframe的src路径，指向public目录下的HTML文件
-const iframeSrc = ref('/heatmap.html')
+const iframeSrc = ref('/heatmap.html1')
 
 // iframe加载完成后的回调
 const onIframeLoad = () => {
