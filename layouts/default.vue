@@ -34,8 +34,12 @@
                     </el-badge>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item v-for="i in 3" :key="i">
-                                系统消息 {{ i }}（未读）
+                            <el-dropdown-item v-for="msg in unreadMessages" :key="msg.id">
+                                <div class="message-item" @click="showDetail(msg)">
+                                    <div class="message-title">{{ msg.title }}</div>
+                                    <!-- <div class="message-content">{{ msg.content }}</div> -->
+                                    <div class="message-time">{{ formatTime(msg.time) }}</div>
+                                </div>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
@@ -48,6 +52,14 @@
             <slot />
         </el-main>
     </el-container>
+        <el-dialog 
+        v-model="detailVisible" 
+        :title="selectedMessage?.title"
+        width="30%">
+        <p>{{ selectedMessage?.content }}</p>
+        <p  class="time-align"> 时间：{{ formatTime(selectedMessage?.time) }}</p>
+
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -58,15 +70,38 @@ import {
     Finished,
     TrendCharts,
     User,
+    Message
 } from "@element-plus/icons-vue";
 
-import { Message } from "@element-plus/icons-vue";
+const unreadVisible = ref(false);
+const detailVisible = ref(false);
+const selectedMessage = ref();
+const unreadMessages = ref([
+    {
+        id: 1,
+        title: '新风险预警',
+        content: '检测到四流不一致风险条目',
+        time: new Date("2023-01-01")
 
-const mockMessages = ref([
-  { id: 1, title: '风险预警', content: '您有3条待处理风险' },
-  { id: 2, title: '系统通知', content: '新版本已发布' },
+    },
+    
+    {
+        id: 2,
+        title: '漏税预警',
+        content: '检测到漏税风险条目',
+        time: new Date("2025-03-03")
+    }
 ]);
+// 新增方法
+const showDetail = (msg:any) => {
+    selectedMessage.value = msg;
+    detailVisible.value = true;
+    unreadVisible.value = false;
+};
 
+const formatTime = (timestamp:any) => {
+    return new Date(timestamp).toLocaleDateString();
+};
 </script>
 
 <style>
@@ -83,9 +118,9 @@ body {
   cursor: pointer;
 }
 
-.message-dropdown {
+/* .message-dropdown {
   width: 250px;
-}
+} */
 
 .el-dropdown-menu__item {
   white-space: normal;
@@ -186,6 +221,12 @@ body {
     /* for animation */
     opacity: 0;
     animation: nav-item-fade-in 0.5s ease-out forwards;
+}
+
+.time-align {
+    text-align: right;
+    margin: 10px 0;
+    color: #909399;
 }
 
 .header-center .nav-item:nth-child(1) {
