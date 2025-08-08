@@ -379,15 +379,15 @@
                     });
                 });
                 // 距离标签，优先级最高
-                allOverlaps.push({
-                    type: 'distance',
-                    text: distanceText,
-                    position: [
-                        (endPoint[0] + targetPoint[0]) / 2,
-                        (endPoint[1] + targetPoint[1]) / 2,
-                    ],
-                    priority: 10
-                });
+                // allOverlaps.push({
+                //     type: 'distance',
+                //     text: distanceText,
+                //     position: [
+                //         (endPoint[0] + targetPoint[0]) / 2,
+                //         (endPoint[1] + targetPoint[1]) / 2,
+                //     ],
+                //     priority: 1
+                // });
 
                 // 如果缩放级别小于阈值，隐藏所有标签
                 if (currentZoom < showZoomThreshold) {
