@@ -310,4 +310,26 @@ body {
     height: calc(100vh - 64px); /* Adjusted for new header height */
     overflow-y: auto;
 }
+
+.message-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    padding: 8px 12px;
+}
+
+.message-title {
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.message-time {
+    margin-left: auto;
+    color: #909399;
+    font-size: 0.9em;
+}
 </style>
