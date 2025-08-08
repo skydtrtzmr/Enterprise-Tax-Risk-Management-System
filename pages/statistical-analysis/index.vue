@@ -1,5 +1,5 @@
 <template>
-  <el-container class="full-height">
+  <el-container class="full-height" @keydown.ctrl.l.prevent="handleViewLogisticMap">
     <!-- 侧边栏菜单 -->
     <el-aside width="240px" class="aside-menu">
       <div class="aside-header">
@@ -23,7 +23,7 @@
 
     <!-- 主内容区域 -->
     <el-main class="content-main">
-      <el-button type="primary" @click="handleViewLogisticMap">查看物流图</el-button>
+      <!-- <el-button type="primary" @click="handleViewLogisticMap">查看物流图</el-button> -->
 
       <!-- 物流图弹窗 -->
       <el-dialog
@@ -56,6 +56,22 @@ const handleViewLogisticMap = () => {
 const handleClose = () => {
   isDialogVisible.value = false;
 };
+
+// 添加键盘事件监听
+const onKeyPress = (e: KeyboardEvent) => {
+  if (e.ctrlKey && e.key.toLowerCase() === 'i') {
+    handleViewLogisticMap();
+  }
+};
+
+// 生命周期钩子
+onMounted(() => {
+  window.addEventListener('keydown', onKeyPress);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyPress);
+});
 </script>
 
 <style scoped>
