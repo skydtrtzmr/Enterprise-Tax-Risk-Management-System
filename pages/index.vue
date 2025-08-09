@@ -16,7 +16,13 @@
 </template>
 
 <script setup lang="ts">
+const { authUser } = useAuth()
 
+onBeforeMount(() => {
+  if (!authUser.value.isLoggedIn) {
+    navigateTo('/login')
+  }
+})
 
 function goToRiskAssessment() {
     navigateTo("/risk-assessment");

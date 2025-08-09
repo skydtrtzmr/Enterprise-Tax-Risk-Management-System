@@ -142,6 +142,7 @@ import {
     Message,
 } from "@element-plus/icons-vue";
 
+const { authUser, logout } = useAuth()
 const unreadVisible = ref(false);
 const detailVisible = ref(false);
 const selectedMessage = ref();
