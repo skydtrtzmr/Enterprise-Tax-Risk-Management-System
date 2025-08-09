@@ -36,6 +36,22 @@
                 ></div>
             </el-card>
         </div>
+                <el-dialog
+            title="风险提示：车辆轨迹异常"
+            v-model="isDialogVisible1"
+            width="90%"
+            :before-close="handleClose"
+        >
+            <HeatmapIframe src="/heatmap1.html" />
+        </el-dialog>
+        <el-dialog
+            title="风险提示：车辆轨迹异常"
+            v-model="isDialogVisible2"
+            width="90%"
+            :before-close="handleClose2"
+        >
+            <HeatmapIframe src="/heatmap2.html" />
+        </el-dialog>
     </div>
 </template>
 
@@ -44,6 +60,51 @@ import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import SubsidyManagementDetail from "~/components/risk/SubsidyManagementDetail.vue";
 import { marked } from 'marked';
+import HeatmapIframe from "~/components/HeatmapIframe.vue";
+
+// 控制弹窗显示的响应式变量
+const isDialogVisible1 = ref(false);
+
+const isDialogVisible2 = ref(false);
+
+// 点击查看物流图处理函数
+const handleViewLogisticMap = () => {
+    console.log("点击查看物流图"); // 添加控制台日志
+    isDialogVisible1.value = true;
+};
+
+const handleViewLogisticMap2 = () => {
+    console.log("点击查看物流图"); // 添加控制台日志
+    isDialogVisible2.value = true;
+};
+
+// 弹窗关闭回调
+const handleClose = () => {
+    isDialogVisible1.value = false;
+};
+
+const handleClose2 = () => {
+    isDialogVisible2.value = false;
+};
+
+// 添加键盘事件监听
+const onKeyPress = (e: KeyboardEvent) => {
+    if (e.shiftKey && e.key.toLowerCase() === "i") {
+        handleViewLogisticMap();
+    }
+    if (e.shiftKey && e.key.toLowerCase() === "j") {
+        handleViewLogisticMap2();
+    }
+};
+
+// 生命周期钩子
+onMounted(() => {
+    window.addEventListener("keydown", onKeyPress);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("keydown", onKeyPress);
+});
 
 const route = useRoute();
 const router = useRouter();
