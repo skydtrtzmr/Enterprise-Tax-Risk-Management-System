@@ -13,7 +13,7 @@
           </div>
         </el-col>
         <el-col :span="10">
-          <h2 class="report-title">企业风险分析</h2>
+          <h2 class="report-title">企业年度税务风险测评报告</h2>
           <p class="report-subtitle">
             根据您提交的数据，系统完成了 {{ totalChecks }} 项指标的全面检测，综合评定企业的税务健康状况。
           </p>
@@ -198,8 +198,6 @@ const lowRiskData: ReportData = {
   ],
   table: [
      { dimension: '成本管理', indicator: '部分差旅费用票据不合规', description: '少量差旅报销缺少有效凭证', level: '中' },
-     { dimension: '四流不一致', indicator: '发票流与货物流不一致', description: '发票信息与货物实际流向不符', level: '中' },
-
   ],
   core: [
       { text: '整体税务风险可控，未发现重大风险点。', tag: '综合', type: 'success' },

@@ -29,7 +29,8 @@
             </div>
             <div class="header-right">
                 <el-dropdown trigger="click" class="message-dropdown">
-                    <el-badge :value="3" class="message-badge">
+                    <el-badge :value="unreadMessages.length" class="message-badge">
+
                         <el-icon :size="28" style="color: #ffffff"
                             ><Message
                         /></el-icon>
@@ -158,7 +159,7 @@ const unreadMessages = ref([
         title: "新风险预警！",
         riskType: "上下游一致的过票行为",
         content: "开具发票商品编码类似接收发票商品编码。",
-        time: new Date("2024-03-13"),
+        time: new Date("2024-03-12"),
     },
     
     {
@@ -166,7 +167,15 @@ const unreadMessages = ref([
         title: "新风险预警！",
         riskType: "进项发票高危品目",
         content: "敏感商品发票金额，取得虚开发票风险。",
-        time: new Date("2024-03-13"),
+        time: new Date("2024-03-12"),
+    },
+    
+    {
+        id: 4,
+        title: "新风险预警！",
+        riskType: "四流不一致",
+        content: "发票流与货物流不一致。",
+        time: new Date("2024-03-15"),
     },
 ]);
 // 新增方法

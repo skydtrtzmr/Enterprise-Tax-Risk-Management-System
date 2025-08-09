@@ -375,7 +375,7 @@
                 targetPoint
             ).toFixed(2);
             var distanceText = new AMap.Text({
-                text: `距离：${distance}米`,
+                text: `距离：${(distance/1000).toFixed(2)}千米`,
                 // text: "距离：15.6千米",
                 position: [
                     (endPoint[0] + targetPoint[0]) / 2,

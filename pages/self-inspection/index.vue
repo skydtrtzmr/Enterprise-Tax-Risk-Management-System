@@ -13,12 +13,38 @@
             >
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><Setting /></el-icon>
-                        <span>风险分析</span>
+                        <el-icon><Cpu /></el-icon>
+                        <span>智能自查</span>
                     </template>
 
                     <el-menu-item index="heatmap1">热力图1</el-menu-item>
                     <el-menu-item index="heatmap2">热力图2</el-menu-item>
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><Reading /></el-icon>
+                        <span>自由阅账</span>
+                    </template>
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><List /></el-icon>
+                        <span>税种检查</span>
+                    </template>
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><EditPen /></el-icon>
+
+                        <span>查结处理</span>
+                    </template>
+                </el-sub-menu>
+                <el-sub-menu index="statistical-functions">
+                    <template #title>
+                        <el-icon><Guide /></el-icon>
+
+                        <span>自查报告</span>
+                    </template>
                 </el-sub-menu>
             </el-menu>
         </el-aside>
@@ -33,7 +59,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import HeatmapIframe from "@/components/HeatmapIframe.vue";
-import { Document, Setting } from "@element-plus/icons-vue";
+import { Document, Setting, EditPen, Reading, Cpu, List, Guide } from "@element-plus/icons-vue";
 
 // 响应式变量：当前选中的热力图（初始为heatmap1）
 const currentHeatmap = ref("heatmap1");
