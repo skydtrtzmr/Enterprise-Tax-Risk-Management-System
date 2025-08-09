@@ -188,39 +188,38 @@ const trendData = ref({
 const trendOption = computed(() => {
   const data = trendData.value[activeTrendTab.value as keyof typeof trendData.value];
   return {
-    title: {
-      text: '月度趋势 (' + selectedYear.value + ')',
-      left: 'center',
-      textStyle: {
-        fontSize: 14
-      }
-    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
         type: 'shadow'
+      },
+      formatter: (params: any) => {
+        let result = params[0].name + '<br/>';
+        params.forEach((item: any) => {
+          if (item.value !== '-') {
+            result += `${item.seriesName}: ${item.value}万元<br/>`;
+          }
+        });
+        return result;
       }
     },
     legend: {
       data: ['本月', '上月', '去年同期'],
-      bottom: 0
+      top: 0
     },
     grid: {
-      top: '15%',
-      bottom: '15%',
+      top: '20%',
+      bottom: '10%',
       containLabel: true
     },
     xAxis: {
       type: 'category',
-      data: data.months,
-      axisLabel: {
-        formatter: function(value: string, index: number) {
-          return index < new Date().getMonth() + 1 ? value : '';
-        }
-      }
+      data: data.months
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      name: '单位：万元',
+      nameLocation: 'end'
     },
     series: [
       {
@@ -230,9 +229,7 @@ const trendOption = computed(() => {
         itemStyle: {
           color: '#409EFF'
         },
-        data: data.currentYear.map((val, idx) => {
-          return idx < new Date().getMonth() + 1 ? val : '-'
-        })
+        data: data.currentYear
       },
       {
         name: '上月',
@@ -276,7 +273,10 @@ const compareOption = computed(() => {
     },
     xAxis: {
       type: 'category',
-      data: data.months.slice(0, new Date().getMonth() + 1)
+      data: data.months,
+      axisLabel: {
+        interval: 0,
+      }
     },
     yAxis: {
       type: 'value'
@@ -328,19 +328,19 @@ const compareOption = computed(() => {
 }
 
 .financial-item:nth-child(1) {
-  background-color: rgba(64, 158, 255, 0.1);
+  background-color: #ecf5ff;
 }
 
 .financial-item:nth-child(2) {
-  background-color: rgba(103, 194, 58, 0.1);
+  background-color: #f0f9eb;
 }
 
 .financial-item:nth-child(3) {
-  background-color: rgba(230, 162, 60, 0.1);
+  background-color: #fdf6ec;
 }
 
 .financial-item:nth-child(4) {
-  background-color: rgba(245, 108, 108, 0.1);
+  background-color: #fef0f0;
 }
 
 .card-title {
