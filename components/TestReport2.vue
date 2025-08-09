@@ -74,67 +74,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="8">
-        <el-card shadow="never" class="summary-card">
-          <template #header>
-            <div class="card-header">
-              <span>涉税风险指标</span>
-            </div>
-          </template>
-          <client-only>
-            <v-chart class="chart" :option="barOption" autoresize />
-          </client-only>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="never" class="summary-card">
-          <template #header>
-            <div class="card-header">
-              <span>风险等级分布</span>
-            </div>
-          </template>
-          <client-only>
-            <v-chart class="chart" :option="pieOption" autoresize />
-          </client-only>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="never" class="summary-card">
-           <template #header>
-            <div class="card-header">
-              <span>核心风险摘要</span>
-            </div>
-          </template>
-          <div class="risk-summary">
-            <ul>
-              <li v-for="item in coreRisks" :key="item.text">
-                <el-tag :type="item.type" effect="dark" size="small">{{ item.tag }}</el-tag>
-                <span>{{ item.text }}</span>
-              </li>
-            </ul>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <el-card style="margin-top: 20px;">
-      <template #header>
-        <div class="card-header">
-          <span>风险明细</span>
-        </div>
-      </template>
-      <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-        <el-table-column prop="dimension" label="风险维度" width="180"></el-table-column>
-        <el-table-column prop="indicator" label="风险指标"></el-table-column>
-        <el-table-column prop="description" label="风险描述"></el-table-column>
-        <el-table-column prop="level" label="风险等级" width="100">
-          <template #default="scope">
-            <el-tag :type="scope.row.level === '高' ? 'danger' : 'warning'">{{ scope.row.level }}</el-tag>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+    
 
   </div>
 </template>
