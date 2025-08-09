@@ -1,10 +1,15 @@
 <template>
   <div class="login-container">
+    <div class="login-decoration">
+      <div class="decoration-circle"></div>
+      <div class="decoration-circle"></div>
+    </div>
+    
     <el-card class="login-card">
       <template #header>
         <div class="card-header">
-          <h2>中比新能源</h2>
-          <p>企业税收风险管理系统</p>
+          <h2 class="system-title">企业税收风险管理系统</h2>
+          <p class="company-name">中比新能源科技有限公司</p>
         </div>
       </template>
 
@@ -13,13 +18,19 @@
         :rules="rules" 
         ref="loginForm"
         @submit.prevent="handleLogin"
+        label-position="top"
       >
         <el-form-item label="工号" prop="userId">
           <el-input 
             v-model="form.userId" 
             placeholder="请输入工号"
             clearable
-          />
+            size="large"
+          >
+            <template #prefix>
+              <el-icon><User /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
 
         <el-form-item label="密码" prop="password">
@@ -28,7 +39,12 @@
             type="password" 
             placeholder="请输入密码"
             show-password
-          />
+            size="large"
+          >
+            <template #prefix>
+              <el-icon><Lock /></el-icon>
+            </template>
+          </el-input>
         </el-form-item>
 
         <el-form-item>
@@ -37,6 +53,7 @@
             native-type="submit"
             :loading="loading"
             class="login-button"
+            size="large"
           >
             登录
           </el-button>
@@ -77,7 +94,7 @@ const handleLogin = () => {
       // 模拟API调用延迟
       setTimeout(() => {
         login(form.userId, form.password)
-        router.push('/')
+        router.push('/statistical-analysis')
         loading.value = false
       }, 500)
     }

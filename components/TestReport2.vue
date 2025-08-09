@@ -109,9 +109,9 @@ const selectedYear = ref(2024);
 const availableYears = [2022, 2023, 2024];
 
 const financialSummary = ref([
-  { label: '资产总额', value: '5,280', unit: '万元' },
-  { label: '收入总额', value: '3,420', unit: '万元' },
-  { label: '利润总额', value: '620', unit: '万元' },
+  { label: '资产总额', value: '52,812', unit: '万元' },
+  { label: '收入总额', value: '34,203', unit: '万元' },
+  { label: '利润总额', value: '6,206', unit: '万元' },
   { label: '毛利率', value: '18.1', unit: '%' }
 ]);
 

@@ -21,7 +21,7 @@
                         <el-icon><WarnTriangleFilled /></el-icon>
                         <span>风险分析</span>
                     </template>
-                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
+                    <!-- <el-menu-item index="logisticmap">物流信息比对图</el-menu-item> -->
                     <!-- 可扩展其他二级菜单 -->
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
@@ -29,7 +29,7 @@
                         <el-icon><Tickets /></el-icon>
                         <span>发票分析</span>
                     </template>
-                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
+                    <!-- <el-menu-item index="logisticmap">物流信息比对图</el-menu-item> -->
                     <!-- 可扩展其他二级菜单 -->
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
@@ -37,7 +37,7 @@
                         <el-icon><Upload /></el-icon>
                         <span>申报分析</span>
                     </template>
-                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
+                    <!-- <el-menu-item index="logisticmap">物流信息比对图</el-menu-item> -->
                     <!-- 可扩展其他二级菜单 -->
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
@@ -45,7 +45,7 @@
                         <el-icon><Management /></el-icon>
                         <span>经营分析</span>
                     </template>
-                    <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
+                    <!-- <el-menu-item index="logisticmap">物流信息比对图</el-menu-item> -->
                     <!-- 可扩展其他二级菜单 -->
                 </el-sub-menu>
             </el-menu>
@@ -56,7 +56,7 @@
             <TestReport2 :riskLevel="'low'"/>
             <!-- 物流图弹窗 -->
             <el-dialog
-                title="物流图分析"
+                title="物流信息比对图"
                 v-model="isDialogVisible1"
                 width="90%"
                 :before-close="handleClose"
@@ -64,7 +64,7 @@
                 <LogisticmapIframe />
             </el-dialog>
             <el-dialog
-                title="物流图分析2"
+                title="物流信息比对图"
                 v-model="isDialogVisible2"
                 width="90%"
                 :before-close="handleClose2"

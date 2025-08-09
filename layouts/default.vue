@@ -108,13 +108,13 @@
                 <el-button type="primary" @click="detailVisible = false"
                     >标记已读</el-button
                 >
-                <el-button @click="handleViewLogisticMap">查看详情</el-button>
+                <el-button @click="handleViewLogisticMap2">查看详情</el-button>
             </div>
         </template>
     </el-dialog>
     <!-- 物流图弹窗 -->
     <el-dialog
-        title="物流图分析"
+        title="物流信息比对图"
         v-model="isDialogVisible1"
         width="90%"
         :before-close="handleClose"
@@ -122,7 +122,7 @@
         <LogisticmapIframe />
     </el-dialog>
     <el-dialog
-        title="物流图分析2"
+        title="物流信息比对图"
         v-model="isDialogVisible2"
         width="90%"
         :before-close="handleClose2"

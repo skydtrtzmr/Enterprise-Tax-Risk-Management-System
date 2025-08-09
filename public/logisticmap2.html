@@ -50,10 +50,19 @@
             }
         </style>
     </head>
-
+    <!-- 隐藏高德地图API水印 -->
+    <style type="text/css">
+       .amap-logo{
+       display: none;
+       opacity:0 !important;
+       }
+       .amap-copyright {
+           opacity:0;
+       }
+   </style>
     <body>
         <div class="demo-title">
-            <h1>物流图</h1>
+            <!-- <h1>物流图</h1> -->
             <!-- <h3>通过热力暂时房产出售分布情况，颜色和高度体现出售量</h3> -->
         </div>
 
@@ -193,7 +202,7 @@
             // 自定义只显示某地点标签
             var locations = [
                 {
-                    name: "⭐中比新能源公司",
+                    name: "⭐中比新能源科技有限公司",
                     lnglat: [118.967756, 31.364896],
                     priority: 1,
                 },
@@ -350,7 +359,7 @@
 
             createMarker2(
                 endPoint,
-                "中比新能源",
+                "<b>收货地</b><br/>中比新能源科技有限公司",
                 `<img src="http://localhost:3000/icons/end1.png"  style="width: 30px;">
                 `
             ).setMap(map);
@@ -358,14 +367,14 @@
             // 添加三个标记
             createMarker(
                 startPoint,
-                "实际发货地",
+                "<b>实际发货地</b><br/>天云科技有限公司",
                 `<img src="http://localhost:3000/icons/start2.png" style="width: 30px;">
                 `
             ).setMap(map);
 
             createMarker(
                 targetPoint,
-                "计划发货地",
+                "<b>计划发货地</b><br/>速达科技有限公司",
                 `<img src="http://localhost:3000/icons/start1.png" style="width: 30px;">
                 `
             ).setMap(map);
@@ -376,7 +385,7 @@
             var targetLine = new AMap.Polyline({
                 path: [startPoint, targetPoint],
                 strokeColor: "#FF0000",
-                strokeWeight: 8,
+                strokeWeight: 4,
                 strokeOpacity: 1,
                 strokeDasharray: [5, 5],
             });
