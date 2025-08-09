@@ -212,6 +212,34 @@ const handleClose = () => {
 const handleClose2 = () => {
     isDialogVisible2.value = false;
 };
+
+// 这个不要放在page/index.vue就不会出问题了。
+useHead({
+    script: [
+        {
+            innerHTML: `
+                window.difyChatbotConfig = {
+  token: 'OQcJr3tsihy4PNui',
+  baseUrl: 'http://localhost',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+            `,
+            type: "text/javascript",
+        },
+        {
+            src: "/scripts/embed.min.js",
+            id: "S5qckSjGKqfJycCP",
+            defer: true,
+        },
+    ],
+});
 </script>
 
 <style>

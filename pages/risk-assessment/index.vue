@@ -22,8 +22,22 @@
                     <h3>60万元政府补助是否需要缴纳企业所得税？</h3>
                     <p class="subtitle">请选择对应的处理方式：</p>
                     <div class="button-group">
-                        <el-button type="info" size="large" @click="startAnalysis('high')"><span class="button-text">缴纳企业所得税</span></el-button>
-                        <el-button type="info" size="large" @click="startAnalysis('low')"><span class="button-text">不缴纳企业所得税</span></el-button>
+                        <el-button
+                            type="info"
+                            size="large"
+                            @click="startAnalysis('high')"
+                            ><span class="button-text"
+                                >缴纳企业所得税</span
+                            ></el-button
+                        >
+                        <el-button
+                            type="info"
+                            size="large"
+                            @click="startAnalysis('low')"
+                            ><span class="button-text"
+                                >不缴纳企业所得税</span
+                            ></el-button
+                        >
                     </div>
                 </div>
 
@@ -114,14 +128,11 @@ const tabsMap = {
     },
 };
 
-const openTabs = shallowRef([
-    tabsMap["one-key-scan"],
-    tabsMap["test-report"],
-]);
+const openTabs = shallowRef([tabsMap["one-key-scan"], tabsMap["test-report"]]);
 const activeTab = ref("one-key-scan");
 
 const activeComponent = computed(() => {
-    if (activeTab.value === 'one-key-scan') return null;
+    if (activeTab.value === "one-key-scan") return null;
     const active = openTabs.value.find((tab) => tab.name === activeTab.value);
     return active ? active.component : null;
 });
@@ -152,33 +163,6 @@ const removeTab = (targetName: TabPaneName) => {
     openTabs.value = tabs.filter((tab) => tab.name !== targetName);
 };
 
-// 这个不要放在page/index.vue就不会出问题了。
-useHead({
-    script: [
-        {
-            innerHTML: `
-                window.difyChatbotConfig = {
-  token: 'OQcJr3tsihy4PNui',
-  baseUrl: 'http://localhost',
-  systemVariables: {
-    // user_id: 'YOU CAN DEFINE USER ID HERE',
-    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
-  },
-  userVariables: {
-    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
-    // name: 'YOU CAN DEFINE USER NAME HERE',
-  },
- }
-            `,
-            type: "text/javascript",
-        },
-        {
-            src: "/scripts/embed.min.js",
-            id: "S5qckSjGKqfJycCP",
-            defer: true,
-        },
-    ],
-});
 
 </script>
 
@@ -224,7 +208,7 @@ useHead({
 }
 
 .main-tabs {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 :deep(.el-tabs__header) {
