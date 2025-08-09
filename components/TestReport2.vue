@@ -438,4 +438,4 @@ const compareOption = computed(() => {
 .el-table .danger-row {
   --el-table-tr-bg-color: var(--el-color-danger-light-9);
 }
-</style> 
+</style>
