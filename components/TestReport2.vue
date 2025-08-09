@@ -195,8 +195,8 @@ const activeCompareTab = ref('asset');
 const trendData = ref({
   asset: {
     months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-    currentYear: [1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300],
-    lastYear: [1100, 1150, 1250, 1350, 1450, 1550, 1650, 1750, 1850, 1950, 2050, 2150]
+    currentYear: [1200, 1300, 1321, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    lastYear: [1100, 1120, 1250, 1360, 1450, 1550, 1572, 1750, 1850, 1950, 2050, 2150]
   },
   income: {
     months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
@@ -260,9 +260,7 @@ const trendOption = computed(() => {
         itemStyle: {
           color: '#67C23A'
         },
-        data: data.currentYear.map((val, idx) => {
-          return idx < new Date().getMonth() ? val : '-'
-        })
+        data: data.currentYear
       },
       {
         name: '去年同期',
@@ -272,9 +270,7 @@ const trendOption = computed(() => {
         itemStyle: {
           color: '#E6A23C'
         },
-        data: data.lastYear.map((val, idx) => {
-          return idx < new Date().getMonth() + 1 ? val : '-'
-        })
+        data: data.lastYear
       }
     ]
   };
@@ -306,12 +302,12 @@ const compareOption = computed(() => {
       {
         name: '2023年',
         type: 'bar',
-        data: data.lastYear.slice(0, new Date().getMonth() + 1)
+        data: data.lastYear
       },
       {
         name: '2024年',
         type: 'bar',
-        data: data.currentYear.slice(0, new Date().getMonth() + 1)
+        data: data.currentYear
       }
     ]
   };

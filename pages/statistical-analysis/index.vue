@@ -9,17 +9,17 @@
             <el-menu default-active="logisticmap" class="el-menu-vertical-demo">
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><WarnTriangleFilled /></el-icon>
-                        <span>风险分析</span>
+                        <el-icon><Money /></el-icon>
+                        <span>财务分析</span>
                     </template>
-                    <el-menu-item index="logisticmap">风险分析总览</el-menu-item>
-                    <el-menu-item index="riskanalysis">风险分析详情</el-menu-item>
+                    <el-menu-item index="logisticmap">财务分析总览</el-menu-item>
+                    <el-menu-item index="riskanalysis">财务分析详情</el-menu-item>
                     <!-- 可扩展其他二级菜单 -->
                 </el-sub-menu>
                 <el-sub-menu index="statistical-functions">
                     <template #title>
-                        <el-icon><Money /></el-icon>
-                        <span>财务分析</span>
+                        <el-icon><WarnTriangleFilled /></el-icon>
+                        <span>风险分析</span>
                     </template>
                     <!-- <el-menu-item index="logisticmap">物流图分析</el-menu-item> -->
                     <!-- 可扩展其他二级菜单 -->
