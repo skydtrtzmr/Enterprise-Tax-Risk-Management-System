@@ -15,15 +15,36 @@
       </div>
       
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in financialSummary" :key="item.label">
-          <div class="financial-item">
-            <div class="financial-label">{{ item.label }}</div>
-            <div class="financial-value">{{ item.value }}</div>
-            <div class="financial-unit">{{ item.unit }}</div>
+        <el-col :span="6" >
+          <div class="financial-item item-1">
+            <div class="financial-label">{{ financialSummary[0].label }}</div>
+            <div class="financial-value">{{ financialSummary[0].value }}</div>
+            <div class="financial-unit">{{ financialSummary[0].unit }}</div>
+          </div>
+        </el-col>
+                <el-col :span="6" >
+          <div class="financial-item item-2">
+            <div class="financial-label">{{ financialSummary[1].label }}</div>
+            <div class="financial-value">{{ financialSummary[1].value }}</div>
+            <div class="financial-unit">{{ financialSummary[1].unit }}</div>
+          </div>
+        </el-col>
+                <el-col :span="6" >
+          <div class="financial-item item-3">
+            <div class="financial-label">{{ financialSummary[2].label }}</div>
+            <div class="financial-value">{{ financialSummary[2].value }}</div>
+            <div class="financial-unit">{{ financialSummary[2].unit }}</div>
+          </div>
+        </el-col>
+                <el-col :span="6" >
+          <div class="financial-item item-4">
+            <div class="financial-label">{{ financialSummary[3].label }}</div>
+            <div class="financial-value">{{ financialSummary[3].value }}</div>
+            <div class="financial-unit">{{ financialSummary[3].unit }}</div>
           </div>
         </el-col>
       </el-row>
-      
+
       <el-row :gutter="20" style="margin-top: 20px;">
         <el-col :span="12">
           <client-only>
@@ -327,20 +348,18 @@ const compareOption = computed(() => {
   margin-bottom: 10px;
 }
 
-.financial-item:nth-child(1) {
-  background-color: #ecf5ff;
+/* 为每个卡片单独设置背景色 */
+.item-1 {
+  background-color: #ecf5ff; /* 资产总额 */
 }
-
-.financial-item:nth-child(2) {
-  background-color: #f0f9eb;
+.item-2 {
+  background-color: #f0f9eb; /* 收入总额 */
 }
-
-.financial-item:nth-child(3) {
-  background-color: #fdf6ec;
+.item-3 {
+  background-color: #fdf6ec; /* 利润总额 */
 }
-
-.financial-item:nth-child(4) {
-  background-color: #fef0f0;
+.item-4 {
+  background-color: #fef0f0; /* 毛利率 */
 }
 
 .card-title {
