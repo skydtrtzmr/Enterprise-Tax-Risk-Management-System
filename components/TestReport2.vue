@@ -1,44 +1,78 @@
 <template>
   <div class="test-report">
-    <!-- <el-card>
+    <!-- 财务数据卡片1 - 独占第一行 -->
+    <el-card>
       <el-row :gutter="20" align="middle">
-        <el-col :span="6">
-          <div class="score-section">
-            <el-progress type="dashboard" :percentage="percentage" :color="colors">
-              <template #default="{ percentage }">
-                <span class="percentage-value">{{ percentage }}</span>
-                <span class="percentage-label">综合得分</span>
-              </template>
-            </el-progress>
-          </div>
+        <el-col :span="4">
+          <el-select v-model="selectedYear" placeholder="选择年份">
+            <el-option
+              v-for="year in availableYears"
+              :key="year"
+              :label="year"
+              :value="year"
+            />
+          </el-select>
         </el-col>
-        <el-col :span="10">
-          <h2 class="report-title">企业年度税务风险测评报告</h2>
-          <p class="report-subtitle">
-            根据您提交的数据，系统完成了 {{ totalChecks }} 项指标的全面检测，综合评定企业的税务健康状况。
-          </p>
-        </el-col>
-        <el-col :span="8">
-            <div v-if="riskLevel !== 'none'" :class="['risk-box', riskLevel]">
-                 <div
-                    class="risk-box-description"
-                    v-if="riskLevel === 'high'"
-                >
-                    <p class="risk-box-description-title">检测完成</p>
-                    <p>高风险！！</p>
-                </div>
-                <div
-                    class="risk-box-description"
-                    v-if="riskLevel === 'low'"
-                >
-                    <p class="risk-box-description-title">检测完成</p>
-                    <p>无风险或风险较低</p>
-                    <p class="risk-box-subtitle">请注意高新技术企业认定标准。</p>
-                </div>
-            </div>
+        <el-col :span="20">
+          <el-row :gutter="20">
+            <el-col :span="6" v-for="item in financialSummary" :key="item.label">
+              <div class="financial-item">
+                <div class="financial-label">{{ item.label }}</div>
+                <div class="financial-value">{{ item.value }}</div>
+                <div class="financial-unit">{{ item.unit }}</div>
+              </div>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
-    </el-card> -->
+      
+      <el-row :gutter="20" style="margin-top: 20px;">
+        <el-col :span="12">
+          <client-only>
+            <v-chart class="chart" :option="assetPieOption" autoresize />
+          </client-only>
+        </el-col>
+        <el-col :span="12">
+          <client-only>
+            <v-chart class="chart" :option="incomePieOption" autoresize />
+          </client-only>
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <!-- 原有风险测评卡片 -->
+
+    <!-- 财务数据卡片2和3 - 同处一行 -->
+    <el-row :gutter="20" style="margin-top: 20px;">
+      <el-col :span="12">
+        <el-card>
+          <el-tabs v-model="activeTrendTab">
+            <el-tab-pane label="资产总额" name="asset">
+              <client-only>
+                <v-chart class="chart" :option="trendOption" autoresize />
+              </client-only>
+            </el-tab-pane>
+            <el-tab-pane label="收入总额" name="income"></el-tab-pane>
+            <el-tab-pane label="利润总额" name="profit"></el-tab-pane>
+            <el-tab-pane label="利润率" name="margin"></el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
+          <el-tabs v-model="activeCompareTab">
+            <el-tab-pane label="资产总额" name="asset">
+              <client-only>
+                <v-chart class="chart" :option="compareOption" autoresize />
+              </client-only>
+            </el-tab-pane>
+            <el-tab-pane label="收入总额" name="income"></el-tab-pane>
+            <el-tab-pane label="利润总额" name="profit"></el-tab-pane>
+            <el-tab-pane label="利润率" name="margin"></el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <el-row :gutter="20" style="margin-top: 20px;">
       <el-col :span="8">
@@ -108,6 +142,155 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import type { PropType } from 'vue';
+
+// 财务数据相关
+const selectedYear = ref(2024);
+const availableYears = [2022, 2023, 2024];
+
+const financialSummary = ref([
+  { label: '资产总额', value: '5,280', unit: '万元' },
+  { label: '收入总额', value: '3,420', unit: '万元' },
+  { label: '利润总额', value: '620', unit: '万元' },
+  { label: '毛利率', value: '18.1', unit: '%' }
+]);
+
+const assetPieOption = ref({
+  title: { text: '资产构成', left: 'center' },
+  tooltip: { trigger: 'item' },
+  series: [{
+    name: '资产构成',
+    type: 'pie',
+    radius: '50%',
+    data: [
+      { value: 3200, name: '流动资产' },
+      { value: 1200, name: '固定资产' },
+      { value: 600, name: '无形资产' },
+      { value: 280, name: '其他资产' }
+    ],
+    emphasis: {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+      }
+    }
+  }]
+});
+
+const incomePieOption = ref({
+  title: { text: '收入构成', left: 'center' },
+  tooltip: { trigger: 'item' },
+  series: [{
+    name: '收入构成',
+    type: 'pie',
+    radius: '50%',
+    data: [
+      { value: 2800, name: '主营业务收入' },
+      { value: 420, name: '其他业务收入' },
+      { value: 200, name: '营业外收入' }
+    ],
+    emphasis: {
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+      }
+    }
+  }]
+});
+
+// 趋势图表数据
+const activeTrendTab = ref('asset');
+const activeCompareTab = ref('asset');
+
+const trendData = ref({
+  asset: {
+    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    currentYear: [1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300],
+    lastYear: [1100, 1150, 1250, 1350, 1450, 1550, 1650, 1750, 1850, 1950, 2050, 2150]
+  },
+  income: {
+    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    currentYear: [800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350],
+    lastYear: [700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250]
+  },
+  // 其他趋势数据...
+});
+
+const trendOption = computed(() => {
+  const data = trendData.value[activeTrendTab.value as keyof typeof trendData.value];
+  return {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    legend: {
+      data: ['本月', '上月', '去年同期']
+    },
+    xAxis: {
+      type: 'category',
+      data: data.months.slice(0, new Date().getMonth() + 1)
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name: '本月',
+        type: 'bar',
+        data: data.currentYear.slice(0, new Date().getMonth() + 1)
+      },
+      {
+        name: '上月',
+        type: 'line',
+        data: data.currentYear.slice(0, new Date().getMonth())
+      },
+      {
+        name: '去年同期',
+        type: 'line',
+        data: data.lastYear.slice(0, new Date().getMonth() + 1)
+      }
+    ]
+  };
+});
+
+const compareOption = computed(() => {
+  const data = trendData.value[activeCompareTab.value as keyof typeof trendData.value];
+  return {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    legend: {
+      data: ['2023年', '2024年']
+    },
+    xAxis: {
+      type: 'category',
+      data: data.months.slice(0, new Date().getMonth() + 1)
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name: '2023年',
+        type: 'bar',
+        data: data.lastYear.slice(0, new Date().getMonth() + 1)
+      },
+      {
+        name: '2024年',
+        type: 'bar',
+        data: data.currentYear.slice(0, new Date().getMonth() + 1)
+      }
+    ]
+  };
+});
+
+// 原有风险测评相关
 
 type RiskLevel = 'low' | 'high' | 'none';
 
@@ -313,6 +496,33 @@ const tableRowClassName = ({ row }: { row: TableRow }) => {
 .test-report {
   padding: 20px;
   background-color: #f0f2f5;
+}
+
+/* 财务数据样式 */
+.financial-item {
+  text-align: center;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.financial-label {
+  font-size: 14px;
+  color: #909399;
+  margin-bottom: 8px;
+}
+
+.financial-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #303133;
+}
+
+.financial-unit {
+  font-size: 12px;
+  color: #909399;
+  margin-top: 4px;
 }
 
 .score-section {
