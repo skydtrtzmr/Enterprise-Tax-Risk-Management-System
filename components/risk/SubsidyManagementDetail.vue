@@ -60,7 +60,7 @@
                                 >研发专项补贴</el-descriptions-item
                             >
                             <el-descriptions-item label="管理状态">
-                                <el-tag size="small">全流程管控中</el-tag>
+                                <el-button type="danger" @click="" size="small">车辆历史轨迹异常</el-button>
                             </el-descriptions-item>
                         </el-descriptions>
                     </el-card>
@@ -520,7 +520,7 @@
         </el-row>
 
         <!-- Floating Anchor -->
-        <div class="fab-container">
+        <!-- <div class="fab-container">
             <transition name="el-fade-in-linear">
                 <el-card v-show="isAnchorVisible" class="anchor-panel">
                     <el-anchor :offset="80" @click="isAnchorVisible = false">
@@ -543,8 +543,24 @@
                 class="fab-button"
                 @click="isAnchorVisible = !isAnchorVisible"
             />
-        </div>
+        </div> -->
     </div>
+     <el-dialog
+            title="风险提示：车辆历史轨迹异常"
+            v-model="isDialogVisible1"
+            width="90%"
+            :before-close="handleClose"
+        >
+            <HeatmapIframe src="/heatmap1.html" />
+        </el-dialog>
+        <el-dialog
+            title="风险提示：车辆历史轨迹异常"
+            v-model="isDialogVisible2"
+            width="90%"
+            :before-close="handleClose2"
+        >
+            <HeatmapIframe src="/heatmap2.html" />
+        </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -558,6 +574,50 @@ import {
 } from "@element-plus/icons-vue";
 import HeatmapIframe from "@/components/HeatmapIframe.vue";
 defineProps<{ projectId: string }>();
+
+// 控制弹窗显示的响应式变量
+const isDialogVisible1 = ref(false);
+
+const isDialogVisible2 = ref(false);
+
+// 点击查看热力图处理函数
+const handleViewHeatMap = () => {
+    console.log("点击查看热力图"); // 添加控制台日志
+    isDialogVisible1.value = true;
+};
+
+const handleViewHeatMap2 = () => {
+    console.log("点击查看热力图2"); // 添加控制台日志
+    isDialogVisible2.value = true;
+};
+
+// 弹窗关闭回调
+const handleClose = () => {
+    isDialogVisible1.value = false;
+};
+
+const handleClose2 = () => {
+    isDialogVisible2.value = false;
+};
+
+// 添加键盘事件监听
+const onKeyPress = (e: KeyboardEvent) => {
+    if (e.shiftKey && e.key.toLowerCase() === "i") {
+        handleViewHeatMap();
+    }
+    if (e.shiftKey && e.key.toLowerCase() === "j") {
+        handleViewHeatMap2();
+    }
+};
+
+// 生命周期钩子
+onMounted(() => {
+    window.addEventListener("keydown", onKeyPress);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("keydown", onKeyPress);
+});
 
 const isProjectInfoExpanded = ref(false);
 const isAnchorVisible = ref(false);
@@ -625,41 +685,41 @@ const tableData2 = ref([
 const tableData3 = ref([
     {
         scenario: "收到补贴",
-        entry: "借：银行存款 200 万  贷：递延收益 - 研发补贴 200 万",
+        entry: "借：银行存款 60 万  贷：递延收益 - 研发补贴 60 万",
         tag: "已生成",
     },
     {
         scenario: "采购电解液",
-        entry: "借：研发支出 - 材料 - 项目 B 100 万  贷：银行存款 100 万  借：递延收益 - 研发补贴 100 万  贷：其他收益 - 补贴收入 100 万",
+        entry: `借：研发支出 - 材料 - 项目 B 30 万  贷：银行存款 30 万    借：递延收益 - 研发补贴 30 万  贷：其他收益 - 补贴收入 30 万`,
         tag: "已生成",
     },
     {
         scenario: "支付工资",
-        entry: "借：研发支出 - 人工 - 项目 B 60 万  贷：应付职工薪酬 60 万  借：递延收益 - 研发补贴 60 万  贷：其他收益 - 补贴收入 60 万",
+        entry: "借：研发支出 - 人工 - 项目 B 18 万  贷：应付职工薪酬 18 万  借：递延收益 - 研发补贴 12 万  贷：其他收益 - 补贴收入 12 万",
         tag: "已生成",
     },
 ]);
 const tableData4 = ref([
     {
         dimension: "材料采购",
-        content: "补贴用途 100 万元 ：发票不含税金额 100 万元",
+        content: "补贴用途 30 万元 ：发票不含税金额 30 万元",
         result: "一致",
         difference: "0",
         status: "已结案",
     },
     {
         dimension: "人员工资",
-        content: "补贴分配 60 万元 ： 工时分摊 60 万元",
+        content: "补贴分配 18 万元 ： 工时分摊 18 万元",
         result: "一致",
         difference: "0",
         status: "已结案",
     },
     {
         dimension: "设备租赁",
-        content: "补贴计划 40 万元 ： 实际支出 0 万元",
-        result: "待执行",
-        difference: "40 万",
-        status: "进行中",
+        content: "补贴计划 12 万元 ： 实际支出 12 万元",
+        result: "一致",
+        difference: "0",
+        status: "已结案",
     },
 ]);
 const tableData5 = ref([
@@ -695,8 +755,8 @@ const tableData6 = ref([
     },
     {
         type: "节税效益",
-        content: "避免多缴企业所得税30 万元",
-        impact: "直接节税 30万元",
+        content: "避免多缴企业所得税 9 万元",
+        impact: "直接节税 9 万元",
     },
 ]);
 const tableData7 = ref([

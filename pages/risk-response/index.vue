@@ -50,7 +50,7 @@
         </el-main>
 
         <el-dialog
-            title="风险提示：车辆轨迹异常"
+            title="风险提示：车辆历史轨迹异常"
             v-model="isDialogVisible1"
             width="90%"
             :before-close="handleClose"
@@ -58,7 +58,7 @@
             <HeatmapIframe src="/heatmap1.html" />
         </el-dialog>
         <el-dialog
-            title="风险提示：车辆轨迹异常"
+            title="风险提示：车辆历史轨迹异常"
             v-model="isDialogVisible2"
             width="90%"
             :before-close="handleClose2"

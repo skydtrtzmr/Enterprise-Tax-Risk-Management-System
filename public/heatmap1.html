@@ -62,7 +62,7 @@
 
     <body>
         <div class="demo-title">
-            <h1>热力图--中比新能源科技有限公司公车使用情况</h1>
+            <h1>热力图--中比新能源科技有限公司研发用车使用情况</h1>
             <h3></h3>
         </div>
 
@@ -373,22 +373,22 @@
                 },
             });
             text.setMap(map);
-            map.on("mousemove", function (e) {
-                var selectPoint = scatter.queryFeature(e.pixel.toArray());
-                // console.log(selectPoint);
-                if (selectPoint) {
-                    text.show();
-                    var count = selectPoint.properties.count;
-                    text.setText(
-                        "Housing sales volume：" +
-                            parseInt(count * 10) +
-                            " sets"
-                    );
-                    text.setPosition(e.lnglat);
-                } else {
-                    text.hide();
-                }
-            });
+            // map.on("mousemove", function (e) {
+            //     var selectPoint = scatter.queryFeature(e.pixel.toArray());
+            //     // console.log(selectPoint);
+            //     if (selectPoint) {
+            //         text.show();
+            //         var count = selectPoint.properties.count;
+            //         text.setText(
+            //             "Housing sales volume：" +
+            //                 parseInt(count * 10) +
+            //                 " sets"
+            //         );
+            //         text.setPosition(e.lnglat);
+            //     } else {
+            //         text.hide();
+            //     }
+            // });
         </script>
     </body>
 </html>
