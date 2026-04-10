@@ -1,9 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>热力图</title>
+        <script type="text/javascript">
+            window._AMapSecurityConfig = {
+                securityJsCode: "7146371476553fb46d32596e3e251c7b",
+            };
+        </script>
         <style>
             html,
             body,
@@ -51,14 +56,14 @@
     </head>
     <!-- 隐藏高德地图API水印 -->
     <style type="text/css">
-       .amap-logo{
-       display: none;
-       opacity:0 !important;
-       }
-       .amap-copyright {
-           opacity:0;
-       }
-   </style>
+        .amap-logo {
+            display: none;
+            opacity: 0 !important;
+        }
+        .amap-copyright {
+            opacity: 0;
+        }
+    </style>
 
     <body>
         <div class="demo-title">
@@ -74,8 +79,8 @@
         </div> -->
 
         <div id="map"></div>
-        <script src="https://webapi.amap.com/maps?v=2.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
-        <script src="https://webapi.amap.com/loca?v=2.0.0&key=e088660e77b10db8c4a6e77d21012f48"></script>
+        <script src="https://webapi.amap.com/maps?v=2.0&key=7a3a981f62a3909a3f219040a3d24786"></script>
+        <script src="https://webapi.amap.com/loca?v=2.0.0&key=7a3a981f62a3909a3f219040a3d24786"></script>
 
         <script>
             var map = new AMap.Map("map", {
@@ -285,7 +290,7 @@
                 // 根据缩放级别调整最小距离
                 var zoomFactor = Math.max(
                     1,
-                    (currentZoom - showZoomThreshold) * 0.5
+                    (currentZoom - showZoomThreshold) * 0.5,
                 );
                 var dynamicMinDistance = minDistance / zoomFactor;
 
@@ -306,7 +311,7 @@
                     for (var j = i + 1; j < sortedOverlaps.length; j++) {
                         var distance = getPixelDistance(
                             sortedOverlaps[i].location.lnglat,
-                            sortedOverlaps[j].location.lnglat
+                            sortedOverlaps[j].location.lnglat,
                         );
 
                         // 如果距离太近，隐藏优先级较低的标签
