@@ -9,7 +9,7 @@
       <template #header>
         <div class="card-header">
           <h2 class="system-title">企业税收风险管理系统</h2>
-          <p class="company-name">中比新能源科技有限公司</p>
+          <p class="company-name">ABC科技科技有限公司</p>
         </div>
       </template>
 
