@@ -1,143 +1,127 @@
 <template>
-  <div class="m-home">
-    <!-- 头部 -->
+  <div class="m-page">
+    <!-- 顶部标题栏 -->
     <div class="m-header">
-      <h1 class="header-title">企业税收风险管理系统</h1>
-      <p class="header-desc">Enterprise Tax Risk Management</p>
+      <div class="header-left">
+        <el-icon :size="20" color="#fff"><Close /></el-icon>
+      </div>
+      <div class="header-title">任务四 涉税风险与管理</div>
+      <div class="header-right">
+        <el-icon :size="20" color="#fff"><MoreFilled /></el-icon>
+      </div>
     </div>
 
-    <!-- 菜单 -->
-    <div class="m-menu">
-      <NuxtLink to="/m/inspect" class="menu-item">
-        <el-icon :size="20" color="#409eff"><Cpu /></el-icon>
-        <span class="menu-item-text">智能自查</span>
-        <el-icon :size="16" color="#c0c4cc"><ArrowRight /></el-icon>
+    <!-- 热力图列表 -->
+    <div class="m-content">
+      <NuxtLink to="/m/heatmap/1" class="heatmap-card">
+        <div class="card-icon">
+          <el-icon :size="20" color="#fff"><Grid /></el-icon>
+        </div>
+        <span class="card-text">项目A-热力图VR模型</span>
       </NuxtLink>
 
-      <div class="menu-item menu-item--disabled">
-        <el-icon :size="20" color="#909399"><Reading /></el-icon>
-        <span class="menu-item-text">自由阅账</span>
-      </div>
-
-      <div class="menu-item menu-item--disabled">
-        <el-icon :size="20" color="#909399"><List /></el-icon>
-        <span class="menu-item-text">税种检查</span>
-      </div>
-
-      <div class="menu-item menu-item--disabled">
-        <el-icon :size="20" color="#909399"><EditPen /></el-icon>
-        <span class="menu-item-text">查结处理</span>
-      </div>
-
-      <div class="menu-item menu-item--disabled">
-        <el-icon :size="20" color="#909399"><Guide /></el-icon>
-        <span class="menu-item-text">自查报告</span>
-      </div>
+      <NuxtLink to="/m/heatmap/2" class="heatmap-card">
+        <div class="card-icon">
+          <el-icon :size="20" color="#fff"><Grid /></el-icon>
+        </div>
+        <span class="card-text">项目B-热力图VR模型</span>
+      </NuxtLink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Cpu, Reading, List, EditPen, Guide, ArrowRight } from '@element-plus/icons-vue'
+import { Close, MoreFilled, Grid } from '@element-plus/icons-vue'
 definePageMeta({ layout: 'blank' })
 </script>
 
 <style scoped>
-.m-home {
+.m-page {
   min-height: 100vh;
   min-height: 100dvh;
   background: #f5f7fa;
 }
 
+/* 顶部标题栏 */
 .m-header {
-  background: linear-gradient(135deg, #0f2557 0%, #1e40af 40%, #2563eb 100%);
-  padding: 56px 24px 40px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  background: linear-gradient(90deg, #4a90d9 0%, #5a9de9 100%);
+  color: #fff;
 }
 
-/* 复用原系统头部的斜纹装饰 */
-.m-header::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 30%;
-  height: 100%;
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 5px,
-    rgba(255, 255, 255, 0.06) 5px,
-    rgba(255, 255, 255, 0.06) 10px
-  );
-  pointer-events: none;
+.header-left,
+.header-right {
+  width: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.header-right {
+  justify-content: flex-end;
 }
 
 .header-title {
-  font-size: 22px;
-  font-weight: 700;
+  flex: 1;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 500;
   color: #fff;
-  margin: 0;
-  letter-spacing: 3px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  position: relative;
 }
 
-.header-desc {
-  margin: 10px 0 0;
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-  letter-spacing: 2px;
-  font-weight: 400;
-  position: relative;
-}
-
-.m-menu {
+/* 内容区 */
+.m-content {
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.menu-item {
+/* 热力图卡片 */
+.heatmap-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 16px;
   background: #fff;
-  border-radius: 10px;
-  border: 1px solid #e4e7ed;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   text-decoration: none;
-  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
 
-.menu-item:active {
-  background: #ecf5ff;
-  border-color: #b3d8ff;
+.heatmap-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
-.menu-item--disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: default;
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #4a90d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.menu-item-text {
+.card-text {
   flex: 1;
   font-size: 15px;
-  font-weight: 500;
-  color: #303133;
+  color: #333;
 }
 
+/* 安全区域 */
 @supports (padding-top: env(safe-area-inset-top)) {
   .m-header {
-    padding-top: calc(48px + env(safe-area-inset-top));
+    height: calc(48px + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
   }
 }
 </style>

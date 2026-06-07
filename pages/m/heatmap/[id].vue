@@ -1,7 +1,7 @@
 <template>
   <div class="m-heatmap-detail">
     <div class="detail-header">
-      <button class="close-btn" @click="navigateTo('/m/inspect')">
+      <button class="close-btn" @click="navigateTo('/m')">
         <el-icon :size="20" color="#fff"><ArrowLeft /></el-icon>
       </button>
       <span class="header-label">{{ currentTitle }}</span>
